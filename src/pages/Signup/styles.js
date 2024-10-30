@@ -25,13 +25,6 @@ export const ScreenCloudy = styled.div`
   background-position: center;
 `;
 
-export const Logo = styled.img`
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 150px;
-`;
-
 export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
