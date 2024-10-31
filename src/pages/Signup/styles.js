@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import backgroundImage from '../../assets/background-day.png';
 import backgroundCloudy from '../../assets/background-cloudy.png';
 
 export const SignupContainer = styled.div`
@@ -8,10 +7,7 @@ export const SignupContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   height: 100vh;
-  width: 100vw;
-  background-image: url(${backgroundImage});
-  background-size: cover;
-  background-position: center;
+  z-index: 10;
 `;
 
 export const ScreenCloudy = styled.div`
@@ -19,7 +15,7 @@ export const ScreenCloudy = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  padding: 100px 250px;
+  padding: 25px 100px;
   background-image: url(${backgroundCloudy});
   background-size: cover;
   background-position: center;
@@ -29,7 +25,8 @@ export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 2px;
+  top: 8px;
 `;
 
 export const ButtonLabel = styled.span`

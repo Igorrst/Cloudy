@@ -8,14 +8,9 @@ const Signup = () => {
     <SignupContainer>
       <LogoType />
       <ScreenCloudy>
-        { }
         <ButtonContainer>
           <ButtonLabel>Inscreva-se</ButtonLabel>
           <PrimaryButton text="Criar conta" />
-        </ButtonContainer>
-
-        { }
-        <ButtonContainer>
           <ButtonLabel>Já tem uma conta?</ButtonLabel>
           <PrimaryButton text="Entrar" />
         </ButtonContainer>

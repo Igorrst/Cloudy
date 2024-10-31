@@ -8,7 +8,7 @@ font-size: 20px;
 border: none;
 border-radius: 20px;
 cursor: pointer;
-margin-bottom: 20px;
+margin-bottom: 22px;
 
 &:hover {
   background-color: #007bbd;
