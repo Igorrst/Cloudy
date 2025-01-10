@@ -1,7 +1,9 @@
+import BackgroundDay from './components/BackgroundDay';
+
 const App = () => {
   return (
     <div>
-      <h1>Bem-vindo ao Cloudy!</h1>
+      <BackgroundDay />
     </div>
   );
 };
