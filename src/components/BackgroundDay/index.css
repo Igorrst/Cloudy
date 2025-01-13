@@ -5,18 +5,28 @@ body {
     padding: 0;
     width: 100%;
     height: 100%;
+    position: relative;
+    border: 2px solid black;
+    border-radius: 2px;
 }
 
 * {
-    position: relative;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
+/* Mantenha as configurações originais */
 .frame {
-    width: 500px;
-    height: auto;
-    margin: 15% auto 0;
-    position: absolute;
+    position: fixed;
+    /* Fixado no fundo para evitar sobreposição */
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    z-index: -1;
+    /* Garante que fique atrás de todos os outros elementos */
+    overflow: hidden;
 }
 
 svg {
@@ -39,16 +49,16 @@ svg {
     animation: cloud-movement 15s linear infinite, cloud-pulse 3s ease-in-out infinite;
 }
 
+/* Controle de camadas */
 .cloud.front {
-    z-index: 9;
+    z-index: -1;
+    /* Mantém na frente do fundo, mas atrás dos componentes */
 }
 
-.cloud.distant {
-    z-index: 1;
-}
-
+.cloud.distant,
 .cloud.background {
-    z-index: 1;
+    z-index: -2;
+    /* Mais distante no plano de fundo */
 }
 
 .cloud.smaller {
