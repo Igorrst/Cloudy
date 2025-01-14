@@ -10,6 +10,7 @@ import {
 } from './styles';
 import ConfigIcon from '../../components/ConfigIcon';
 import CloudyLogo from '../../assets/logo.png';
+import { createUser } from '../../services/userService';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -50,6 +51,8 @@ const Register = () => {
 
     const hasErrors = Object.values(newErrors).some((error) => error);
     if (hasErrors) return;
+
+    createUser(formData)
 
     console.log('Formulário enviado com sucesso:', formData);
   };
