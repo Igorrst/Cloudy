@@ -4,6 +4,7 @@ import Signup from './pages/Signup';
 import ConfigIcon from './components/ConfigIcon';
 import LogoType from './components/Logo';
 import Register from './pages/Register';
+import Login from './pages/Login';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Signup />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
     </Router>
