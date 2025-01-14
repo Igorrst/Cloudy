@@ -54,7 +54,7 @@ const Register = () => {
 
     createUser(formData)
 
-    console.log('Formulário enviado com sucesso:', formData);
+    alert('Conta criada com sucesso!');
   };
 
   return (
@@ -90,6 +90,7 @@ const Register = () => {
           value={formData.password}
           onChange={handleChange}
           hasError={errors.password}
+          minLength={8}
         />
         {errors.password && <ErrorMessage>A senha é obrigatória.</ErrorMessage>}
 
@@ -100,6 +101,7 @@ const Register = () => {
           value={formData.confirmPassword}
           onChange={handleChange}
           hasError={errors.confirmPassword}
+          minLength={8}
         />
         {errors.confirmPassword && (
           <ErrorMessage>A confirmação da senha é obrigatória.</ErrorMessage>

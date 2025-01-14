@@ -11,6 +11,10 @@ const Signup: React.FC = () => {
     navigate('/register');
   };
 
+  const handleLogin = () => {
+    navigate('/Login');
+  };
+
   return (
     <SignupContainer>
       <LogoType />
@@ -20,7 +24,7 @@ const Signup: React.FC = () => {
           { }
           <PrimaryButton text="Criar conta" onClick={handleCreateAccount} />
           <ButtonLabel>Já tem uma conta?</ButtonLabel>
-          <PrimaryButton text="Entrar" />
+          <PrimaryButton text="Entrar" onClick={handleLogin} />
         </ButtonContainer>
       </ScreenCloudy>
       <ConfigIcon />
