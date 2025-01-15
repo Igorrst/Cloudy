@@ -8,7 +8,7 @@ import {
   RegisterButton,
   ErrorMessage,
 } from './styles';
-import ConfigIcon from '../../components/ConfigIcon';
+import Configurations from '../../components/Configurations';
 import CloudyLogo from '../../assets/logo.png';
 import { createUser } from '../../services/userService';
 
@@ -109,7 +109,7 @@ const Register = () => {
 
         <RegisterButton type="submit">Registrar</RegisterButton>
       </FormContainer>
-      <ConfigIcon />
+      <Configurations />
     </RegisterContainer>
   );
 };
