@@ -6,6 +6,11 @@ export const RegisterContainer = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    min-height: auto;
+  }
 `;
 
 export const HeaderContainer = styled.div`
@@ -13,11 +18,23 @@ export const HeaderContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 768px) {
+    margin-bottom: 10px;
+  }
 `;
 
 export const LogoImage = styled.img`
   width: 150px;
   height: auto;
+
+  @media (max-width: 768px) {
+    width: 120px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100px;
+  }
 `;
 
 export const FormContainer = styled.form`
@@ -28,6 +45,11 @@ export const FormContainer = styled.form`
   padding: 10px;
   border: 2px solid black;
   border-radius: 20px;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    padding: 8px;
+  }
 `;
 
 export const InputField = styled.input<{ hasError?: boolean }>`
@@ -35,10 +57,9 @@ export const InputField = styled.input<{ hasError?: boolean }>`
   border: 1px solid ${(props) => (props.hasError ? 'red' : 'black')};
   border-radius: 4px;
   font-size: 16px;
-  outline: none;
 
-  &:focus {
-    border-color: ${(props) => (props.hasError ? 'darkred' : '#0079a9')};
+  @media (max-width: 768px) {
+    font-size: 14px;
   }
 `;
 
@@ -60,5 +81,9 @@ export const RegisterButton = styled.button`
 
   &:hover {
     background-color: #014f73;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
   }
 `;

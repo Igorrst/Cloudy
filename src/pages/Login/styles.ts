@@ -3,6 +3,14 @@ import styled from 'styled-components';
 export const LogoImage = styled.img`
   width: 150px;
   height: auto;
+
+  @media (max-width: 768px) {
+    width: 120px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100px;
+  }
 `;
 
 export const LoginContainer = styled.div`
@@ -11,6 +19,11 @@ export const LoginContainer = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    min-height: auto;
+  }
 `;
 
 export const FormContainer = styled.form`
@@ -21,6 +34,11 @@ export const FormContainer = styled.form`
   padding: 10px;
   border: 2px solid black;
   border-radius: 20px;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    padding: 8px;
+  }
 `;
 
 export const InputField = styled.input<{ hasError?: boolean }>`
@@ -28,6 +46,10 @@ export const InputField = styled.input<{ hasError?: boolean }>`
   border: 1px solid black;
   border-radius: 4px;
   font-size: 16px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 export const LoginButton = styled.button`
@@ -41,5 +63,9 @@ export const LoginButton = styled.button`
 
   &:hover {
     background-color: #014f73;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
   }
 `;
