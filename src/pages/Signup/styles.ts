@@ -8,6 +8,7 @@ export const SignupContainer = styled.div`
   justify-content: center;
   height: 100vh;
   z-index: 10;
+  padding: 0 15px;
 `;
 
 export const ScreenCloudy = styled.div`
@@ -19,6 +20,10 @@ export const ScreenCloudy = styled.div`
   background-image: url(${backgroundCloudy});
   background-size: cover;
   background-position: center;
+
+  @media (max-width: 768px) {
+    padding: 2px 34px;
+  }
 `;
 
 export const ButtonContainer = styled.div`
@@ -33,4 +38,8 @@ export const ButtonLabel = styled.span`
   font-size: 30px;
   color: #000;
   margin-bottom: 8px;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
