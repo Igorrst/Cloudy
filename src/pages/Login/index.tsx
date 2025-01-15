@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ConfigIcon from '../../components/ConfigIcon';
+import Configurations from '../../components/Configurations';
 import {
   LogoImage,
   LoginContainer,
@@ -50,7 +50,7 @@ const Login = () => {
 
   return (
     <>
-      <ConfigIcon />
+      <Configurations />
       <LoginContainer>
         <LogoImage src={CloudyLogo} alt="Logo Cloudy" />
         <FormContainer onSubmit={handleLogin}>

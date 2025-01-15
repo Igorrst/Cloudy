@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { SignupContainer, ButtonContainer, ButtonLabel, ScreenCloudy } from './styles';
 import LogoType from '../../components/Logo';
-import ConfigIcon from '../../components/ConfigIcon';
+import Configurations from '../../components/Configurations';
 import PrimaryButton from '../../components/Buttons/PrimaryButton';
 
 const Signup: React.FC = () => {
@@ -27,7 +27,7 @@ const Signup: React.FC = () => {
           <PrimaryButton text="Entrar" onClick={handleLogin} />
         </ButtonContainer>
       </ScreenCloudy>
-      <ConfigIcon />
+      <Configurations />
     </SignupContainer>
   );
 };
