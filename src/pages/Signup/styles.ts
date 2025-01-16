@@ -19,41 +19,53 @@ export const ScreenCloudy = styled.div`
   background: none;
   width: 100%;
   height: 100%;
+  @media (max-width: 768px) {
+    padding: 20px 40px;
+  }
+  @media (max-width: 480px) {
+    padding: 15px 20px;
+  }
 `;
 
 export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2px;
-  margin-top: 20px;
+  margin-top: 10px;
   position: relative;
 
-h2 {
-  font-size: 14px;
-  color: #333;
-  margin: 0;
-  position: relative;
-  left: -100px;
-  top: -50px;
-  border-bottom: 2px solid black;
-}
+  h2 {
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+    position: relative;
+    left: -100px;
+    top: -50px;
+    border-bottom: 2px solid black;
 
-h3 {
-  font-size: 12px;
-  color: #666;
-  text-align: center;
-
-  a {
-    color: rgb(23, 185, 255);
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: #007bbd;
+    @media (max-width: 480px) {
+      left: 0;
+      top: -10px;
+      text-align: center;
+    }
   }
-}
+
+  h3 {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+
+    a {
+      color: rgb(23, 185, 255);
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #007bbd;
+      }
+    }
+  }
 `;
 
 export const ButtonLabel = styled.span`
@@ -62,7 +74,10 @@ export const ButtonLabel = styled.span`
   margin-bottom: 8px;
 
   @media (max-width: 768px) {
-    font-size: 24px;
+    font-size: 18px;
+  }
+  @media (max-width: 480px) {
+    font-size: 16px;
   }
 `;
 
