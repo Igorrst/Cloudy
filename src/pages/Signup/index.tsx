@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { SignupContainer, ButtonContainer, ButtonLabel, ScreenCloudy } from './styles';
+import { SignupContainer, CloudyBox, ButtonContainer, ButtonLabel, ScreenCloudy } from './styles';
 import LogoType from '../../components/Logo';
 import Configurations from '../../components/Configurations';
 import PrimaryButton from '../../components/Buttons/PrimaryButton';
@@ -12,23 +12,35 @@ const Signup: React.FC = () => {
   };
 
   const handleLogin = () => {
-    navigate('/Login');
+    navigate('/login');
   };
 
   return (
     <SignupContainer>
       <LogoType />
-      <ScreenCloudy>
-        <ButtonContainer>
-          <ButtonLabel>Inscreva-se</ButtonLabel>
-          { }
-          <PrimaryButton text="Criar conta" onClick={handleCreateAccount} />
-          <ButtonLabel>Já tem uma conta?</ButtonLabel>
-          <PrimaryButton text="Entrar" onClick={handleLogin} />
-        </ButtonContainer>
-      </ScreenCloudy>
+      <CloudyBox>
+        <ScreenCloudy>
+          <ButtonContainer>
+            <h2>bem-vindo ao Cloudy</h2>
+            <ButtonLabel>Inscreva-se</ButtonLabel>
+            <PrimaryButton text="Criar conta" onClick={handleCreateAccount} />
+            <ButtonLabel>Já tem uma conta?</ButtonLabel>
+            <PrimaryButton text="Entrar" onClick={handleLogin} />
+            <h3>
+              @desenvolvido por{' '}
+              <a href="https://github.com/Igorrst" target="_blank" rel="noopener noreferrer">
+                Igorrst
+              </a>{' '}
+              &{' '}
+              <a href="https://github.com/KaykyDion" target="_blank" rel="noopener noreferrer">
+                KaykyDion
+              </a>
+            </h3>
+          </ButtonContainer>
+        </ScreenCloudy>
+      </CloudyBox >
       <Configurations />
-    </SignupContainer>
+    </SignupContainer >
   );
 };
 
