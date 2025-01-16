@@ -21,4 +21,9 @@ export const PrimaryButton = styled.button`
     transform: scale(1.05);
     transition: all 0.3s ease;
   }
+
+      @media (max-width: 480px) {
+      width: 280px;
+    }
+  }
 `;
