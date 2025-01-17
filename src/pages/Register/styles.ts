@@ -46,9 +46,22 @@ export const FormContainer = styled.form`
     border-bottom: 1px solid black;
   }
 
+  @media (max-width: 1024px) {
+    padding: 30px;
+    width: 80%;
+    max-width: 350px;
+  }
+
   @media (max-width: 768px) {
     padding: 20px;
     width: 90%;
+    max-width: 300px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px;
+    width: 90%;
+    max-width: 280px;
   }
 `;
 

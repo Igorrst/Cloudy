@@ -44,6 +44,7 @@ svg {
     animation-duration: 15s;
     filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.2));
     animation: cloud-movement 15s linear infinite, cloud-pulse 3s ease-in-out infinite;
+    z-index: -2;
 }
 
 .cloud.front {
