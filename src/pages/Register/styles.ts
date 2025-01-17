@@ -46,6 +46,12 @@ export const FormContainer = styled.form`
     border-bottom: 1px solid black;
   }
 
+  @media (max-width: 1366px) {
+    padding: 35px;
+    width: 85%;
+    max-width: 380px;
+  }
+
   @media (max-width: 1024px) {
     padding: 30px;
     width: 80%;
