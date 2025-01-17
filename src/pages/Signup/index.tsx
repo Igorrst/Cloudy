@@ -21,7 +21,7 @@ const Signup: React.FC = () => {
       <CloudyBox>
         <ScreenCloudy>
           <ButtonContainer>
-            <h2>bem-vindo ao Cloudy</h2>
+            <h2>Bem-vindo ao Cloudy</h2>
             <ButtonLabel>Inscreva-se</ButtonLabel>
             <PrimaryButton text="Criar conta" onClick={handleCreateAccount} />
             <ButtonLabel>Já tem uma conta?</ButtonLabel>

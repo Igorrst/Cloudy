@@ -19,6 +19,7 @@ export const ScreenCloudy = styled.div`
   background: none;
   width: 100%;
   height: 100%;
+
   @media (max-width: 768px) {
     padding: 20px 40px;
   }
@@ -84,7 +85,7 @@ export const ButtonLabel = styled.span`
 export const CloudyBox = styled.div`
   width: 410px;
   height: 400px;
-  background-color: white;
+  background-color: #e0f7fa;
   border-radius: 30px;
   position: relative;
   border: 1px solid black;
