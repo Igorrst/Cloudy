@@ -1,19 +1,29 @@
 import { useState } from 'react';
-import Configurations from '../../components/Configurations';
 import {
-  LogoImage,
   LoginContainer,
+  HeaderContainer,
   FormContainer,
+  InputWrapper,
   InputField,
-  LoginButton,
+  ErrorMessage,
+  ButtonWrapper,
 } from './styles';
-import CloudyLogo from '../../assets/logo.png';
+import Configurations from '../../components/Configurations';
+import EmailIcon from '../../assets/email.png';
+import PasswordIcon from '../../assets/password.png';
+import PrimaryButton from '../../components/Buttons/PrimaryButton';
 import { loginUser } from '../../services/userService';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+  });
+
+  const [errors, setErrors] = useState({
+    email: false,
+    password: false,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,14 +32,24 @@ const Login = () => {
       ...prevData,
       [name]: value,
     }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: false }));
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const newErrors = {
+      email: !formData.email.trim(),
+      password: !formData.password.trim(),
+    };
+
+    setErrors(newErrors);
+
+    const hasErrors = Object.values(newErrors).some((error) => error);
+    if (hasErrors) return;
+
     try {
       const response = await loginUser(formData);
-
-      console.log('Dados retornados pela API:', response);
 
       const token = response;
 
@@ -40,7 +60,6 @@ const Login = () => {
         console.error('Token não encontrado');
       }
     } catch (error: any) {
-      console.error('Erro ao fazer login:', error);
       alert(
         error.response?.data?.message ||
         'Erro ao fazer login. Verifique suas credenciais.'
@@ -49,31 +68,50 @@ const Login = () => {
   };
 
   return (
-    <>
-      <Configurations />
-      <LoginContainer>
-        <LogoImage src={CloudyLogo} alt="Logo Cloudy" />
-        <FormContainer onSubmit={handleLogin}>
+    <LoginContainer>
+      <HeaderContainer />
+      <FormContainer onSubmit={handleLogin}>
+        <h2>Login</h2>
+        <InputWrapper>
+          <img src={EmailIcon} alt="Ícone de email" />
           <InputField
+            style={{ padding: '23px 0 23px 45px' }}
             type="email"
             name="email"
             placeholder="Email"
-            required
             value={formData.email}
             onChange={handleChange}
+            hasError={errors.email}
           />
+        </InputWrapper>
+        {errors.email && <ErrorMessage>O email é obrigatório.</ErrorMessage>}
+
+        <InputWrapper>
+          <img src={PasswordIcon} alt="Ícone de senha" />
           <InputField
+            style={{ padding: '23px 0 23px 45px' }}
             type="password"
             name="password"
             placeholder="Senha"
-            required
             value={formData.password}
             onChange={handleChange}
+            hasError={errors.password}
           />
-          <LoginButton type="submit">Entrar</LoginButton>
-        </FormContainer>
-      </LoginContainer>
-    </>
+        </InputWrapper>
+        {errors.password && <ErrorMessage>A senha é obrigatória.</ErrorMessage>}
+
+        <ButtonWrapper>
+          <PrimaryButton text="Entrar" type="submit" />
+        </ButtonWrapper>
+        <p style={{ marginLeft: '100px' }}>
+          Ou{' '}
+          <Link to="/register" style={{ textDecoration: 'none', color: 'blue' }}>
+            registre-se
+          </Link>
+        </p>
+      </FormContainer>
+      <Configurations />
+    </LoginContainer>
   );
 };
 
