@@ -101,7 +101,7 @@ const Login = () => {
         {errors.password && <ErrorMessage>A senha é obrigatória.</ErrorMessage>}
 
         <ButtonWrapper>
-          <PrimaryButton text="Entrar" type="submit" />
+          <PrimaryButton text="Entrar" />
         </ButtonWrapper>
         <p style={{ marginLeft: '100px' }}>
           Ou{' '}
