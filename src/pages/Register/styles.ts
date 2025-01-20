@@ -46,6 +46,27 @@ export const FormContainer = styled.form`
     border-bottom: 1px solid black;
   }
 
+  input, textarea, select, button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: rgb(23, 185, 255);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: rgb(20, 150, 220);
+    }
+  }
+
   @media (max-width: 1366px) {
     padding: 35px;
     width: 85%;
@@ -67,7 +88,27 @@ export const FormContainer = styled.form`
   @media (max-width: 480px) {
     padding: 15px;
     width: 90%;
-    max-width: 280px;
+    max-width: 250px;
+
+    input, textarea, select, button {
+      font-size: 14px;
+      padding: 8px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    padding: 10px;
+    width: 95%;
+    max-width: 220px;
+
+    h2 {
+      font-size: 20px;
+    }
+
+    input, textarea, select, button {
+      font-size: 12px;
+      padding: 6px;
+    }
   }
 `;
 
