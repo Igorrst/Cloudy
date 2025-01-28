@@ -5,6 +5,8 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f0f0f0;
   }
 
   body {
@@ -59,5 +61,23 @@ export const GlobalStyle = createGlobalStyle`
     body {
       font-size: 14px;
     }
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f0f0f0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 6px;
+    border: 3px solid #f0f0f0;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
   }
 `;

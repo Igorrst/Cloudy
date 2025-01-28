@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { SignupContainer, CloudyBox, ButtonContainer, ButtonLabel, ScreenCloudy } from './styles';
 import LogoType from '../../components/Logo';
-import Configurations from '../../components/Configurations';
 import PrimaryButton from '../../components/Buttons/PrimaryButton';
 
 const Signup: React.FC = () => {
@@ -39,7 +38,6 @@ const Signup: React.FC = () => {
           </ButtonContainer>
         </ScreenCloudy>
       </CloudyBox >
-      <Configurations />
     </SignupContainer >
   );
 };
