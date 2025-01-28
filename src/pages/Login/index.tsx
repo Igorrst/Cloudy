@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   LoginContainer,
   HeaderContainer,
@@ -8,7 +9,6 @@ import {
   ErrorMessage,
   ButtonWrapper,
 } from './styles';
-import Configurations from '../../components/Configurations';
 import EmailIcon from '../../assets/email.png';
 import PasswordIcon from '../../assets/password.png';
 import PrimaryButton from '../../components/Buttons/PrimaryButton';
@@ -25,6 +25,8 @@ const Login = () => {
     email: false,
     password: false,
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -56,6 +58,7 @@ const Login = () => {
       if (token && token.trim() !== '') {
         localStorage.setItem('authToken', token);
         alert('Login realizado com sucesso!');
+        navigate('/home');
       } else {
         console.error('Token não encontrado');
       }
@@ -110,7 +113,6 @@ const Login = () => {
           </Link>
         </p>
       </FormContainer>
-      <Configurations />
     </LoginContainer>
   );
 };

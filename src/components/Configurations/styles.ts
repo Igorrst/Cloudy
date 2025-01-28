@@ -1,11 +1,14 @@
 import styled from 'styled-components';
 
 export const ConfigIconContainer = styled.img`
-  position: absolute;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  position: fixed;
   top: 20px;
   right: 20px;
-  width: 30px;
-  cursor: pointer;
+  margin: 0;
+  z-index: 1000;
 `;
 
 export const ModalContainer = styled.div`

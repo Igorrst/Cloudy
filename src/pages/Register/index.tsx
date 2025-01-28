@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   RegisterContainer,
   HeaderContainer,
@@ -8,7 +9,6 @@ import {
   ErrorMessage,
   ButtonWrapper,
 } from './styles';
-import Configurations from '../../components/Configurations';
 import EmailIcon from '../../assets/email.png';
 import PasswordIcon from '../../assets/password.png';
 import UserIcon from '../../assets/user.png';
@@ -30,6 +30,8 @@ const Register = () => {
     password: false,
     confirmPassword: false,
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -56,6 +58,7 @@ const Register = () => {
 
     createUser(formData);
     alert('Conta criada com sucesso!');
+    navigate('/home');
   };
 
   return (
@@ -136,7 +139,6 @@ const Register = () => {
           Ou <Link to="/login" style={{ textDecoration: 'none', color: 'blue' }}>faça login</Link>
         </p>
       </FormContainer>
-      <Configurations />
     </RegisterContainer>
   );
 };
