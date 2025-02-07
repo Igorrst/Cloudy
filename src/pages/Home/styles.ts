@@ -6,6 +6,10 @@ export const Container = styled.div`
   align-items: center;
   padding: 40px;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
 `;
 
 export const TextPost = styled.div`
@@ -28,6 +32,15 @@ export const TextPost = styled.div`
 
   ::placeholder {
     color: black;
+  }
+
+  @media (max-width: 768px) {
+  margin-top: 100px;
+  }
+
+  @media (max-width:  480px) {
+  margin-top: 100px;
+  max-width: 60%;
   }
 `;
 
@@ -52,16 +65,20 @@ export const IconButton = styled.button`
   &:active {
     transform: translateY(-50%) scale(0.9);
   }
+
+  @media (max-width: 480px) {
+    right: -30px;
+  }
 `;
 
 export const BoxPost = styled.div`
   width: 100%;
   max-width: 600px;
-  height: 440px;
-  overflow: visible;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: white;
+  min-height: 400px;
+  height: auto;
+  border: 1px solid rgb(42, 38, 255);
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.53);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -73,6 +90,14 @@ export const BoxPost = styled.div`
   p {
     color: #aaa;
   }
+
+  @media (max-width: 768px) {
+    max-width: 90%;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 70%;
+  }
 `;
 
 export const Post = styled.div`
@@ -80,13 +105,15 @@ export const Post = styled.div`
   font-weight: bold;
   color: #333;
   word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
   text-align: center;
 `;
 
 export const HeartButton = styled.button<{ liked: boolean }>`
   position: absolute;
   right: -50px;
-  top: 20%;
+  top: 45%;
   transform: translateY(-50%);
   background: none;
   border: none;
@@ -106,12 +133,16 @@ export const HeartButton = styled.button<{ liked: boolean }>`
   &:active img {
     transform: scale(0.9);
   }
+
+  @media (max-width: 480px) {
+    right: -40px;
+  }
 `;
 
 export const CommentButton = styled.button`
   position: absolute;
   right: -50px;
-  top: 30%;
+  top: 55%;
   transform: translateY(-50%);
   background: none;
   border: none;
@@ -130,5 +161,9 @@ export const CommentButton = styled.button`
 
   &:active img {
     transform: scale(0.9);
+  }
+
+  @media (max-width: 480px) {
+    right: -40px;
   }
 `;
