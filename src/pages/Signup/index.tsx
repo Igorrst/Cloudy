@@ -27,7 +27,7 @@ const Signup: React.FC = () => {
             <PrimaryButton text="Entrar" onClick={handleLogin} />
             <h3>
               @desenvolvido por{' '}
-              <a href="https://github.com/Igorrst" target="_blank" rel="noopener noreferrer">
+              <a href="https://virtual-business-card-ten.vercel.app/" target="_blank" rel="noopener noreferrer">
                 Igorrst
               </a>{' '}
               &{' '}
