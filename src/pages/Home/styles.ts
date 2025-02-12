@@ -76,9 +76,9 @@ export const BoxPost = styled.div`
   max-width: 600px;
   min-height: 400px;
   height: auto;
-  border: 1px solid rgb(42, 38, 255);
+  border: 2px solid black;
   border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.53);
+  background-color: rgba(255, 255, 255, 0.86);
   display: flex;
   align-items: center;
   justify-content: center;
