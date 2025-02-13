@@ -8,7 +8,10 @@ import {
   IconButton,
   HeartButton,
   CommentButton,
+  UserTop,
+  UserPost,
 } from "./styles";
+import User from "../../components/User";
 
 const Home = () => {
   const [posts, setPosts] = useState<string[]>([]);
@@ -44,6 +47,9 @@ const Home = () => {
 
   return (
     <Container>
+      <UserTop>
+      <User />
+      </UserTop>
       <TextPost>
         <textarea
           placeholder="O que está pensando?"
@@ -52,7 +58,7 @@ const Home = () => {
           onChange={(e) => setNewPost(e.target.value)}
         />
         <IconButton onClick={handleAddPost}>
-          <img src="/src/assets/down.png" alt="Postar" />
+          <img src="/src/assets/down.svg" alt="Postar" />
         </IconButton>
       </TextPost>
       <BoxPost onWheel={handleScroll}>
@@ -76,8 +82,8 @@ const Home = () => {
               <motion.img
                src={
                 likedPosts[currentPostIndex]
-                ? "/src/assets/heart-red.png"
-                 : "/src/assets/heart.png"
+                ? "/src/assets/heart-red.svg"
+                 : "/src/assets/heart.svg"
               }
                alt="Curtir"
               whileTap={{ scale: 0.9 }}
@@ -86,12 +92,15 @@ const Home = () => {
                />
               </HeartButton>
             <CommentButton>
-              <img src="/src/assets/comment.png" alt="Comentar" />
+              <img src="/src/assets/comment.svg" alt="Comentar" />
             </CommentButton>
           </>
         ) : (
           <p>Nenhum Post ainda, crie seu primeiro!</p>
         )}
+          <UserPost>
+            <User />
+          </UserPost>
       </BoxPost>
     </Container>
   );
