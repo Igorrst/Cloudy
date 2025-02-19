@@ -86,6 +86,7 @@ export const BoxPost = styled.div`
   padding: 20px;
   box-sizing: border-box;
   position: relative;
+  margin-top: 40px;
 
   p {
     color: #aaa;
@@ -185,4 +186,60 @@ export const UserPost = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+    img {
+    width: 30px;
+    height: 30px;
+    opacity: 0.8;
+  }
+
+  &:hover img {
+    transform: scale(1.2);
+  }
+
+  &:active img {
+    transform: scale(0.9);
+  }
+
+  @media (max-width: 480px) {
+    right: 280px;
+  }
+`;
+
+export const UserModal = styled.div`
+  position: absolute;
+  top: 40px;
+  left: 0;
+  margin-right: 100px;
+  background: white;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 15px;
+  width: 180px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  h3 {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .profile-btn {
+    width: 100%;
+    padding: 8px;
+    background: #009BDE;
+    color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .profile-btn:hover {
+    background:rgb(123, 215, 255);
+  }
 `;
