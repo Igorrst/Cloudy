@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Container,
@@ -10,10 +10,17 @@ import {
   CommentButton,
   UserTop,
   UserPost,
+  UserModal,
 } from "./styles";
 import User from "../../components/User";
+import DownIcon from "../../assets/down.svg";
+import CommentIcon from "../../assets/comment.svg";
+import HeartIcon from "../../assets/heart.svg";
+import HeartRedIcon from "../../assets/heart-red.svg";
 
 const Home = () => {
+  const [showModal, setShowModal] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
   const [posts, setPosts] = useState<string[]>([]);
   const [currentPostIndex, setCurrentPostIndex] = useState(0);
   const [newPost, setNewPost] = useState("");
@@ -45,6 +52,19 @@ const Home = () => {
     setLikedPosts(updatedLikes);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setShowModal(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <Container>
       <UserTop>
@@ -58,7 +78,7 @@ const Home = () => {
           onChange={(e) => setNewPost(e.target.value)}
         />
         <IconButton onClick={handleAddPost}>
-          <img src="/src/assets/down.svg" alt="Postar" />
+          <img src={DownIcon} alt="Postar" />
         </IconButton>
       </TextPost>
       <BoxPost onWheel={handleScroll}>
@@ -80,27 +100,31 @@ const Home = () => {
               liked={likedPosts[currentPostIndex]}
               >
               <motion.img
-               src={
-                likedPosts[currentPostIndex]
-                ? "/src/assets/heart-red.svg"
-                 : "/src/assets/heart.svg"
-              }
-               alt="Curtir"
+               src={likedPosts[currentPostIndex] ? HeartRedIcon : HeartIcon} 
+               alt="Like Icon" 
               whileTap={{ scale: 0.9 }}
               whileHover={{ scale: 1.1 }}
               transition={{ type: "spring", stiffness: 300 }}
                />
               </HeartButton>
             <CommentButton>
-              <img src="/src/assets/comment.svg" alt="Comentar" />
+              <img src={CommentIcon} alt="Comentar" />
             </CommentButton>
           </>
         ) : (
           <p>Nenhum Post ainda, crie seu primeiro!</p>
         )}
-          <UserPost>
-            <User />
-          </UserPost>
+          <UserPost onClick={() => setShowModal(true)}>
+          <User />
+          {showModal && (
+            <UserModal ref={modalRef}>
+              <h3>Nome do Usuário</h3>
+              <button className="profile-btn" onClick={() => console.log("Redirecionar para perfil")}>
+                Ir para o perfil
+              </button>
+            </UserModal>
+          )}
+        </UserPost>
       </BoxPost>
     </Container>
   );
