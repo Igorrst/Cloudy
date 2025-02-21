@@ -179,9 +179,9 @@ export const UserTop = styled.div`
 `;
 
 export const UserPost = styled.div`
-  position: fixed;
+  position: absolute;
   padding-bottom: 440px;
-  left: 400px;
+  left: 20px;
   z-index: 10;
   display: flex;
   justify-content: center;
