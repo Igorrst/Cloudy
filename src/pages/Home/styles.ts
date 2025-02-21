@@ -74,6 +74,7 @@ export const IconButton = styled.button`
 export const BoxPost = styled.div`
   width: 100%;
   max-width: 600px;
+  top: 40px;
   min-height: 400px;
   height: auto;
   border: 2px solid black;
@@ -178,69 +179,24 @@ export const UserTop = styled.div`
 `;
 
 export const UserPost = styled.div`
-  position: absolute;
-  top: 20px;
-  left: -50px;
+  position: fixed;
+  padding-bottom: 440px;
+  left: 400px;
   z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 12px;
 
-    img {
+  img {
     width: 30px;
     height: 30px;
     opacity: 0.8;
-  }
-
-  &:hover img {
-    transform: scale(1.2);
-  }
-
-  &:active img {
-    transform: scale(0.9);
+    margin-right: 10px;
   }
 
   @media (max-width: 480px) {
     right: 280px;
-  }
-`;
-
-export const UserModal = styled.div`
-  position: absolute;
-  top: 40px;
-  left: 0;
-  margin-right: 100px;
-  background: white;
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 15px;
-  width: 180px;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-
-  h3 {
-    font-size: 14px;
-    margin-bottom: 8px;
-  }
-
-  }
-
-  .profile-btn {
-    width: 100%;
-    padding: 8px;
-    background: #009BDE;
-    color: white;
-    border: 1px solid black;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-
-  .profile-btn:hover {
-    background:rgb(123, 215, 255);
+    left: 100px;
   }
 `;

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Container,
@@ -10,7 +10,6 @@ import {
   CommentButton,
   UserTop,
   UserPost,
-  UserModal,
 } from "./styles";
 import User from "../../components/User";
 import DownIcon from "../../assets/down.svg";
@@ -19,30 +18,25 @@ import HeartIcon from "../../assets/heart.svg";
 import HeartRedIcon from "../../assets/heart-red.svg";
 
 const Home = () => {
-  const [showModal, setShowModal] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
-  const [posts, setPosts] = useState<string[]>([]);
+  const [posts, setPosts] = useState<any[]>([]);
   const [currentPostIndex, setCurrentPostIndex] = useState(0);
   const [newPost, setNewPost] = useState("");
   const [likedPosts, setLikedPosts] = useState<boolean[]>([]);
 
   const handleAddPost = () => {
     if (newPost.trim()) {
-      setPosts([newPost, ...posts]);
+      const newPostObject = { content: newPost };
+      setPosts([newPostObject, ...posts]);
       setLikedPosts([false, ...likedPosts]);
       setNewPost("");
     }
   };
 
   const handleScroll = (event: React.WheelEvent) => {
-    if (event.deltaY > 0) {
-      if (currentPostIndex < posts.length - 1) {
-        setCurrentPostIndex(currentPostIndex + 1);
-      }
-    } else {
-      if (currentPostIndex > 0) {
-        setCurrentPostIndex(currentPostIndex - 1);
-      }
+    if (event.deltaY > 0 && currentPostIndex < posts.length - 1) {
+      setCurrentPostIndex(currentPostIndex + 1);
+    } else if (event.deltaY < 0 && currentPostIndex > 0) {
+      setCurrentPostIndex(currentPostIndex - 1);
     }
   };
 
@@ -52,23 +46,10 @@ const Home = () => {
     setLikedPosts(updatedLikes);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        setShowModal(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
     <Container>
       <UserTop>
-      <User />
+        <User />
       </UserTop>
       <TextPost>
         <textarea
@@ -92,21 +73,21 @@ const Home = () => {
                 exit={{ opacity: 0, y: -80 }}
                 transition={{ duration: 0.5 }}
               >
-                <Post>{posts[currentPostIndex]}</Post>
+                <Post>{posts[currentPostIndex].content}</Post>
               </motion.div>
             </AnimatePresence>
             <HeartButton
               onClick={() => toggleLike(currentPostIndex)}
               liked={likedPosts[currentPostIndex]}
-              >
+            >
               <motion.img
-               src={likedPosts[currentPostIndex] ? HeartRedIcon : HeartIcon} 
-               alt="Like Icon" 
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 300 }}
-               />
-              </HeartButton>
+                src={likedPosts[currentPostIndex] ? HeartRedIcon : HeartIcon}
+                alt="Like Icon"
+                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              />
+            </HeartButton>
             <CommentButton>
               <img src={CommentIcon} alt="Comentar" />
             </CommentButton>
@@ -114,16 +95,9 @@ const Home = () => {
         ) : (
           <p>Nenhum Post ainda, crie seu primeiro!</p>
         )}
-          <UserPost onClick={() => setShowModal(true)}>
+        <UserPost>
           <User />
-          {showModal && (
-            <UserModal ref={modalRef}>
-              <h3>Nome do Usuário</h3>
-              <button className="profile-btn" onClick={() => console.log("Redirecionar para perfil")}>
-                Ir para o perfil
-              </button>
-            </UserModal>
-          )}
+          <h3>Nome do Usuário</h3>
         </UserPost>
       </BoxPost>
     </Container>
