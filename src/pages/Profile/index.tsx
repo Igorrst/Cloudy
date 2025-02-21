@@ -1,12 +1,12 @@
 import { Container, UserTop } from "./styles";
-import User from "../../components/User";
+import Back from "../../components/GoToBack";
 
 const Profile = () => {
 
     return(
         <Container>
             <UserTop>
-            <User />
+            <Back />
             </UserTop>
         </Container>
     )
