@@ -1,24 +1,13 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Container,
-  TextPost,
-  BoxPost,
-  Post,
-  IconButton,
-  HeartButton,
-  CommentButton,
-  UserTop,
-  UserPost,
-} from "./styles";
+import { AnimatePresence } from "framer-motion";
+import { Container, TextPost, BoxPost, IconButton, UserTop } from "./styles";
+
 import User from "../../components/User";
+import PostCard from "../../components/PostCard";
 import DownIcon from "../../assets/down.svg";
-import CommentIcon from "../../assets/comment.svg";
-import HeartIcon from "../../assets/heart.svg";
-import HeartRedIcon from "../../assets/heart-red.svg";
 
 const Home = () => {
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<{ content: string }[]>([]);
   const [currentPostIndex, setCurrentPostIndex] = useState(0);
   const [newPost, setNewPost] = useState("");
   const [likedPosts, setLikedPosts] = useState<boolean[]>([]);
@@ -51,6 +40,7 @@ const Home = () => {
       <UserTop>
         <User />
       </UserTop>
+
       <TextPost>
         <textarea
           placeholder="O que está pensando?"
@@ -62,43 +52,21 @@ const Home = () => {
           <img src={DownIcon} alt="Postar" />
         </IconButton>
       </TextPost>
+
       <BoxPost onWheel={handleScroll}>
         {posts.length > 0 ? (
-          <>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentPostIndex}
-                initial={{ opacity: 0, y: 80 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -80 }}
-                transition={{ duration: 0.5 }}
-              >
-                <Post>{posts[currentPostIndex].content}</Post>
-              </motion.div>
-            </AnimatePresence>
-            <HeartButton
-              onClick={() => toggleLike(currentPostIndex)}
+          <AnimatePresence mode="wait">
+            <PostCard
+              key={currentPostIndex}
+              content={posts[currentPostIndex].content}
+              userName="Nome do Usuário"
               liked={likedPosts[currentPostIndex]}
-            >
-              <motion.img
-                src={likedPosts[currentPostIndex] ? HeartRedIcon : HeartIcon}
-                alt="Like Icon"
-                whileTap={{ scale: 0.9 }}
-                whileHover={{ scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              />
-            </HeartButton>
-            <CommentButton>
-              <img src={CommentIcon} alt="Comentar" />
-            </CommentButton>
-          </>
+              onClick={() => toggleLike(currentPostIndex)}
+            />
+          </AnimatePresence>
         ) : (
           <p>Nenhum Post ainda, crie seu primeiro!</p>
         )}
-        <UserPost>
-          <User />
-          <h3>Nome do Usuário</h3>
-        </UserPost>
       </BoxPost>
     </Container>
   );

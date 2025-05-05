@@ -73,7 +73,6 @@ export const IconButton = styled.button`
 export const BoxPost = styled.div`
   width: 100%;
   max-width: 600px;
-  top: 40px;
   min-height: 400px;
   height: auto;
   border-radius: 20px;
@@ -99,74 +98,6 @@ export const BoxPost = styled.div`
   }
 `;
 
-export const Post = styled.div`
-  font-size: 20px;
-  font-weight: bold;
-  color: #333;
-  word-wrap: break-word;
-  word-break: break-word;
-  white-space: pre-wrap;
-  text-align: center;
-`;
-
-export const HeartButton = styled.button<{ liked: boolean }>`
-  position: absolute;
-  right: -50px;
-  top: 45%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-
-  img {
-    width: 30px;
-    height: 30px;
-    opacity: ${(props) => (props.liked ? 1 : 0.8)};
-  }
-
-  &:hover img {
-    transform: scale(1.2);
-  }
-
-  &:active img {
-    transform: scale(0.9);
-  }
-
-  @media (max-width: 480px) {
-    right: -40px;
-  }
-`;
-
-export const CommentButton = styled.button`
-  position: absolute;
-  right: -50px;
-  top: 55%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-
-  img {
-    width: 30px;
-    height: 30px;
-    opacity: 0.8;
-  }
-
-  &:hover img {
-    transform: scale(1.2);
-  }
-
-  &:active img {
-    transform: scale(0.9);
-  }
-
-  @media (max-width: 480px) {
-    right: -40px;
-  }
-`;
-
 export const UserTop = styled.div`
   right: 70px;
   height: 30px;
@@ -174,27 +105,4 @@ export const UserTop = styled.div`
   position: fixed;
   top: 20px;
   z-index: 1000;
-`;
-
-export const UserPost = styled.div`
-  position: absolute;
-  padding-bottom: 440px;
-  left: 20px;
-  z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-
-  img {
-    width: 30px;
-    height: 30px;
-    opacity: 0.8;
-    margin-right: 10px;
-  }
-
-  @media (max-width: 480px) {
-    right: 280px;
-    left: 100px;
-  }
 `;
