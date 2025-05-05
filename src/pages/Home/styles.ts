@@ -20,8 +20,7 @@ export const TextPost = styled.div`
 
   textarea {
     width: 100%;
-    height: 50px;
-    border: 1px solid black;
+    height: 45px;
     border-radius: 8px;
     padding: 10px;
     font-size: 16px;
@@ -35,12 +34,12 @@ export const TextPost = styled.div`
   }
 
   @media (max-width: 768px) {
-  margin-top: 100px;
+    margin-top: 100px;
   }
 
-  @media (max-width:  480px) {
-  margin-top: 100px;
-  max-width: 60%;
+  @media (max-width: 480px) {
+    margin-top: 100px;
+    max-width: 60%;
   }
 `;
 
@@ -58,8 +57,8 @@ export const IconButton = styled.button`
   justify-content: center;
 
   img {
-    width: 30px;
-    height: 30px;
+    width: 45px;
+    height: 45px;
   }
 
   &:active {
@@ -77,9 +76,8 @@ export const BoxPost = styled.div`
   top: 40px;
   min-height: 400px;
   height: auto;
-  border: 2px solid black;
   border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.86);
+  background-color: rgb(222, 246, 255);
   display: flex;
   align-items: center;
   justify-content: center;
