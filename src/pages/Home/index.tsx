@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { AnimatePresence } from "framer-motion";
 import { Container, TextPost, BoxPost, IconButton, UserTop } from "./styles";
 
 import User from "../../components/User";
@@ -8,7 +7,6 @@ import DownIcon from "../../assets/down.svg";
 
 const Home = () => {
   const [posts, setPosts] = useState<{ content: string }[]>([]);
-  const [currentPostIndex, setCurrentPostIndex] = useState(0);
   const [newPost, setNewPost] = useState("");
   const [likedPosts, setLikedPosts] = useState<boolean[]>([]);
 
@@ -18,14 +16,6 @@ const Home = () => {
       setPosts([newPostObject, ...posts]);
       setLikedPosts([false, ...likedPosts]);
       setNewPost("");
-    }
-  };
-
-  const handleScroll = (event: React.WheelEvent) => {
-    if (event.deltaY > 0 && currentPostIndex < posts.length - 1) {
-      setCurrentPostIndex(currentPostIndex + 1);
-    } else if (event.deltaY < 0 && currentPostIndex > 0) {
-      setCurrentPostIndex(currentPostIndex - 1);
     }
   };
 
@@ -53,17 +43,17 @@ const Home = () => {
         </IconButton>
       </TextPost>
 
-      <BoxPost onWheel={handleScroll}>
+      <BoxPost>
         {posts.length > 0 ? (
-          <AnimatePresence mode="wait">
+          posts.map((post, index) => (
             <PostCard
-              key={currentPostIndex}
-              content={posts[currentPostIndex].content}
+              key={index}
+              content={post.content}
               userName="Nome do Usuário"
-              liked={likedPosts[currentPostIndex]}
-              onClick={() => toggleLike(currentPostIndex)}
+              liked={likedPosts[index]}
+              onClick={() => toggleLike(index)}
             />
-          </AnimatePresence>
+          ))
         ) : (
           <p>Nenhum Post ainda, crie seu primeiro!</p>
         )}
