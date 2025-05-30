@@ -108,7 +108,3 @@ export const UserTop = styled.div`
   top: 20px;
   z-index: 1000;
 `;
-
-export const DotNavigation = styled.div`
-  display: none;
-`;
