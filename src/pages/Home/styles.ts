@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,13 +15,13 @@ export const Container = styled.div`
 
 export const TextPost = styled.div`
   width: 100%;
-  max-width: 300px;
+  max-width: 500px;
   margin-bottom: 20px;
   position: relative;
 
   textarea {
     width: 100%;
-    height: 45px;
+    height: 60px;
     border-radius: 8px;
     padding: 10px;
     font-size: 16px;
@@ -39,7 +40,7 @@ export const TextPost = styled.div`
 
   @media (max-width: 480px) {
     margin-top: 100px;
-    max-width: 60%;
+    max-width: 90%;
   }
 `;
 
@@ -73,28 +74,29 @@ export const IconButton = styled.button`
 export const BoxPost = styled.div`
   width: 100%;
   max-width: 600px;
-  min-height: 400px;
-  height: auto;
+  height: 75vh;
   border-radius: 20px;
-  background-color: rgb(222, 246, 255);
+  background-color: transparent;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
+  flex-direction: column;
+  gap: 32px;
+  overflow-y: scroll;
+  padding: 10px;
   box-sizing: border-box;
-  position: relative;
 
-  p {
-    color: #aaa;
+  &::-webkit-scrollbar {
+    display: none;
   }
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 
   @media (max-width: 768px) {
     max-width: 90%;
   }
 
   @media (max-width: 480px) {
-    max-width: 70%;
+    max-width: 100%;
   }
 `;
 
