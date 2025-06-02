@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const SignupContainer = styled.div`
   display: flex;
@@ -57,13 +57,13 @@ export const ButtonContainer = styled.div`
     text-align: center;
 
     a {
-      color: rgb(23, 185, 255);
+      color: #17b9ff;
       text-decoration: none;
       font-weight: bold;
       transition: color 0.3s ease;
 
       &:hover {
-        color: #007bbd;
+        color: #009bde;
       }
     }
   }
