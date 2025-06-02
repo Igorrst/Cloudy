@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const ConfigIconContainer = styled.img`
   width: 30px;
@@ -13,12 +13,13 @@ export const ConfigIconContainer = styled.img`
 
 export const ModalContainer = styled.div`
   position: absolute;
+  z-index: 9999;
   top: 60px;
   right: 20px;
   background-color: white;
   padding: 20px;
   width: 200px;
-  border: 2px solid #009BDE;
+  border: 2px solid #009bde;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
@@ -69,7 +70,7 @@ export const Textarea = styled.textarea`
   transition: border-color 0.3s;
 
   &:focus {
-    border-color: #009BDE;
+    border-color: #009bde;
   }
 `;
 
@@ -77,7 +78,7 @@ export const ReportButton = styled.button`
   width: 100%;
   margin-top: 10px;
   padding: 10px;
-  background-color: #009BDE;
+  background-color: #009bde;
   color: white;
   border: none;
   border-radius: 5px;
@@ -86,7 +87,7 @@ export const ReportButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #0079B5;
+    background-color: #0079b5;
   }
 
   &:disabled {
