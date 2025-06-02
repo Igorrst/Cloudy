@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const PrimaryButton = styled.button`
   background-color: rgb(23, 185, 255);
@@ -22,8 +22,7 @@ export const PrimaryButton = styled.button`
     transition: all 0.3s ease;
   }
 
-      @media (max-width: 480px) {
-      width: 280px;
-    }
+  @media (max-width: 480px) {
+    width: 280px;
   }
 `;

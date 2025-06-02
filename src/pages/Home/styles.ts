@@ -27,7 +27,7 @@ export const TextPost = styled.div`
     font-size: 16px;
     resize: none;
     box-sizing: border-box;
-    background: rgb(222, 246, 255);
+    background: #e0f7fa;
   }
 
   ::placeholder {

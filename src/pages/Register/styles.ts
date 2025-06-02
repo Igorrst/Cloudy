@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const RegisterContainer = styled.div`
   display: flex;
@@ -41,12 +41,15 @@ export const FormContainer = styled.form`
     font-size: 24px;
     font-weight: bold;
     text-align: center;
-    color: rgb(23, 185, 255);
+    color: #17b9ff;
     margin-bottom: 20px;
     border-bottom: 1px solid black;
   }
 
-  input, textarea, select, button {
+  input,
+  textarea,
+  select,
+  button {
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -56,14 +59,14 @@ export const FormContainer = styled.form`
   }
 
   button {
-    background-color: rgb(23, 185, 255);
+    background-color: #17b9ff;
     color: white;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: rgb(20, 150, 220);
+      background-color: #17b9ff;
     }
   }
 
@@ -90,7 +93,10 @@ export const FormContainer = styled.form`
     width: 90%;
     max-width: 250px;
 
-    input, textarea, select, button {
+    input,
+    textarea,
+    select,
+    button {
       font-size: 14px;
       padding: 8px;
     }
@@ -105,7 +111,10 @@ export const FormContainer = styled.form`
       font-size: 20px;
     }
 
-    input, textarea, select, button {
+    input,
+    textarea,
+    select,
+    button {
       font-size: 12px;
       padding: 6px;
     }
@@ -119,7 +128,7 @@ export const InputWrapper = styled.div`
   width: 100%;
   height: 48px;
   margin-bottom: 8px;
-  
+
   img {
     position: absolute;
     left: 12px;
@@ -131,14 +140,14 @@ export const InputWrapper = styled.div`
 export const InputField = styled.input<{ hasError?: boolean }>`
   flex: 1;
   height: 100%;
-  border: 1px solid ${(props) => (props.hasError ? 'red' : '#0079a9')};
+  border: 1px solid ${(props) => (props.hasError ? "red" : "#0079a9")};
   border-radius: 8px;
   font-size: 16px;
   outline: none;
   transition: border-color 0.3s ease;
 
   &:focus {
-    border-color: ${(props) => (props.hasError ? 'darkred' : '#005f80')};
+    border-color: ${(props) => (props.hasError ? "darkred" : "#005f80")};
   }
 `;
 
@@ -165,7 +174,7 @@ export const ButtonWrapper = styled.div`
 
     &:hover {
       transform: translateY(-2px);
-      background-color: #006b8c;
+      background-color: #009bde;
     }
   }
 `;
