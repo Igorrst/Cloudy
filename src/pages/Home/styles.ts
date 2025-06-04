@@ -14,25 +14,13 @@ export const Container = styled.div`
 `;
 
 export const TextPost = styled.div`
-  width: 100%;
-  max-width: 500px;
-  margin-bottom: 20px;
+  margin-top: 50px;
+  width: 630px;
+  border-radius: 40px;
+  padding: 20px;
   position: relative;
-
-  textarea {
-    width: 100%;
-    height: 60px;
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 16px;
-    resize: none;
-    box-sizing: border-box;
-    background: #e0f7fa;
-  }
-
-  ::placeholder {
-    color: black;
-  }
+  background-color: rgba(255, 255, 255, 0.4);
+  padding-bottom: 65px;
 
   @media (max-width: 768px) {
     margin-top: 100px;
@@ -44,13 +32,32 @@ export const TextPost = styled.div`
   }
 `;
 
+export const TextArea = styled.textarea`
+  max-width: 500px;
+  width: 100%;
+  height: 60px;
+  border-radius: 40px;
+  padding: 16 px 10px 10px 40px;
+  font-size: 16px;
+  margin-left: 90px;
+  resize: none;
+  box-sizing: border-box;
+  background: #e0f7fa;
+
+  ::placeholder {
+    color: black;
+  }
+`;
+
 export const IconButton = styled.button`
   position: absolute;
-  top: 50%;
-  right: -50px;
+  padding-right: 5px;
+  top: 75%;
+  right: 20px;
   transform: translateY(-50%);
-  background: none;
+  background-color: #e0f7fa;
   border: none;
+  border-radius: 10px;
   cursor: pointer;
   transition: transform 0.2s;
   display: flex;
@@ -58,7 +65,7 @@ export const IconButton = styled.button`
   justify-content: center;
 
   img {
-    width: 45px;
+    width: 30px;
     height: 45px;
   }
 
