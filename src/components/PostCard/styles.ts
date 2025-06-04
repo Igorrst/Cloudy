@@ -3,8 +3,8 @@ import styled from "styled-components";
 export const Container = styled.div`
   position: relative;
   width: 100%;
-  min-height: 400px;
-  border-radius: 20px;
+  min-height: 200px;
+  border-radius: 40px;
   background-color: #e0f7fa;
   padding: 20px;
   box-sizing: border-box;
@@ -27,7 +27,7 @@ export const Container = styled.div`
 `;
 
 export const PostContent = styled.div`
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
   color: #333;
   word-break: break-word;

@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -7,6 +7,7 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     scrollbar-width: thin;
     scrollbar-color: #888 #f0f0f0;
+    outline-color: #17b9ff;
   }
 
   body {
