@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Container, TextPost, BoxPost, IconButton, UserTop } from "./styles";
+import {
+  Container,
+  TextPost,
+  BoxPost,
+  IconButton,
+  UserTop,
+  TextArea,
+} from "./styles";
 
 import User from "../../components/User";
 import PostCard from "../../components/PostCard";
@@ -32,7 +39,7 @@ const Home = () => {
       </UserTop>
 
       <TextPost>
-        <textarea
+        <TextArea
           placeholder="O que está pensando?"
           maxLength={100}
           value={newPost}
@@ -40,6 +47,7 @@ const Home = () => {
         />
         <IconButton onClick={handleAddPost}>
           <img src={DownIcon} alt="Postar" />
+          <p>Postar</p>
         </IconButton>
       </TextPost>
 
