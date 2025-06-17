@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Container, PostContent, UserPostInfo } from "./styles";
-import User from "../User";
+import Avatar from "../Avatar";
 import LikeButton from "../LikeButton";
 
 interface PostCardProps {
@@ -25,7 +25,7 @@ const PostCard = ({ content, userName, liked, onClick }: PostCardProps) => {
       <LikeButton liked={liked} onClick={onClick} />
 
       <UserPostInfo>
-        <User />
+        <Avatar name={userName} />
         <h3>{userName}</h3>
       </UserPostInfo>
     </Container>

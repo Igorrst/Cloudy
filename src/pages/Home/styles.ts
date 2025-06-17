@@ -15,8 +15,8 @@ export const Container = styled.div`
 
 export const TextPost = styled.div`
   margin-top: 50px;
-  width: 630px;
-  border-radius: 40px;
+  width: 600px;
+  border-radius: 10px;
   padding: 20px;
   position: relative;
   background-color: rgba(255, 255, 255, 0.4);
@@ -35,11 +35,10 @@ export const TextPost = styled.div`
 export const TextArea = styled.textarea`
   max-width: 500px;
   width: 100%;
-  height: 60px;
-  border-radius: 40px;
-  padding: 16 px 10px 10px 40px;
+  height: 80px;
+  border-radius: 10px;
+  padding: 10px 10px 10px 20px;
   font-size: 16px;
-  margin-left: 90px;
   resize: none;
   box-sizing: border-box;
   background: #e0f7fa;
@@ -51,8 +50,9 @@ export const TextArea = styled.textarea`
 
 export const IconButton = styled.button`
   position: absolute;
-  padding-right: 5px;
-  top: 75%;
+  padding-right: 20px;
+  padding-left: 10px;
+  top: 80%;
   right: 20px;
   transform: translateY(-50%);
   background-color: #e0f7fa;
