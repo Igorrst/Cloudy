@@ -11,6 +11,7 @@ import {
 import PostCard from "../../components/PostCard";
 import DownIcon from "../../assets/down.svg";
 import Avatar from "../../components/Avatar";
+import { Send } from "lucide-react";
 
 const Home = () => {
   const [posts, setPosts] = useState<{ content: string }[]>([]);
@@ -49,7 +50,7 @@ const Home = () => {
           />
         </div>
         <IconButton onClick={handleAddPost}>
-          <img src={DownIcon} alt="Postar" />
+          <Send size={20} />
           <p>Postar</p>
         </IconButton>
       </TextPost>
