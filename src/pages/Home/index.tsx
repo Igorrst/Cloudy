@@ -8,9 +8,9 @@ import {
   TextArea,
 } from "./styles";
 
-import User from "../../components/User";
 import PostCard from "../../components/PostCard";
-import DownIcon from "../../assets/down.svg";
+import Avatar from "../../components/Avatar";
+import { Send } from "lucide-react";
 
 const Home = () => {
   const [posts, setPosts] = useState<{ content: string }[]>([]);
@@ -35,18 +35,21 @@ const Home = () => {
   return (
     <Container>
       <UserTop>
-        <User />
+        <Avatar name="Igor" />
       </UserTop>
 
       <TextPost>
-        <TextArea
-          placeholder="O que está pensando?"
-          maxLength={100}
-          value={newPost}
-          onChange={(e) => setNewPost(e.target.value)}
-        />
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Avatar name="Igor" />
+          <TextArea
+            placeholder="O que está pensando?"
+            maxLength={100}
+            value={newPost}
+            onChange={(e) => setNewPost(e.target.value)}
+          />
+        </div>
         <IconButton onClick={handleAddPost}>
-          <img src={DownIcon} alt="Postar" />
+          <Send size={20} />
           <p>Postar</p>
         </IconButton>
       </TextPost>
