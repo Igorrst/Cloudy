@@ -9,7 +9,6 @@ import {
 } from "./styles";
 
 import PostCard from "../../components/PostCard";
-import DownIcon from "../../assets/down.svg";
 import Avatar from "../../components/Avatar";
 import { Send } from "lucide-react";
 
