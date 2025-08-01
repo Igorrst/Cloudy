@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const PrimaryButton = styled.button`
-  background-color: rgb(23, 185, 255);
-  color: #fff;
+  background-color: ${({ theme }) => theme.colors.blue[600]};
+  color: ${({ theme }) => theme.colors.gray[50]};
   padding: 20px 120px;
   font-size: 16px;
   border: none;
@@ -17,7 +17,7 @@ export const PrimaryButton = styled.button`
   justify-content: center;
 
   &:hover {
-    background-color: #007bbd;
+    background-color: ${({ theme }) => theme.colors.blue[850]};
     transform: scale(1.05);
     transition: all 0.3s ease;
   }

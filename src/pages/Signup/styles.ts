@@ -37,12 +37,12 @@ export const ButtonContainer = styled.div`
 
   h2 {
     font-size: 14px;
-    color: #333;
+    color: ${({ theme }) => theme.colors.gray[900]};
     margin: 0;
     position: relative;
     left: -100px;
     top: -50px;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid ${({ theme }) => theme.colors.gray[1000]};
 
     @media (max-width: 480px) {
       left: 0;
@@ -53,17 +53,17 @@ export const ButtonContainer = styled.div`
 
   h3 {
     font-size: 12px;
-    color: #666;
+    color: ${({ theme }) => theme.colors.gray[700]};
     text-align: center;
 
     a {
-      color: #17b9ff;
+      color: ${({ theme }) => theme.colors.blue[650]};
       text-decoration: none;
       font-weight: bold;
       transition: color 0.3s ease;
 
       &:hover {
-        color: #009bde;
+        color: ${({ theme }) => theme.colors.blue[700]};
       }
     }
   }
@@ -71,7 +71,7 @@ export const ButtonContainer = styled.div`
 
 export const ButtonLabel = styled.span`
   font-size: 20px;
-  color: #000;
+  color: ${({ theme }) => theme.colors.gray[1200]};
   margin-bottom: 8px;
 
   @media (max-width: 768px) {
@@ -85,10 +85,10 @@ export const ButtonLabel = styled.span`
 export const CloudyBox = styled.div`
   width: 410px;
   height: 400px;
-  background-color: #e0f7fa;
+  background-color: ${({ theme }) => theme.colors.blue[50]};
   border-radius: 30px;
   position: relative;
-  border: 1px solid black;
+  border: 1px solid ${({ theme }) => theme.colors.gray[1000]};
 
   @media (max-width: 1024px) {
     width: 480px;
