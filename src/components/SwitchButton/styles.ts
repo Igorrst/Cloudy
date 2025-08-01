@@ -15,10 +15,8 @@ export const SwitchLabel = styled.label<{ checked: boolean }>`
   width: 60px;
   height: 30px;
   margin-right: 20px;
-  background-color: ${(props) =>
-    props.checked
-      ? ({ theme }) => theme.colors.blue[650]
-      : ({ theme }) => theme.colors.gray[50]};
+  background-color: ${({ checked, theme }) =>
+    theme.colors.blue[checked ? 650 : 50]};
   border: 2px solid ${({ theme }) => theme.colors.gray[1000]};
   border-radius: 15px;
   transition: background-color 0.3s ease;
