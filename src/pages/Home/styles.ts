@@ -23,7 +23,12 @@ export const TextPost = styled.div`
   border-radius: 10px;
   padding: 20px;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(
+    ${({ theme }) => parseInt(theme.colors.blue[100].slice(1, 3), 16)},
+    ${({ theme }) => parseInt(theme.colors.blue[100].slice(3, 5), 16)},
+    ${({ theme }) => parseInt(theme.colors.blue[100].slice(5, 7), 16)},
+    0.4
+  );
 
   @media (max-width: 768px) {
     margin-top: 100px;
@@ -44,15 +49,15 @@ export const TextArea = styled.textarea`
   font-size: 16px;
   resize: none;
   box-sizing: border-box;
-  background: #e0f7fa;
+  background: ${({ theme }) => theme.colors.blue[100]};
 
   ::placeholder {
-    color: black;
+    color: ${({ theme }) => theme.colors.gray[1000]};
   }
 `;
 
 export const IconButton = styled.button`
-  background-color: #e0f7fa;
+  background-color: ${({ theme }) => theme.colors.blue[100]};
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -66,7 +71,7 @@ export const IconButton = styled.button`
   font-size: 14px;
 
   &:hover {
-    background-color: #b0e0e6;
+    background-color: ${({ theme }) => theme.colors.blue[250]};
   }
 `;
 

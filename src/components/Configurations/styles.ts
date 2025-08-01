@@ -16,10 +16,10 @@ export const ModalContainer = styled.div`
   z-index: 9999;
   top: 60px;
   right: 20px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.gray[50]};
   padding: 20px;
   width: 200px;
-  border: 2px solid #009bde;
+  border: 2px solid ${({ theme }) => theme.colors.blue[650]};
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
@@ -46,7 +46,7 @@ export const ThemeIcon = styled.img`
 export const ReportSection = styled.div`
   margin-top: 40px;
   text-align: left;
-  border: 2px solid black;
+  border: 2px solid ${({ theme }) => theme.colors.gray[1000]};
   border-radius: 8px;
   padding: 5px;
 
@@ -63,14 +63,14 @@ export const Textarea = styled.textarea`
   padding: 10px;
   margin-top: 10px;
   border-radius: 5px;
-  border: 1px solid black;
+  border: 1px solid ${({ theme }) => theme.colors.gray[1000]};
   font-size: 14px;
   resize: none;
   outline: none;
   transition: border-color 0.3s;
 
   &:focus {
-    border-color: #009bde;
+    border-color: ${({ theme }) => theme.colors.blue[650]};
   }
 `;
 
@@ -78,8 +78,8 @@ export const ReportButton = styled.button`
   width: 100%;
   margin-top: 10px;
   padding: 10px;
-  background-color: #009bde;
-  color: white;
+  background-color: ${({ theme }) => theme.colors.blue[650]};
+  color: ${({ theme }) => theme.colors.gray[50]};
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -87,11 +87,11 @@ export const ReportButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #007bbd;
+    background-color: ${({ theme }) => theme.colors.blue[850]};
   }
 
   &:disabled {
-    background-color: #ccc;
+    background-color: ${({ theme }) => theme.colors.gray[300]};
     cursor: not-allowed;
   }
 `;

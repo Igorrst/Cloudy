@@ -5,7 +5,7 @@ export const Container = styled.div`
   width: 100%;
   min-height: 200px;
   border-radius: 40px;
-  background-color: #e0f7fa;
+  background-color: ${({ theme }) => theme.colors.blue[100]};
   padding: 20px;
   box-sizing: border-box;
   display: flex;
@@ -29,7 +29,7 @@ export const Container = styled.div`
 export const PostContent = styled.div`
   font-size: 16px;
   font-weight: 500;
-  color: #333;
+  color: ${({ theme }) => theme.colors.gray[900]};
   word-break: break-word;
   white-space: pre-wrap;
   text-align: center;
