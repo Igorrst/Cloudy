@@ -9,10 +9,9 @@ export const Button = styled.button<{ liked: boolean }>`
   border: none;
   cursor: pointer;
 
-  img {
-    width: 30px;
-    height: 30px;
+  svg {
     opacity: ${(props) => (props.liked ? 1 : 0.8)};
+    transition: all 0.3s ease;
   }
 
   @media (max-width: 480px) {

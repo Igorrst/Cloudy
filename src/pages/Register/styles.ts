@@ -128,13 +128,6 @@ export const InputWrapper = styled.div`
   width: 100%;
   height: 48px;
   margin-bottom: 8px;
-
-  img {
-    position: absolute;
-    left: 12px;
-    width: 24px;
-    height: 24px;
-  }
 `;
 
 export const InputField = styled.input<{ hasError?: boolean }>`

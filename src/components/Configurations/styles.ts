@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ConfigIconContainer = styled.img`
+export const ConfigIconContainer = styled.div`
   width: 30px;
   height: 30px;
   cursor: pointer;
@@ -36,11 +36,6 @@ export const ThemeContainer = styled.div`
   justify-content: space-between;
   margin-top: 20px;
   margin-left: 20px;
-`;
-
-export const ThemeIcon = styled.img`
-  width: 30px;
-  height: 30px;
 `;
 
 export const ReportSection = styled.div`
