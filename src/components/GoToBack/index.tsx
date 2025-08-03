@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import back from "../../assets/back.svg";
-import { UserIcon } from "./styles";
+import { CircleArrowLeft } from "lucide-react";
+import { useTheme } from "styled-components";
 
 const Back = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
 
   return (
-    <UserIcon
-      src={back}
-      alt="Usuário"
+    <CircleArrowLeft
       onClick={() => navigate("/home")}
-      style={{ cursor: "pointer" }}
+      size={30}
+      color={theme.colors.gray[1000]}
     />
   );
 };

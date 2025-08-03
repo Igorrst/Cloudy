@@ -56,7 +56,7 @@ export const TextArea = styled.textarea`
   }
 `;
 
-export const IconButton = styled.button`
+export const PublishButton = styled.button`
   background-color: ${({ theme }) => theme.colors.blue[100]};
   border: none;
   border-radius: 10px;

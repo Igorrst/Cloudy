@@ -1,7 +1,7 @@
 import { Button } from "./styles";
-import HeartIcon from "../../assets/heart.svg";
-import HeartRedIcon from "../../assets/heart-red.svg";
 import { motion } from "framer-motion";
+import { Heart } from "lucide-react";
+import { useTheme } from "styled-components";
 
 interface LikeButtonProps {
   liked: boolean;
@@ -9,14 +9,17 @@ interface LikeButtonProps {
 }
 
 const LikeButton = ({ liked, onClick }: LikeButtonProps) => {
+  const theme = useTheme();
+
   return (
     <Button onClick={onClick} liked={liked}>
-      <motion.img
-        src={liked ? HeartRedIcon : HeartIcon}
-        alt="Like"
-        whileTap={{ scale: 0.9 }}
-        whileHover={{ scale: 1.1 }}
-      />
+      <motion.div whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.1 }}>
+        <Heart
+          size={30}
+          color={liked ? "red" : theme.colors.gray[1000]}
+          fill={liked ? "red" : "none"}
+        />
+      </motion.div>
     </Button>
   );
 };

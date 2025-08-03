@@ -3,14 +3,14 @@ import {
   Container,
   TextPost,
   BoxPost,
-  IconButton,
+  PublishButton,
   UserTop,
   TextArea,
 } from "./styles";
 
 import PostCard from "../../components/PostCard";
 import Avatar from "../../components/Avatar";
-import { Send } from "lucide-react";
+import { CloudUpload } from "lucide-react";
 
 const Home = () => {
   const [posts, setPosts] = useState<{ content: string }[]>([]);
@@ -48,10 +48,10 @@ const Home = () => {
             onChange={(e) => setNewPost(e.target.value)}
           />
         </div>
-        <IconButton onClick={handleAddPost}>
-          <Send size={20} />
+        <PublishButton onClick={handleAddPost}>
+          <CloudUpload size={20} />
           <p>Postar</p>
-        </IconButton>
+        </PublishButton>
       </TextPost>
 
       <BoxPost>

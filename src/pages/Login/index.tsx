@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   LoginContainer,
   HeaderContainer,
@@ -8,17 +8,16 @@ import {
   InputField,
   ErrorMessage,
   ButtonWrapper,
-} from './styles';
-import EmailIcon from '../../assets/email.png';
-import PasswordIcon from '../../assets/password.png';
-import PrimaryButton from '../../components/Buttons/PrimaryButton';
-import { loginUser } from '../../services/userService';
-import { Link } from 'react-router-dom';
+} from "./styles";
+import { Mail, LockKeyhole } from "lucide-react";
+import PrimaryButton from "../../components/Buttons/PrimaryButton";
+import { loginUser } from "../../services/userService";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState({
@@ -55,17 +54,17 @@ const Login = () => {
 
       const token = response;
 
-      if (token && token.trim() !== '') {
-        localStorage.setItem('authToken', token);
-        alert('Login realizado com sucesso!');
-        navigate('/home');
+      if (token && token.trim() !== "") {
+        localStorage.setItem("authToken", token);
+        alert("Login realizado com sucesso!");
+        navigate("/home");
       } else {
-        console.error('Token não encontrado');
+        console.error("Token não encontrado");
       }
     } catch (error: any) {
       alert(
         error.response?.data?.message ||
-        'Erro ao fazer login. Verifique suas credenciais.'
+          "Erro ao fazer login. Verifique suas credenciais."
       );
     }
   };
@@ -76,9 +75,9 @@ const Login = () => {
       <FormContainer onSubmit={handleLogin}>
         <h2>Login</h2>
         <InputWrapper>
-          <img src={EmailIcon} alt="Ícone de email" />
+          <Mail size={24} style={{ position: "absolute", left: "12px" }} />
           <InputField
-            style={{ padding: '23px 0 23px 45px' }}
+            style={{ padding: "23px 0 23px 45px" }}
             type="email"
             name="email"
             placeholder="Email"
@@ -90,9 +89,12 @@ const Login = () => {
         {errors.email && <ErrorMessage>O email é obrigatório.</ErrorMessage>}
 
         <InputWrapper>
-          <img src={PasswordIcon} alt="Ícone de senha" />
+          <LockKeyhole
+            size={24}
+            style={{ position: "absolute", left: "12px" }}
+          />
           <InputField
-            style={{ padding: '23px 0 23px 45px' }}
+            style={{ padding: "23px 0 23px 45px" }}
             type="password"
             name="password"
             placeholder="Senha"
@@ -106,9 +108,12 @@ const Login = () => {
         <ButtonWrapper>
           <PrimaryButton text="Entrar" />
         </ButtonWrapper>
-        <p style={{ marginLeft: '100px' }}>
-          Ou{' '}
-          <Link to="/register" style={{ textDecoration: 'none', color: 'blue' }}>
+        <p style={{ marginLeft: "100px" }}>
+          Ou{" "}
+          <Link
+            to="/register"
+            style={{ textDecoration: "none", color: "blue" }}
+          >
             registre-se
           </Link>
         </p>
