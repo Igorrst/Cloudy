@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Button = styled.button<{ liked: boolean }>`
+export const Button = styled.button`
   background: none;
   border: none;
   cursor: pointer;
@@ -11,11 +11,11 @@ export const Button = styled.button<{ liked: boolean }>`
   svg {
     width: 28px;
     height: 28px;
-    opacity: ${(props) => (props.liked ? 1 : 0.8)};
-    display: block;
+    color: ${({ theme }) => theme.colors.gray[900]};
+    opacity: 0.85;
   }
 
-  @media (max-width: 480px) {
-    right: -40px;
+  &:hover svg {
+    opacity: 1;
   }
 `;

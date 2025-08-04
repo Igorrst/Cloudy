@@ -6,4 +6,5 @@ export {
   Mail,
   LockKeyhole,
   UserRound,
+  MessageSquareText,
 } from "lucide-react";

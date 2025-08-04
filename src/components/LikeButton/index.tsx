@@ -15,7 +15,7 @@ const LikeButton = ({ liked, onClick }: LikeButtonProps) => {
     <Button onClick={onClick} liked={liked}>
       <motion.div whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.1 }}>
         <Heart
-          size={30}
+          size={25}
           color={liked ? "red" : theme.colors.gray[1000]}
           fill={liked ? "red" : "none"}
         />

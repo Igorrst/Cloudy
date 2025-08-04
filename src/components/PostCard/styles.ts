@@ -26,6 +26,20 @@ export const Container = styled.div`
   }
 `;
 
+export const PostActions = styled.div`
+  position: absolute;
+  right: 100px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  @media (max-width: 480px) {
+    right: 10px;
+    gap: 15px;
+  }
+`;
+
 export const PostContent = styled.div`
   font-size: 16px;
   font-weight: 500;
