@@ -1,68 +1,92 @@
 import styled from "styled-components";
 
-export const ConfigIconContainer = styled.div`
-  width: 30px;
-  height: 30px;
+export const ConfigTrigger = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
   position: fixed;
   top: 20px;
   right: 20px;
-  margin: 0;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background-color: ${({ theme }) => theme.colors.blue[100]};
   z-index: 1000;
+`;
+
+export const UserInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  span {
+    font-size: 14px;
+    font-weight: bold;
+  }
+`;
+
+export const ArrowIcon = styled.div<{ isOpen: boolean }>`
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  transform: rotate(${({ isOpen }) => (isOpen ? "180deg" : "0deg")});
 `;
 
 export const ModalContainer = styled.div`
   position: absolute;
   z-index: 9999;
-  top: 60px;
+  top: 50px;
   right: 20px;
-  background-color: ${({ theme }) => theme.colors.gray[50]};
+  background-color: ${({ theme }) => theme.colors.blue[100]};
   padding: 20px;
-  width: 200px;
-  border: 2px solid ${({ theme }) => theme.colors.blue[650]};
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-
-  h3 {
-    font-size: 18px;
-    margin-bottom: 20px;
-  }
+  width: 220px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
-export const ThemeContainer = styled.div`
+export const OptionRow = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 20px;
-  margin-left: 20px;
+  justify-content: space-around;
+  font-weight: 500;
+`;
+
+export const Separator = styled.hr`
+  width: 100%;
+  height: 1px;
+  background-color: ${({ theme }) => theme.colors.gray[300]};
+  border: none;
 `;
 
 export const ReportSection = styled.div`
-  margin-top: 40px;
   text-align: left;
   border: 2px solid ${({ theme }) => theme.colors.gray[1000]};
   border-radius: 8px;
-  padding: 5px;
+  padding: 10px;
 
   h4 {
-    margin-bottom: 10px;
-    font-size: 16px;
+    font-size: 14px;
+    margin-bottom: 6px;
     font-weight: bold;
   }
 `;
 
 export const Textarea = styled.textarea`
   width: 100%;
-  height: 80px;
-  padding: 10px;
-  margin-top: 10px;
+  height: 70px;
+  padding: 8px;
   border-radius: 5px;
   border: 1px solid ${({ theme }) => theme.colors.gray[1000]};
-  font-size: 14px;
+  font-size: 13px;
   resize: none;
   outline: none;
-  transition: border-color 0.3s;
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.gray[500]};
+  }
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.blue[650]};
@@ -71,14 +95,14 @@ export const Textarea = styled.textarea`
 
 export const ReportButton = styled.button`
   width: 100%;
-  margin-top: 10px;
-  padding: 10px;
+  margin-top: 8px;
+  padding: 8px;
   background-color: ${({ theme }) => theme.colors.blue[650]};
   color: ${({ theme }) => theme.colors.gray[50]};
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   transition: background-color 0.3s ease;
 
   &:hover {
@@ -88,5 +112,38 @@ export const ReportButton = styled.button`
   &:disabled {
     background-color: ${({ theme }) => theme.colors.gray[300]};
     cursor: not-allowed;
+  }
+`;
+
+export const LogoutButton = styled.button`
+  background: transparent;
+  border: none;
+  color: red;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  justify-content: center;
+`;
+
+export const VerticalSeparator = styled.div`
+  width: 1px;
+  height: 24px;
+  background-color: ${({ theme }) => theme.colors.gray[400]};
+  margin: 0 8px;
+`;
+
+export const ClickableRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+
+  &:hover {
+    opacity: 0.8;
   }
 `;

@@ -1,7 +1,6 @@
 export {
   CircleArrowLeft,
-  Bolt,
-  SunMoon,
+  Moon,
   CloudUpload,
   Mail,
   LockKeyhole,

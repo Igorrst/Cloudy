@@ -1,8 +1,12 @@
 import styled from "styled-components";
 
-export const AvatarWrapper = styled.div`
-  width: 40px;
-  height: 40px;
+interface AvatarWrapperProps {
+  size: number;
+}
+
+export const AvatarWrapper = styled.div<AvatarWrapperProps>`
+  width: ${({ size }) => size}px;
+  height: ${({ size }) => size}px;
   background-color: ${({ theme }) => theme.colors.blue[600]};
   border-radius: 50%;
   display: flex;
@@ -10,7 +14,7 @@ export const AvatarWrapper = styled.div`
   justify-content: center;
   color: ${({ theme }) => theme.colors.gray[50]};
   font-weight: bold;
-  font-size: 18px;
+  font-size: ${({ size }) => size * 0.45}px;
   cursor: pointer;
   margin-right: 20px;
 `;
