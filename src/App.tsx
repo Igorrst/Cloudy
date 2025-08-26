@@ -3,7 +3,6 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme";
 
 import BackgroundDay from "./components/BackgroundDay";
-import Configurations from "./components/Configurations";
 import LogoType from "./components/Logo";
 import Signup from "./pages/Signup";
 import Register from "./pages/Register";
