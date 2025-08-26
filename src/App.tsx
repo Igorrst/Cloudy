@@ -18,7 +18,6 @@ const App = () => {
         <div style={{ position: "relative", zIndex: 1 }}>
           <BackgroundDay />
           <LogoType />
-          <Configurations />
           <Routes>
             <Route path="/" element={<Signup />} />
             <Route path="/register" element={<Register />} />

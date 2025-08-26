@@ -25,6 +25,8 @@ const Login = () => {
     password: false,
   });
 
+  const [isLoading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +40,7 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
     const newErrors = {
       email: !formData.email.trim(),
@@ -57,6 +60,7 @@ const Login = () => {
       if (token && token.trim() !== "") {
         localStorage.setItem("authToken", token);
         alert("Login realizado com sucesso!");
+        setLoading(false);
         navigate("/home");
       } else {
         console.error("Token não encontrado");
@@ -66,6 +70,7 @@ const Login = () => {
         error.response?.data?.message ||
           "Erro ao fazer login. Verifique suas credenciais."
       );
+      setLoading(false);
     }
   };
 
@@ -106,7 +111,7 @@ const Login = () => {
         {errors.password && <ErrorMessage>A senha é obrigatória.</ErrorMessage>}
 
         <ButtonWrapper>
-          <PrimaryButton text="Entrar" />
+          <PrimaryButton disabled={isLoading} text="Entrar" />
         </ButtonWrapper>
         <p style={{ marginLeft: "100px" }}>
           Ou{" "}

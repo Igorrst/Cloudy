@@ -11,6 +11,7 @@ import {
 import PostCard from "../../components/PostCard";
 import Avatar from "../../components/Avatar";
 import { CloudUpload } from "lucide-react";
+import Configurations from "../../components/Configurations";
 
 const Home = () => {
   const [posts, setPosts] = useState<{ content: string }[]>([]);
@@ -35,7 +36,7 @@ const Home = () => {
   return (
     <Container>
       <UserTop>
-        <Avatar name="Igor" />
+        <Configurations />
       </UserTop>
 
       <TextPost>

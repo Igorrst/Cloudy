@@ -1,19 +1,27 @@
 import useModalStore from "../../stores/modalStore";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
-  ConfigIconContainer,
+  ConfigTrigger,
   ModalContainer,
-  ThemeContainer,
+  OptionRow,
+  Separator,
   ReportSection,
   Textarea,
   ReportButton,
+  LogoutButton,
+  UserInfo,
+  ArrowIcon,
+  VerticalSeparator,
+  ClickableRow,
 } from "./styles";
 import SwitchButton from "../SwitchButton";
-import { Bolt, SunMoon } from "lucide-react";
-import { useTheme } from "styled-components";
+import { LogOut, Moon, ChevronDown } from "lucide-react";
+import Avatar from "../Avatar";
 
 const Configurations: React.FC = () => {
   const { isModalOpen, toggleModal } = useModalStore();
+  const navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [reportText, setReportText] = useState("");
 
@@ -27,20 +35,39 @@ const Configurations: React.FC = () => {
     setReportText(event.target.value);
   };
 
-  const theme = useTheme();
+  const goToProfile = () => {
+    toggleModal();
+    navigate("/profile");
+  };
 
   return (
     <>
-      <ConfigIconContainer onClick={toggleModal}>
-        <Bolt size={30} color={theme.colors.gray[1000]} />
-      </ConfigIconContainer>
+      <ConfigTrigger onClick={toggleModal}>
+        <UserInfo>
+          <Avatar isNavigation={false} name="Igor" size={25} />
+        </UserInfo>
+        <VerticalSeparator />
+        <ArrowIcon isOpen={isModalOpen}>
+          <ChevronDown size={16} />
+        </ArrowIcon>
+      </ConfigTrigger>
+
       {isModalOpen && (
         <ModalContainer>
-          <h3>Configurações</h3>
-          <ThemeContainer>
-            <SunMoon size={30} color={theme.colors.gray[1000]} />
+          <ClickableRow onClick={goToProfile}>
+            <Avatar name="Igor" size={30} />
+            <span>Perfil</span>
+          </ClickableRow>
+
+          <Separator />
+
+          <OptionRow>
+            <Moon size={25} />
             <SwitchButton isChecked={isChecked} onToggle={handleToggle} />
-          </ThemeContainer>
+          </OptionRow>
+
+          <Separator />
+
           <ReportSection>
             <h4>Reportar Bug</h4>
             <Textarea
@@ -50,6 +77,13 @@ const Configurations: React.FC = () => {
             />
             <ReportButton>Enviar Reporte</ReportButton>
           </ReportSection>
+
+          <Separator />
+
+          <LogoutButton>
+            <LogOut size={20} />
+            <span>Sair</span>
+          </LogoutButton>
         </ModalContainer>
       )}
     </>
