@@ -1,0 +1,178 @@
+body.night-mode {
+  background: linear-gradient(#000000, #1a1a1a, #2b2b2b, #3a3a3a);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.frame {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.moon {
+  position: absolute;
+  top: 60px;
+  left: 80px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fffde7, #d8d6c0 60%, #b0ae9f 100%);
+  box-shadow:
+    0 0 20px 5px rgba(255, 255, 230, 0.1),
+    0 0 60px 20px rgba(255, 255, 230, 0.05);
+  z-index: 3;
+  animation: moon-glow 8s ease-in-out infinite alternate;
+  overflow: hidden;
+}
+
+.moon::before,
+.moon::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(180, 180, 160, 0.4);
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.moon::before {
+  width: 35px;
+  height: 35px;
+  top: 30px;
+  left: 50px;
+  box-shadow:
+    -10px 30px 0 -5px rgba(180, 180, 160, 0.35),
+    40px 20px 0 -10px rgba(180, 180, 160, 0.3),
+    15px 60px 0 -8px rgba(180, 180, 160, 0.25);
+}
+
+.moon::after {
+  width: 20px;
+  height: 20px;
+  top: 70px;
+  left: 25px;
+  box-shadow:
+    25px -15px 0 -5px rgba(180, 180, 160, 0.4),
+    55px 10px 0 -6px rgba(180, 180, 160, 0.3),
+    35px 45px 0 -5px rgba(180, 180, 160, 0.35);
+}
+
+@keyframes moon-glow {
+  0% {
+    box-shadow:
+      0 0 20px 5px rgba(255, 255, 230, 0.1),
+      0 0 60px 20px rgba(255, 255, 230, 0.05);
+    transform: scale(1);
+  }
+  100% {
+    box-shadow:
+      0 0 25px 8px rgba(255, 255, 230, 0.15),
+      0 0 80px 30px rgba(255, 255, 230, 0.08);
+    transform: scale(1.02);
+  }
+}
+
+.stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: twinkle 2s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cloud {
+  position: absolute;
+  top: 20px;
+  width: 300px;
+  opacity: 0.45;
+  animation: cloud-movement-night 18s linear infinite;
+  filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.3));
+  z-index: -2;
+}
+
+.cloud.front { z-index: -1; }
+
+.cloud.distant,
+.cloud.background { z-index: -2; }
+
+.cloud.smaller {
+  margin-right: 400px;
+  width: 100px;
+  margin-top: 50px;
+}
+
+.cloud.small {
+  margin-right: 200px;
+  width: 150px;
+}
+
+.cloud.big {
+  width: 500px;
+  margin-top: 70px;
+  margin-right: 150px;
+}
+
+.cloud.massive {
+  width: 600px;
+  margin-top: 20px;
+  margin-right: 0px;
+}
+
+.slow  { animation-duration: 18s; }
+.slower { animation-duration: 21s; }
+.slowest { animation-duration: 24s; }
+
+@keyframes cloud-movement-night {
+  0% {
+    transform: translateX(100vw);
+    opacity: 0.45;
+  }
+  40% {
+    transform: translateX(65vw);
+    opacity: 0.42;
+  }
+  60% {
+    transform: translateX(55vw);
+    opacity: 0.35;
+  }
+  80% {
+    transform: translateX(45vw);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateX(40vw);
+    opacity: 0;
+  }
+}
