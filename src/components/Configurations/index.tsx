@@ -1,6 +1,6 @@
 import useModalStore from "../../stores/modalStore";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import {
   ConfigTrigger,
   ModalContainer,
@@ -18,16 +18,15 @@ import {
 import SwitchButton from "../SwitchButton";
 import { LogOut, Moon, ChevronDown } from "lucide-react";
 import Avatar from "../Avatar";
+import useThemeStore from "../../stores/themeStore";
 
 const Configurations: React.FC = () => {
   const { isModalOpen, toggleModal } = useModalStore();
   const navigate = useNavigate();
-  const [isChecked, setIsChecked] = useState(false);
   const [reportText, setReportText] = useState("");
 
-  const handleToggle = () => {
-    setIsChecked(!isChecked);
-  };
+  const isNight = useThemeStore((state) => state.isNight);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
 
   const handleReportChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -63,7 +62,7 @@ const Configurations: React.FC = () => {
 
           <OptionRow>
             <Moon size={25} />
-            <SwitchButton isChecked={isChecked} onToggle={handleToggle} />
+            <SwitchButton isChecked={isNight} onToggle={toggleTheme} />
           </OptionRow>
 
           <Separator />

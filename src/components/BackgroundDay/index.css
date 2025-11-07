@@ -1,5 +1,4 @@
-html,
-body {
+body.day-mode {
   background: linear-gradient(#007bbd, #b0e0e6, #b0e0e6, #ffffff);
   margin: 0;
   padding: 0;
