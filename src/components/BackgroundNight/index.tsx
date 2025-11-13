@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
-import "./index.css";
+import styles from "./index.module.css";
 
 const BackgroundNight: React.FC = () => {
   useEffect(() => {
-    const starsContainer = document.querySelector(".stars");
+    const starsContainer = document.querySelector(
+      `.${styles.stars}`
+    ) as HTMLDivElement | null;
     if (!starsContainer) return;
 
     starsContainer.innerHTML = "";
@@ -11,26 +13,28 @@ const BackgroundNight: React.FC = () => {
     const numStars = 250;
     for (let i = 0; i < numStars; i++) {
       const star = document.createElement("div");
-      star.classList.add("star");
+      star.classList.add(styles.star);
       const size = Math.random() * 2 + 1;
+
       star.style.width = `${size}px`;
       star.style.height = `${size}px`;
       star.style.top = `${Math.random() * 100}%`;
       star.style.left = `${Math.random() * 100}%`;
       star.style.animationDelay = `${Math.random() * 3}s`;
+
       starsContainer.appendChild(star);
     }
   }, []);
 
   return (
-    <div className="frame">
-      <div className="moon"></div>
-      <div className="stars"></div>
+    <div className={styles.frame}>
+      <div className={styles.moon}></div>
+      <div className={styles.stars}></div>
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 762 331"
-        className="cloud big front slowest"
+        className={`${styles.cloud} ${styles.big} ${styles.front} ${styles.slowest}`}
       >
         <path
           fill="#b0b0b0"
@@ -46,7 +50,7 @@ const BackgroundNight: React.FC = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 762 331"
-        className="cloud distant smaller slower"
+        className={`${styles.cloud} ${styles.distant} ${styles.smaller} ${styles.slower}`}
       >
         <path
           fill="#a0a0a0"
@@ -62,7 +66,7 @@ const BackgroundNight: React.FC = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 762 331"
-        className="cloud small slow"
+        className={`${styles.cloud} ${styles.small} ${styles.slow}`}
       >
         <path
           fill="#c5c5c5"
@@ -78,7 +82,7 @@ const BackgroundNight: React.FC = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 762 331"
-        className="cloud smaller slowest"
+        className={`${styles.cloud} ${styles.smaller} ${styles.slowest}`}
       >
         <path
           fill="#bcbcbc"

@@ -1,16 +1,9 @@
-body.night-mode {
+:global(body.night-mode) {
   background: linear-gradient(#000000, #1a1a1a, #2b2b2b, #3a3a3a);
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 .frame {
@@ -106,12 +99,6 @@ body.night-mode {
   50% { opacity: 1; }
 }
 
-svg {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
 .cloud {
   position: absolute;
   top: 20px;
@@ -122,29 +109,27 @@ svg {
   z-index: -2;
 }
 
-.cloud.front { z-index: -1; }
+.front { z-index: -1; }
+.distant { z-index: -2; }
 
-.cloud.distant,
-.cloud.background { z-index: -2; }
-
-.cloud.smaller {
+.smaller {
   margin-right: 400px;
   width: 100px;
   margin-top: 50px;
 }
 
-.cloud.small {
+.small {
   margin-right: 200px;
   width: 150px;
 }
 
-.cloud.big {
+.big {
   width: 500px;
   margin-top: 70px;
   margin-right: 150px;
 }
 
-.cloud.massive {
+.massive {
   width: 600px;
   margin-top: 20px;
   margin-right: 0px;
