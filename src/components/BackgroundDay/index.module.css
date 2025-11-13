@@ -1,20 +1,12 @@
-body.day-mode {
+:global(body.day-mode) {
   background: linear-gradient(#007bbd, #b0e0e6, #b0e0e6, #ffffff);
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  position: relative;
-  border-radius: 2px;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-.frame {
+.clouds {
   position: fixed;
   top: 0;
   left: 0;
@@ -35,64 +27,51 @@ svg {
   top: 20px;
   width: 300px;
   opacity: 1;
-  animation-name: cloud-movement;
-  animation-timing-function: linear;
-  animation-direction: normal;
-  animation-iteration-count: infinite;
-  animation-duration: 15s;
+  animation: cloud-movement 15s linear infinite, cloud-pulse 3s ease-in-out infinite;
   filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.2));
-  animation: cloud-movement 15s linear infinite,
-    cloud-pulse 3s ease-in-out infinite;
   z-index: -2;
 }
 
-.cloud.front {
+.front {
   z-index: -1;
 }
 
-.cloud.distant,
-.cloud.background {
+.distant {
   z-index: -2;
 }
 
-.cloud.smaller {
+.small {
+  margin-right: 200px;
+  width: 150px;
+}
+
+.smaller {
   margin-right: 400px;
   width: 100px;
   margin-top: 50px;
 }
 
-.cloud.small {
-  margin-right: 200px;
-  width: 150px;
-}
-
-.cloud.big {
+.big {
   width: 500px;
   margin-top: 70px;
   margin-right: 150px;
 }
 
-.cloud.massive {
+.massive {
   width: 600px;
   margin-top: 20px;
   margin-right: 0px;
 }
 
 .slow {
-  -webkit-animation-duration: 9.2s;
-  -moz-animation-duration: 9.2s;
   animation-duration: 9.2s;
 }
 
 .slower {
-  -webkit-animation-duration: 11.2s;
-  -moz-animation-duration: 11.2s;
   animation-duration: 11.2s;
 }
 
 .slowest {
-  -webkit-animation-duration: 13.5s;
-  -moz-animation-duration: 13.5s;
   animation-duration: 13.5s;
 }
 
@@ -101,7 +80,6 @@ svg {
     opacity: 1;
     transform: translateX(100vw);
   }
-
   100% {
     opacity: 1;
     transform: translateX(-300px);
