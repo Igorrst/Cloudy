@@ -30,11 +30,10 @@ interface Comment {
 }
 
 interface CommentButtonProps {
-  postId?: string;
   comments?: Comment[];
 }
 
-const CommentButton = ({ postId, comments = [] }: CommentButtonProps) => {
+const CommentButton = ({ comments = [] }: CommentButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [newComment, setNewComment] = useState("");
 
@@ -84,7 +83,7 @@ const CommentButton = ({ postId, comments = [] }: CommentButtonProps) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.2 }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <ModalContent>
                 <ModalHeader>
