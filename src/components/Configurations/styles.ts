@@ -125,7 +125,10 @@ export const LogoutButton = styled.button`
   font-size: 15px;
   font-weight: bold;
   cursor: pointer;
-  justify-content: center;
+  padding: 8px 0;
+  margin: 0;
+  width: 100%;
+  justify-content: flex-start;
 `;
 
 export const VerticalSeparator = styled.div`
