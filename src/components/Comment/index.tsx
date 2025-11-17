@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MessageSquare, X } from "lucide-react";
+import { MessageSquare, X, MoreVertical, Edit, Trash2, Heart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Button,
@@ -16,8 +16,19 @@ import {
   CommentInput,
   SendButton,
   EmptyComments,
+  CommentActions,
+  CommentOptionsButton,
+  CommentOptionsModal,
+  CommentOptionItem,
+  CommentLikeButton,
 } from "./styles";
 import Avatar from "../Avatar";
+import { getUserIdFromToken } from "../../utils/auth";
+
+interface CommentLike {
+  id: string;
+  name: string;
+}
 
 interface Comment {
   id: string;
@@ -27,17 +38,34 @@ interface Comment {
     id: string;
   };
   createdAt: string;
+  likes?: CommentLike[];
 }
 
 interface CommentButtonProps {
   postId: string;
   comments?: Comment[];
+  commentsCount: number;
   onCommentCreate?: (postId: string, content: string) => void;
+  onCommentEdit?: (postId: string, commentId: string, content: string) => void;
+  onCommentDelete?: (postId: string, commentId: string) => void;
+  onCommentLike?: (postId: string, commentId: string, isLiked: boolean) => void;
 }
 
-const CommentButton = ({ postId, comments = [], onCommentCreate }: CommentButtonProps) => {
+const CommentButton = ({ 
+  postId, 
+  comments = [], 
+  commentsCount, 
+  onCommentCreate,
+  onCommentEdit,
+  onCommentDelete,
+  onCommentLike
+}: CommentButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [newComment, setNewComment] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState("");
+  const [showOptionsFor, setShowOptionsFor] = useState<string | null>(null);
+  const currentUserId = getUserIdFromToken();
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -70,12 +98,55 @@ const CommentButton = ({ postId, comments = [], onCommentCreate }: CommentButton
     return date.toLocaleDateString("pt-BR");
   };
 
+  const isCommentOwner = (comment: Comment) => {
+    return currentUserId === comment.owner.id;
+  };
+
+  const isCommentLiked = (comment: Comment) => {
+    if (!currentUserId || !comment.likes) return false;
+    return comment.likes.some((like) => like.id === currentUserId);
+  };
+
+  const handleEditComment = (comment: Comment) => {
+    setEditingCommentId(comment.id);
+    setEditContent(comment.content);
+    setShowOptionsFor(null);
+  };
+
+  const handleSaveEdit = () => {
+    if (editingCommentId && editContent.trim() && onCommentEdit) {
+      onCommentEdit(postId, editingCommentId, editContent.trim());
+      setEditingCommentId(null);
+      setEditContent("");
+    }
+  };
+
+  const handleDeleteComment = (commentId: string) => {
+    if (window.confirm("Tem certeza que deseja excluir este comentário?") && onCommentDelete) {
+      onCommentDelete(postId, commentId);
+      setShowOptionsFor(null);
+    }
+  };
+
+  const handleLikeComment = (comment: Comment) => {
+    if (onCommentLike) {
+      const isLiked = isCommentLiked(comment);
+      onCommentLike(postId, comment.id, isLiked);
+    }
+  };
+
   return (
     <>
-      <Button onClick={handleOpen}>
+      <Button onClick={handleOpen} hasComments={commentsCount > 0}>
         <motion.div whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.1 }}>
-          <MessageSquare size={28} strokeWidth={2} />
+          <MessageSquare 
+            size={28} 
+            strokeWidth={2}
+            color={commentsCount > 0 ? "#FFD700" : undefined}
+            fill={commentsCount > 0 ? "#FFD700" : "none"}
+          />
         </motion.div>
+        {commentsCount > 0 && <span>{commentsCount}</span>}
       </Button>
 
       <AnimatePresence>
@@ -108,12 +179,87 @@ const CommentButton = ({ postId, comments = [], onCommentCreate }: CommentButton
                       <CommentItem key={comment.id}>
                         <CommentHeader>
                           <Avatar name={comment.owner.name} size={32} />
-                          <div>
+                          <div style={{ flex: 1 }}>
                             <strong>{comment.owner.name}</strong>
                             <CommentTime>{formatDate(comment.createdAt)}</CommentTime>
                           </div>
+                          <CommentActions>
+                            <CommentLikeButton 
+                              onClick={() => handleLikeComment(comment)}
+                              liked={isCommentLiked(comment)}
+                            >
+                              <motion.div whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.1 }}>
+                                <Heart
+                                  size={18}
+                                  color={isCommentLiked(comment) ? "red" : undefined}
+                                  fill={isCommentLiked(comment) ? "red" : "none"}
+                                />
+                              </motion.div>
+                              {comment.likes && comment.likes.length > 0 && (
+                                <span>{comment.likes.length}</span>
+                              )}
+                            </CommentLikeButton>
+                          </CommentActions>
+                          {isCommentOwner(comment) && (
+                            <CommentOptionsButton onClick={() => setShowOptionsFor(showOptionsFor === comment.id ? null : comment.id)}>
+                              <MoreVertical size={16} />
+                            </CommentOptionsButton>
+                          )}
+                          {showOptionsFor === comment.id && (
+                            <CommentOptionsModal>
+                              <CommentOptionItem onClick={() => handleEditComment(comment)}>
+                                <Edit size={14} />
+                                <span>Editar</span>
+                              </CommentOptionItem>
+                              <CommentOptionItem onClick={() => handleDeleteComment(comment.id)} delete>
+                                <Trash2 size={14} />
+                                <span>Excluir</span>
+                              </CommentOptionItem>
+                            </CommentOptionsModal>
+                          )}
                         </CommentHeader>
-                        <CommentContent>{comment.content}</CommentContent>
+                        {editingCommentId === comment.id ? (
+                          <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <CommentInput
+                              value={editContent}
+                              onChange={(e) => setEditContent(e.target.value)}
+                              maxLength={280}
+                              style={{ minHeight: '60px' }}
+                            />
+                            <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                              <button
+                                onClick={() => {
+                                  setEditingCommentId(null);
+                                  setEditContent("");
+                                }}
+                                style={{
+                                  padding: '6px 12px',
+                                  border: 'none',
+                                  borderRadius: '6px',
+                                  cursor: 'pointer',
+                                  background: '#ccc'
+                                }}
+                              >
+                                Cancelar
+                              </button>
+                              <button
+                                onClick={handleSaveEdit}
+                                style={{
+                                  padding: '6px 12px',
+                                  border: 'none',
+                                  borderRadius: '6px',
+                                  cursor: 'pointer',
+                                  background: '#00b2ff',
+                                  color: 'white'
+                                }}
+                              >
+                                Salvar
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <CommentContent>{comment.content}</CommentContent>
+                        )}
                       </CommentItem>
                     ))
                   )}

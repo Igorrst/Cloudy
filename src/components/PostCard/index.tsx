@@ -34,6 +34,9 @@ interface PostCardProps {
   onEdit: (postId: string, newContent: string) => void;
   onDelete: (postId: string) => void;
   onCommentCreate: (postId: string, content: string) => void;
+  onCommentEdit?: (postId: string, commentId: string, content: string) => void;
+  onCommentDelete?: (postId: string, commentId: string) => void;
+  onCommentLike?: (postId: string, commentId: string, isLiked: boolean) => void;
 }
 
 const PostCard = ({ 
@@ -47,7 +50,10 @@ const PostCard = ({
   onLike, 
   onEdit, 
   onDelete,
-  onCommentCreate 
+  onCommentCreate,
+  onCommentEdit,
+  onCommentDelete,
+  onCommentLike
 }: PostCardProps) => {
   const [showOptions, setShowOptions] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -167,7 +173,15 @@ const PostCard = ({
           <LikeButton liked={liked} likesCount={likesCount} onClick={onLike} />
         </div>
         <div className="action-button comment">
-          <Comment postId={id} comments={comments} onCommentCreate={onCommentCreate} />
+          <Comment 
+            postId={id} 
+            comments={comments} 
+            commentsCount={comments.length} 
+            onCommentCreate={onCommentCreate}
+            onCommentEdit={onCommentEdit}
+            onCommentDelete={onCommentDelete}
+            onCommentLike={onCommentLike}
+          />
         </div>
       </PostActions>
     </Container>
