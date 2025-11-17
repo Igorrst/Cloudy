@@ -5,10 +5,11 @@ import { useTheme } from "styled-components";
 
 interface LikeButtonProps {
   liked: boolean;
+  likesCount: number;
   onClick: () => void;
 }
 
-const LikeButton = ({ liked, onClick }: LikeButtonProps) => {
+const LikeButton = ({ liked, likesCount, onClick }: LikeButtonProps) => {
   const theme = useTheme();
 
   return (
@@ -20,6 +21,7 @@ const LikeButton = ({ liked, onClick }: LikeButtonProps) => {
           fill={liked ? "red" : "none"}
         />
       </motion.div>
+      {likesCount > 0 && <span>{likesCount}</span>}
     </Button>
   );
 };

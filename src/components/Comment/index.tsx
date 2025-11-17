@@ -30,10 +30,12 @@ interface Comment {
 }
 
 interface CommentButtonProps {
+  postId: string;
   comments?: Comment[];
+  onCommentCreate?: (postId: string, content: string) => void;
 }
 
-const CommentButton = ({ comments = [] }: CommentButtonProps) => {
+const CommentButton = ({ postId, comments = [], onCommentCreate }: CommentButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [newComment, setNewComment] = useState("");
 
@@ -47,7 +49,8 @@ const CommentButton = ({ comments = [] }: CommentButtonProps) => {
   };
 
   const handleSendComment = () => {
-    if (newComment.trim()) {
+    if (newComment.trim() && onCommentCreate) {
+      onCommentCreate(postId, newComment.trim());
       setNewComment("");
     }
   };
