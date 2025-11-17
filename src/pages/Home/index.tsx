@@ -13,7 +13,7 @@ import Avatar from "../../components/Avatar";
 import { UploadCloud } from "lucide-react";
 import Configurations from "../../components/Configurations";
 import { getPosts, createPost, updatePost, deletePost, likePost, unlikePost } from "../../services/postService";
-import { createComment } from "../../services/commentService";
+import { createComment, updateComment, deleteComment, likeComment, unlikeComment } from "../../services/commentService";
 import { getCurrentUser } from "../../services/userService";
 
 interface PostOwner {
@@ -34,6 +34,7 @@ interface PostComment {
     id: string;
   };
   createdAt: string;
+  likes?: PostLike[];
 }
 
 interface Post {
@@ -81,7 +82,10 @@ const Home = () => {
         createdAt: post.createdAt,
         updatedAt: post.updatedAt,
         likes: post.likes || [],
-        comments: post.comments || [],
+        comments: (post.comments || []).map((comment: any) => ({
+          ...comment,
+          likes: comment.likes || [],
+        })),
       }));
       setPosts(formattedPosts);
     } catch (error) {
@@ -151,6 +155,36 @@ const Home = () => {
     }
   };
 
+  const handleCommentEdit = async (postId: string, commentId: string, content: string) => {
+    try {
+      await updateComment(postId, commentId, { content });
+      await loadPosts();
+    } catch (error: any) {
+      alert(error.response?.data?.message || "Erro ao editar comentário");
+    }
+  };
+
+  const handleCommentDelete = async (postId: string, commentId: string) => {
+    try {
+      await deleteComment(postId, commentId);
+      await loadPosts();
+    } catch (error: any) {
+      alert(error.response?.data?.message || "Erro ao excluir comentário");
+    }
+  };
+
+  const handleCommentLike = async (postId: string, commentId: string, isLiked: boolean) => {
+    try {
+      if (isLiked) {
+        await unlikeComment(postId, commentId);
+      } else {
+        await likeComment(postId, commentId);
+      }
+      await loadPosts();
+    } catch (error: any) {
+    }
+  };
+
   const isPostLiked = (post: Post): boolean => {
     if (!currentUser) return false;
     return post.likes.some((like) => like.id === currentUser.id);
@@ -196,6 +230,9 @@ const Home = () => {
               onEdit={handleEditPost}
               onDelete={handleDeletePost}
               onCommentCreate={handleCommentCreate}
+              onCommentEdit={handleCommentEdit}
+              onCommentDelete={handleCommentDelete}
+              onCommentLike={handleCommentLike}
             />
           ))
         ) : (

@@ -1,18 +1,25 @@
 import styled from "styled-components";
 
-export const Button = styled.button`
+export const Button = styled.button<{ hasComments: boolean }>`
   background: none;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
 
   svg {
     width: 28px;
     height: 28px;
-    color: ${({ theme }) => theme.colors.gray[900]};
-    opacity: 0.85;
+    opacity: ${(props) => (props.hasComments ? 1 : 0.8)};
+    display: block;
+  }
+
+  span {
+    font-size: 14px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.gray[800]};
   }
 
   &:hover svg {
@@ -122,6 +129,8 @@ export const CommentHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
+  position: relative;
+  flex-wrap: wrap;
 `;
 
 export const CommentContent = styled.p`
@@ -217,5 +226,97 @@ export const EmptyComments = styled.div`
   span {
     font-size: 14px;
     color: ${({ theme }) => theme.colors.gray[600]};
+  }
+`;
+
+export const CommentActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+`;
+
+export const CommentLikeButton = styled.button<{ liked: boolean }>`
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    opacity: ${(props) => (props.liked ? 1 : 0.7)};
+    display: block;
+  }
+
+  span {
+    font-size: 13px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.gray[800]};
+    min-width: 12px;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.blue[200]};
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+export const CommentOptionsButton = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  color: ${({ theme }) => theme.colors.gray[800]};
+  margin-left: auto;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.gray[200]};
+  }
+`;
+
+export const CommentOptionsModal = styled.div`
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background-color: ${({ theme }) => theme.colors.blue[100]};
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 120px;
+  z-index: 1000;
+  overflow: hidden;
+`;
+
+export const CommentOptionItem = styled.div<{ delete?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: ${({ theme, delete: isDelete }) => isDelete ? theme.colors.red[500] : theme.colors.gray[1000]};
+  font-size: 13px;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.blue[200]};
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
   }
 `;
