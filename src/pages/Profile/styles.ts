@@ -2,18 +2,21 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   max-width: 935px;
+  width: 100%;
   margin: 0 auto;
-  padding: 60px 20px 40px;
+  padding: 80px 20px 80px;
   min-height: 100vh;
   position: relative;
   color: ${({ theme }) => theme.colors.gray[1000]};
+  box-sizing: border-box;
+  overflow-x: hidden;
 
   body.night-mode & {
     color: ${({ theme }) => theme.colors.gray[50]};
   }
 
   @media (max-width: 768px) {
-    padding: 60px 10px 20px;
+    padding: 80px 10px 60px;
   }
 `;
 
@@ -23,8 +26,9 @@ export const TopBar = styled.div`
   right: 20px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
   z-index: 1000;
+  flex-direction: row-reverse;
 
   & > div:first-child {
     position: static !important;
@@ -35,7 +39,7 @@ export const TopBar = styled.div`
   @media (max-width: 768px) {
     top: 15px;
     right: 15px;
-    gap: 10px;
+    gap: 16px;
   }
 `;
 
@@ -146,6 +150,11 @@ export const StatItem = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
 
   strong {
     font-size: 18px;
@@ -173,6 +182,20 @@ export const BioSection = styled.div`
   padding: 20px 0;
   margin-bottom: 30px;
   position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 20px;
+  }
+`;
+
+export const BioContent = styled.div`
+  flex: 1;
+  min-width: 0;
 `;
 
 export const BioText = styled.p`
@@ -322,11 +345,40 @@ export const CancelButton = styled.button`
   }
 `;
 
+export const PostsScrollContainer = styled.div`
+  width: 100%;
+  max-width: 100%;
+  max-height: calc(100vh - 180px);
+  min-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 30px;
+  padding: 0;
+  padding-bottom: 120px;
+  box-sizing: border-box;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  @media (max-width: 768px) {
+    max-height: calc(100vh - 130px);
+    min-height: 300px;
+    padding-bottom: 100px;
+  }
+`;
+
 export const PostsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  margin-top: 30px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-bottom: 80px;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
@@ -336,21 +388,28 @@ export const PostsGrid = styled.div`
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 20px;
+    padding-bottom: 60px;
   }
 `;
 
 export const PostItem = styled.div`
   width: 100%;
+  max-width: 100%;
   min-height: 350px;
   display: flex;
   flex-direction: column;
   aspect-ratio: 1;
+  box-sizing: border-box;
+  overflow: hidden;
 
   & > div {
     height: 100%;
+    width: 100%;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     min-height: 350px;
+    box-sizing: border-box;
   }
 
   @media (max-width: 1024px) {
@@ -539,5 +598,265 @@ export const EmojiPickerContainer = styled.div`
     transform: translateX(-50%);
     max-width: calc(100vw - 20px);
     width: auto;
+  }
+`;
+
+export const SearchWrapper = styled.div`
+  position: relative;
+  width: 280px;
+  flex-shrink: 0;
+
+  @media (max-width: 1024px) {
+    width: 250px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
+  & > div {
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+
+  & input {
+    font-size: 14px !important;
+    padding: 8px 36px 8px 12px !important;
+  }
+
+  & svg {
+    right: 10px !important;
+    width: 18px !important;
+    height: 18px !important;
+  }
+`;
+
+export const FollowButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: ${({ theme }) => theme.colors.blue[500]};
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: ${({ theme }) => theme.colors.blue[600]};
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+`;
+
+export const UnfollowButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: transparent;
+  border: 2px solid ${({ theme }) => theme.colors.blue[500]};
+  border-radius: 8px;
+  color: ${({ theme }) => theme.colors.blue[500]};
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  body.night-mode & {
+    border-color: ${({ theme }) => theme.colors.blue[400]};
+    color: ${({ theme }) => theme.colors.blue[400]};
+  }
+
+  &:hover:not(:disabled) {
+    background: ${({ theme }) => theme.colors.blue[50]};
+    border-color: ${({ theme }) => theme.colors.blue[600]};
+    color: ${({ theme }) => theme.colors.blue[600]};
+    transform: translateY(-1px);
+
+    body.night-mode & {
+      background: ${({ theme }) => theme.colors.gray[800]};
+      border-color: ${({ theme }) => theme.colors.blue[500]};
+      color: ${({ theme }) => theme.colors.blue[500]};
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+`;
+
+export const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+`;
+
+export const ModalContent = styled.div`
+  background: ${({ theme }) => theme.colors.blue[50]};
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+  body.night-mode & {
+    background: ${({ theme }) => theme.colors.gray[900]};
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    max-width: 90%;
+    max-height: 70vh;
+  }
+`;
+
+export const ModalHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.blue[200]};
+
+  body.night-mode & {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
+  }
+`;
+
+export const ModalTitle = styled.h3`
+  font-size: 18px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.gray[1000]};
+  margin: 0;
+
+  body.night-mode & {
+    color: ${({ theme }) => theme.colors.gray[50]};
+  }
+`;
+
+export const ModalCloseButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: ${({ theme }) => theme.colors.gray[700]};
+  cursor: pointer;
+  transition: all 0.2s;
+
+  body.night-mode & {
+    color: ${({ theme }) => theme.colors.gray[300]};
+  }
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.blue[100]};
+    color: ${({ theme }) => theme.colors.gray[1000]};
+
+    body.night-mode & {
+      background: ${({ theme }) => theme.colors.gray[800]};
+      color: ${({ theme }) => theme.colors.gray[100]};
+    }
+  }
+`;
+
+export const ModalList = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.blue[300]};
+    border-radius: 3px;
+
+    body.night-mode & {
+      background: ${({ theme }) => theme.colors.gray[600]};
+    }
+  }
+`;
+
+export const ModalUserItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.blue[100]};
+
+    body.night-mode & {
+      background: ${({ theme }) => theme.colors.gray[800]};
+    }
+  }
+
+  span {
+    font-size: 16px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.gray[1000]};
+
+    body.night-mode & {
+      color: ${({ theme }) => theme.colors.gray[50]};
+    }
+  }
+`;
+
+export const ModalEmptyState = styled.div`
+  padding: 40px 20px;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.gray[600]};
+  font-size: 14px;
+
+  body.night-mode & {
+    color: ${({ theme }) => theme.colors.gray[400]};
   }
 `;

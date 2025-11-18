@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { Container, TopBar, BackButton, ProfileHeader, ProfileInfo, BioSection, BioText, BioTextarea, BioActions, EditButton, SaveButton, CancelButton, PostsGrid, PostItem, EmptyState, StatsSection, StatItem, EmojiButton, EmojiPickerContainer } from "./styles";
+import { Container, TopBar, BackButton, ProfileHeader, ProfileInfo, BioSection, BioContent, BioText, BioTextarea, BioActions, EditButton, SaveButton, CancelButton, PostsScrollContainer, PostsGrid, PostItem, EmptyState, StatsSection, StatItem, EmojiButton, EmojiPickerContainer, SearchWrapper, FollowButton, UnfollowButton, ModalOverlay, ModalContent, ModalHeader, ModalTitle, ModalCloseButton, ModalList, ModalUserItem, ModalEmptyState } from "./styles";
 import Configurations from "../../components/Configurations";
 import Avatar from "../../components/Avatar";
 import PostCard from "../../components/PostCard";
-import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { getCurrentUser, updateUser } from "../../services/userService";
+import UserSearch from "../../components/UserSearch";
+import { ArrowLeft, UserPlus, UserMinus, X, Smile, Edit2, Check } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCurrentUser, getUserById, updateUser, followUser, unfollowUser } from "../../services/userService";
 import { getPosts, likePost, unlikePost, updatePost, deletePost } from "../../services/postService";
 import { createComment, updateComment, deleteComment, likeComment, unlikeComment } from "../../services/commentService";
-import { Smile, Edit2, Check, X } from "lucide-react";
 import EmojiPicker, { EmojiClickData, Theme, Categories } from "emoji-picker-react";
 import useThemeStore from "../../stores/themeStore";
 import { Post, PostComment, UserProfile, ApiPostsResponse, ApiPostResponse, ApiCommentResponse, isApiError } from "../../types";
@@ -16,6 +16,7 @@ import { getUserIdFromToken } from "../../utils/auth";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { userId } = useParams<{ userId?: string }>();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,10 +24,16 @@ const Profile = () => {
   const [bioText, setBioText] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowingLoading, setIsFollowingLoading] = useState(false);
+  const [currentUserName, setCurrentUserName] = useState<string>("");
+  const [showFollowersModal, setShowFollowersModal] = useState(false);
+  const [showFollowingModal, setShowFollowingModal] = useState(false);
   const bioTextareaRef = useRef<HTMLTextAreaElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const isNight = useThemeStore((state) => state.isNight);
   const currentUserId = getUserIdFromToken();
+  const isOwnProfile = !userId || userId === currentUserId;
 
   useEffect(() => {
     const handleResize = () => {
@@ -38,8 +45,23 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
+    const loadCurrentUser = async () => {
+      if (currentUserId) {
+        try {
+          const currentUser = await getCurrentUser();
+          if (currentUser) {
+            setCurrentUserName(currentUser.name);
+          }
+        } catch (error) {
+        }
+      }
+    };
+    loadCurrentUser();
+  }, [currentUserId]);
+
+  useEffect(() => {
     loadProfile();
-  }, []);
+  }, [userId, currentUserId]);
 
   useEffect(() => {
     if (showEmojiPicker && emojiPickerRef.current) {
@@ -87,10 +109,24 @@ const Profile = () => {
   const loadProfile = async () => {
     try {
       setIsLoading(true);
-      const userData = await getCurrentUser();
+      let userData: UserProfile | null = null;
+      
+      if (userId && userId !== currentUserId) {
+        userData = await getUserById(userId);
+      } else {
+        userData = await getCurrentUser();
+      }
+      
       if (userData) {
         setUser(userData);
         setBioText(userData.bio || "");
+        
+        if (userData.followers && currentUserId) {
+          const isUserFollowing = userData.followers.some(
+            (follower) => follower.follower.id === currentUserId
+          );
+          setIsFollowing(isUserFollowing);
+        }
         
         const response = await getPosts() as ApiPostsResponse;
         const userPosts = response.posts
@@ -343,7 +379,7 @@ const Profile = () => {
                 if (isLiked) {
                   return {
                     ...comment,
-                    likes: (comment.likes || []).filter(like => like.id !== currentUserId)
+                    likes: (comment.likes || []).filter(like => like.id === currentUserId)
                   };
                 } else {
                   return {
@@ -363,6 +399,50 @@ const Profile = () => {
         ? error.response?.data?.message || "Erro ao curtir comentário"
         : "Erro ao curtir comentário";
       alert(errorMessage);
+    }
+  };
+
+  const handleFollow = async () => {
+    if (!user || !currentUserId || isFollowingLoading) return;
+    
+    try {
+      setIsFollowingLoading(true);
+      if (isFollowing) {
+        await unfollowUser(user.id);
+        setIsFollowing(false);
+        if (user.followers) {
+          setUser({
+            ...user,
+            followers: user.followers.filter(
+              (follower) => follower.follower.id !== currentUserId
+            ),
+          });
+        }
+      } else {
+        await followUser(user.id);
+        setIsFollowing(true);
+        if (currentUserId && currentUserName) {
+          setUser({
+            ...user,
+            followers: [
+              ...(user.followers || []),
+              {
+                follower: {
+                  id: currentUserId,
+                  name: currentUserName,
+                },
+              },
+            ],
+          });
+        }
+      }
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.response?.data?.message || "Erro ao seguir/deixar de seguir"
+        : "Erro ao seguir/deixar de seguir";
+      alert(errorMessage);
+    } finally {
+      setIsFollowingLoading(false);
     }
   };
 
@@ -394,20 +474,38 @@ const Profile = () => {
           <ArrowLeft size={24} />
         </BackButton>
       </TopBar>
+
       <ProfileHeader>
         <Avatar name={user.name} size={90} isNavigation={false} />
         <ProfileInfo>
-          <h1>{user.name}</h1>
+          <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
+            <h1>{user.name}</h1>
+            {!isOwnProfile && currentUserId && (
+              <>
+                {isFollowing ? (
+                  <UnfollowButton onClick={handleFollow} disabled={isFollowingLoading}>
+                    <UserMinus size={18} />
+                    Deixar de seguir
+                  </UnfollowButton>
+                ) : (
+                  <FollowButton onClick={handleFollow} disabled={isFollowingLoading}>
+                    <UserPlus size={18} />
+                    Seguir
+                  </FollowButton>
+                )}
+              </>
+            )}
+          </div>
           <StatsSection>
             <StatItem>
               <strong>{postsCount}</strong>
               <span>posts</span>
             </StatItem>
-            <StatItem>
+            <StatItem onClick={() => setShowFollowersModal(true)} style={{ cursor: "pointer" }}>
               <strong>{followersCount}</strong>
               <span>seguidores</span>
             </StatItem>
-            <StatItem>
+            <StatItem onClick={() => setShowFollowingModal(true)} style={{ cursor: "pointer" }}>
               <strong>{followingCount}</strong>
               <span>seguindo</span>
             </StatItem>
@@ -416,98 +514,167 @@ const Profile = () => {
       </ProfileHeader>
 
       <BioSection>
-        {isEditingBio ? (
-          <div style={{ position: "relative", width: "100%" }}>
-            <BioTextarea
-              ref={bioTextareaRef}
-              value={bioText}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setBioText(e.target.value)}
-              placeholder="Escreva sua bio..."
-              maxLength={150}
-              onClick={() => setShowEmojiPicker(false)}
-            />
-            <EmojiButton
-              type="button"
-              onClick={toggleEmojiPicker}
-              aria-label="emoji"
-            >
-              <Smile size={18} />
-            </EmojiButton>
-            {showEmojiPicker && (
-              <EmojiPickerContainer ref={emojiPickerRef}>
-                <EmojiPicker
-                  onEmojiClick={handleEmojiClick}
-                  theme={isNight ? Theme.DARK : Theme.LIGHT}
-                  width={windowWidth <= 480 ? windowWidth - 20 : 350}
-                  height={windowWidth <= 480 ? 350 : 400}
-                  searchDisabled={false}
-                  skinTonesDisabled={false}
-                  previewConfig={{ showPreview: false }}
-                  categories={[
-                    { category: Categories.SUGGESTED, name: "Mais Usados" },
-                    { category: Categories.SMILEYS_PEOPLE, name: "Carinhas e Pessoas" },
-                    { category: Categories.ANIMALS_NATURE, name: "Animais e Natureza" },
-                    { category: Categories.FOOD_DRINK, name: "Comida e Bebida" },
-                    { category: Categories.TRAVEL_PLACES, name: "Viagem e Lugares" },
-                    { category: Categories.ACTIVITIES, name: "Atividades" },
-                    { category: Categories.OBJECTS, name: "Objetos" },
-                    { category: Categories.SYMBOLS, name: "Símbolos" },
-                    { category: Categories.FLAGS, name: "Bandeiras" }
-                  ]}
-                />
-              </EmojiPickerContainer>
-            )}
-            <BioActions>
-              <SaveButton onClick={handleSaveBio}>
-                <Check size={16} />
-                Salvar
-              </SaveButton>
-              <CancelButton onClick={handleCancelEdit}>
-                <X size={16} />
-                Cancelar
-              </CancelButton>
-            </BioActions>
-          </div>
-        ) : (
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", width: "100%" }}>
-            <BioText>{user.bio || "Nenhuma bio ainda."}</BioText>
-            {currentUserId === user.id && (
-              <EditButton onClick={() => setIsEditingBio(true)}>
-                <Edit2 size={16} />
-              </EditButton>
-            )}
-          </div>
-        )}
+        <BioContent>
+          {isEditingBio ? (
+            <div style={{ position: "relative", width: "100%" }}>
+              <BioTextarea
+                ref={bioTextareaRef}
+                value={bioText}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setBioText(e.target.value)}
+                placeholder="Escreva sua bio..."
+                maxLength={150}
+                onClick={() => setShowEmojiPicker(false)}
+              />
+              <EmojiButton
+                type="button"
+                onClick={toggleEmojiPicker}
+                aria-label="emoji"
+              >
+                <Smile size={18} />
+              </EmojiButton>
+              {showEmojiPicker && (
+                <EmojiPickerContainer ref={emojiPickerRef}>
+                  <EmojiPicker
+                    onEmojiClick={handleEmojiClick}
+                    theme={isNight ? Theme.DARK : Theme.LIGHT}
+                    width={windowWidth <= 480 ? windowWidth - 20 : 350}
+                    height={windowWidth <= 480 ? 350 : 400}
+                    searchDisabled={false}
+                    skinTonesDisabled={false}
+                    previewConfig={{ showPreview: false }}
+                    categories={[
+                      { category: Categories.SUGGESTED, name: "Mais Usados" },
+                      { category: Categories.SMILEYS_PEOPLE, name: "Carinhas e Pessoas" },
+                      { category: Categories.ANIMALS_NATURE, name: "Animais e Natureza" },
+                      { category: Categories.FOOD_DRINK, name: "Comida e Bebida" },
+                      { category: Categories.TRAVEL_PLACES, name: "Viagem e Lugares" },
+                      { category: Categories.ACTIVITIES, name: "Atividades" },
+                      { category: Categories.OBJECTS, name: "Objetos" },
+                      { category: Categories.SYMBOLS, name: "Símbolos" },
+                      { category: Categories.FLAGS, name: "Bandeiras" }
+                    ]}
+                  />
+                </EmojiPickerContainer>
+              )}
+              <BioActions>
+                <SaveButton onClick={handleSaveBio}>
+                  <Check size={16} />
+                  Salvar
+                </SaveButton>
+                <CancelButton onClick={handleCancelEdit}>
+                  <X size={16} />
+                  Cancelar
+                </CancelButton>
+              </BioActions>
+            </div>
+          ) : (
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", width: "100%" }}>
+              <BioText>{user.bio || "Nenhuma bio ainda."}</BioText>
+              {currentUserId === user.id && (
+                <EditButton onClick={() => setIsEditingBio(true)}>
+                  <Edit2 size={16} />
+                </EditButton>
+              )}
+            </div>
+          )}
+        </BioContent>
+        <SearchWrapper>
+          <UserSearch />
+        </SearchWrapper>
       </BioSection>
 
-      <PostsGrid>
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <PostItem key={post.id}>
-              <PostCard
-                id={post.id}
-                content={post.content}
-                owner={post.owner}
-                ownerId={post.ownerId}
-                liked={isPostLiked(post)}
-                likesCount={post.likes.length}
-                comments={post.comments}
-                onLike={() => handleLike(post.id, isPostLiked(post))}
-                onEdit={handleEditPost}
-                onDelete={handleDeletePost}
-                onCommentCreate={handleCommentCreate}
-                onCommentEdit={handleCommentEdit}
-                onCommentDelete={handleCommentDelete}
-                onCommentLike={handleCommentLike}
-              />
-            </PostItem>
-          ))
-        ) : (
-          <EmptyState>
-            <p>Nenhum post ainda</p>
-          </EmptyState>
-        )}
-      </PostsGrid>
+      <PostsScrollContainer>
+        <PostsGrid>
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <PostItem key={post.id}>
+                <PostCard
+                  id={post.id}
+                  content={post.content}
+                  owner={post.owner}
+                  ownerId={post.ownerId}
+                  liked={isPostLiked(post)}
+                  likesCount={post.likes.length}
+                  comments={post.comments}
+                  onLike={() => handleLike(post.id, isPostLiked(post))}
+                  onEdit={handleEditPost}
+                  onDelete={handleDeletePost}
+                  onCommentCreate={handleCommentCreate}
+                  onCommentEdit={handleCommentEdit}
+                  onCommentDelete={handleCommentDelete}
+                  onCommentLike={handleCommentLike}
+                />
+              </PostItem>
+            ))
+          ) : (
+            <EmptyState>
+              <p>Nenhum post ainda</p>
+            </EmptyState>
+          )}
+        </PostsGrid>
+      </PostsScrollContainer>
+
+      {showFollowersModal && (
+        <ModalOverlay onClick={() => setShowFollowersModal(false)}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalHeader>
+              <ModalTitle>Seguidores</ModalTitle>
+              <ModalCloseButton onClick={() => setShowFollowersModal(false)}>
+                <X size={20} />
+              </ModalCloseButton>
+            </ModalHeader>
+            <ModalList>
+              {user.followers && user.followers.length > 0 ? (
+                user.followers.map((follower) => (
+                  <ModalUserItem
+                    key={follower.follower.id}
+                    onClick={() => {
+                      navigate(`/profile/${follower.follower.id}`);
+                      setShowFollowersModal(false);
+                    }}
+                  >
+                    <Avatar name={follower.follower.name} size={40} isNavigation={false} />
+                    <span>{follower.follower.name}</span>
+                  </ModalUserItem>
+                ))
+              ) : (
+                <ModalEmptyState>Nenhum seguidor ainda</ModalEmptyState>
+              )}
+            </ModalList>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+
+      {showFollowingModal && (
+        <ModalOverlay onClick={() => setShowFollowingModal(false)}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalHeader>
+              <ModalTitle>Seguindo</ModalTitle>
+              <ModalCloseButton onClick={() => setShowFollowingModal(false)}>
+                <X size={20} />
+              </ModalCloseButton>
+            </ModalHeader>
+            <ModalList>
+              {user.following && user.following.length > 0 ? (
+                user.following.map((following) => (
+                  <ModalUserItem
+                    key={following.following.id}
+                    onClick={() => {
+                      navigate(`/profile/${following.following.id}`);
+                      setShowFollowingModal(false);
+                    }}
+                  >
+                    <Avatar name={following.following.name} size={40} isNavigation={false} />
+                    <span>{following.following.name}</span>
+                  </ModalUserItem>
+                ))
+              ) : (
+                <ModalEmptyState>Não está seguindo ninguém ainda</ModalEmptyState>
+              )}
+            </ModalList>
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </Container>
   );
 };
