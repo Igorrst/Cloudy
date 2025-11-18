@@ -46,3 +46,37 @@ export const updateUser = async (userId: string, userData: UpdateUserData) => {
   const response = await api.put(`/users/${userId}`, userData);
   return response.data;
 };
+
+export interface SearchUsersResponse {
+  users: Array<{
+    id: string;
+    name: string;
+    email: string;
+    bio?: string;
+    profilePhoto?: string;
+    createdAt: string;
+    updatedAt: string;
+  }>;
+  meta: {
+    page: number;
+    total: number;
+  };
+}
+
+export const searchUsers = async (name: string, page: number = 1): Promise<SearchUsersResponse> => {
+  const params = new URLSearchParams();
+  if (name) params.append('name', name);
+  params.append('page', page.toString());
+  const response = await api.get(`/users?${params.toString()}`);
+  return response.data;
+};
+
+export const followUser = async (userId: string) => {
+  const response = await api.post(`/users/${userId}/followers`);
+  return response.data;
+};
+
+export const unfollowUser = async (userId: string) => {
+  const response = await api.delete(`/users/${userId}/followers`);
+  return response.data;
+};
