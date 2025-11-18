@@ -1,14 +1,543 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
+  max-width: 935px;
+  margin: 0 auto;
+  padding: 60px 20px 40px;
+  min-height: 100vh;
+  position: relative;
+  color: ${({ theme }) => theme.colors.gray[1000]};
 
+  body.night-mode & {
+    color: ${({ theme }) => theme.colors.gray[50]};
+  }
+
+  @media (max-width: 768px) {
+    padding: 60px 10px 20px;
+  }
 `;
 
-export const UserTop = styled.div`
-  right: 70px;
-  height: 30px;
-  cursor: pointer;
+export const TopBar = styled.div`
   position: fixed;
   top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   z-index: 1000;
+
+  & > div:first-child {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+  }
+
+  @media (max-width: 768px) {
+    top: 15px;
+    right: 15px;
+    gap: 10px;
+  }
+`;
+
+export const BackButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: ${({ theme }) => theme.colors.blue[100]};
+  border: none;
+  border-radius: 50%;
+  color: ${({ theme }) => theme.colors.blue[700]};
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 10001;
+
+  body.night-mode & {
+    background: ${({ theme }) => theme.colors.gray[800]};
+    color: ${({ theme }) => theme.colors.gray[100]};
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.blue[200]};
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    body.night-mode & {
+      background: ${({ theme }) => theme.colors.gray[700]};
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+  }
+`;
+
+export const ProfileHeader = styled.div`
+  display: flex;
+  gap: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.blue[200]};
+  margin-bottom: 30px;
+
+  body.night-mode & {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
+  }
+
+  @media (max-width: 768px) {
+    gap: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+`;
+
+export const ProfileInfo = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.gray[1000]};
+    margin: 0;
+
+    body.night-mode & {
+      color: ${({ theme }) => theme.colors.gray[50]};
+    }
+
+    @media (max-width: 768px) {
+      font-size: 24px;
+    }
+  }
+`;
+
+export const StatsSection = styled.div`
+  display: flex;
+  gap: 40px;
+
+  @media (max-width: 768px) {
+    gap: 30px;
+  }
+
+  @media (max-width: 480px) {
+    justify-content: center;
+    gap: 20px;
+  }
+`;
+
+export const StatItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  strong {
+    font-size: 18px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.gray[1000]};
+
+    body.night-mode & {
+      color: ${({ theme }) => theme.colors.gray[50]};
+    }
+  }
+
+  span {
+    font-size: 14px;
+    color: ${({ theme }) => theme.colors.gray[800]};
+    text-transform: lowercase;
+    font-weight: 600;
+
+    body.night-mode & {
+      color: ${({ theme }) => theme.colors.gray[300]};
+    }
+  }
+`;
+
+export const BioSection = styled.div`
+  padding: 20px 0;
+  margin-bottom: 30px;
+  position: relative;
+`;
+
+export const BioText = styled.p`
+  font-size: 16px;
+  line-height: 1.6;
+  color: ${({ theme }) => theme.colors.gray[900]};
+  margin: 0;
+  word-wrap: break-word;
+  font-weight: 500;
+
+  body.night-mode & {
+    color: ${({ theme }) => theme.colors.gray[200]};
+  }
+`;
+
+export const BioTextarea = styled.textarea`
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  padding-right: 40px;
+  border: 1px solid ${({ theme }) => theme.colors.blue[300]};
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: inherit;
+  line-height: 1.5;
+  color: ${({ theme }) => theme.colors.blue[900]};
+  background: ${({ theme }) => theme.colors.blue[50]};
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+
+  body.night-mode & {
+    border: 1px solid ${({ theme }) => theme.colors.gray[600]};
+    color: ${({ theme }) => theme.colors.gray[100]};
+    background: ${({ theme }) => theme.colors.gray[900]};
+  }
+
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.blue[500]};
+
+    body.night-mode & {
+      border-color: ${({ theme }) => theme.colors.blue[500]};
+    }
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.blue[400]};
+
+    body.night-mode & {
+      color: ${({ theme }) => theme.colors.gray[500]};
+    }
+  }
+`;
+
+export const BioActions = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+`;
+
+export const EditButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid ${({ theme }) => theme.colors.blue[300]};
+  border-radius: 6px;
+  color: ${({ theme }) => theme.colors.blue[700]};
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+
+  body.night-mode & {
+    border: 1px solid ${({ theme }) => theme.colors.gray[600]};
+    color: ${({ theme }) => theme.colors.gray[200]};
+  }
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.blue[100]};
+    border-color: ${({ theme }) => theme.colors.blue[400]};
+
+    body.night-mode & {
+      background: ${({ theme }) => theme.colors.gray[800]};
+      border-color: ${({ theme }) => theme.colors.gray[500]};
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+export const SaveButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: ${({ theme }) => theme.colors.blue[500]};
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+  font-weight: 500;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.blue[600]};
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+export const CancelButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid ${({ theme }) => theme.colors.blue[300]};
+  border-radius: 6px;
+  color: ${({ theme }) => theme.colors.blue[700]};
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+
+  body.night-mode & {
+    border: 1px solid ${({ theme }) => theme.colors.gray[600]};
+    color: ${({ theme }) => theme.colors.gray[200]};
+  }
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.blue[100]};
+    border-color: ${({ theme }) => theme.colors.blue[400]};
+
+    body.night-mode & {
+      background: ${({ theme }) => theme.colors.gray[800]};
+      border-color: ${({ theme }) => theme.colors.gray[500]};
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+export const PostsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 30px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+`;
+
+export const PostItem = styled.div`
+  width: 100%;
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 1;
+
+  & > div {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 350px;
+  }
+
+  @media (max-width: 1024px) {
+    min-height: 320px;
+    
+    & > div {
+      min-height: 320px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    min-height: 300px;
+    
+    & > div {
+      min-height: 300px;
+    }
+  }
+`;
+
+export const EmptyState = styled.div`
+  text-align: center;
+  padding: 60px 20px;
+  color: ${({ theme }) => theme.colors.blue[600]};
+
+  body.night-mode & {
+    color: ${({ theme }) => theme.colors.gray[400]};
+  }
+
+  p {
+    font-size: 18px;
+    margin: 0;
+  }
+`;
+
+export const EmojiButton = styled.button`
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: ${({ theme }) => theme.colors.blue[600]};
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+
+  body.night-mode & {
+    color: ${({ theme }) => theme.colors.gray[300]};
+  }
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.blue[100]};
+    color: ${({ theme }) => theme.colors.blue[700]};
+
+    body.night-mode & {
+      background: ${({ theme }) => theme.colors.gray[800]};
+      color: ${({ theme }) => theme.colors.gray[100]};
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+export const EmojiPickerContainer = styled.div`
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 1000;
+  border-radius: 16px;
+  overflow: visible;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+  background: ${({ theme }) => theme.colors.blue[50]};
+  border: 1px solid ${({ theme }) => theme.colors.blue[200]};
+  animation: slideInUp 0.3s ease-out;
+
+  body.night-mode & {
+    background: ${({ theme }) => theme.colors.gray[900]};
+    border: 1px solid ${({ theme }) => theme.colors.gray[700]};
+    box-shadow: 
+      0 8px 24px rgba(0, 0, 0, 0.5),
+      0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  & * {
+    box-sizing: border-box !important;
+  }
+
+  & > div {
+    width: 100% !important;
+    min-width: 350px !important;
+    max-width: none !important;
+  }
+
+  & > div > div {
+    width: 100% !important;
+    min-width: 350px !important;
+    max-width: none !important;
+  }
+
+  & > div > div > div {
+    width: 100% !important;
+    min-width: 350px !important;
+    max-width: none !important;
+  }
+
+  & input,
+  & input[type="text"],
+  & input[type="search"],
+  & input[placeholder*="Search"],
+  & input[placeholder*="search"],
+  & input[placeholder],
+  & input::placeholder {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 250px !important;
+    box-sizing: border-box !important;
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+    word-break: normal !important;
+    word-wrap: normal !important;
+    overflow-wrap: normal !important;
+    white-space: nowrap !important;
+    text-overflow: clip !important;
+    overflow: visible !important;
+    display: block !important;
+    letter-spacing: normal !important;
+  }
+
+  & > div > div > input,
+  & > div > div > div > input,
+  & > div > div > div > div > input,
+  & > div > div > div > div > div > input,
+  & > div > div > div > div > div > div > input {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 250px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+    word-break: normal !important;
+    word-wrap: normal !important;
+    letter-spacing: normal !important;
+  }
+
+  & [class*="search"],
+  & [class*="Search"],
+  & [class*="input"],
+  & [class*="Input"] {
+    width: 100% !important;
+    min-width: 250px !important;
+    max-width: none !important;
+    overflow: visible !important;
+  }
+
+  @media (max-width: 768px) {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: calc(100vw - 40px);
+  }
+
+  @media (max-width: 480px) {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    max-width: calc(100vw - 20px);
+    width: auto;
+  }
 `;

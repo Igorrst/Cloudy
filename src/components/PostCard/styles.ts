@@ -4,10 +4,11 @@ import { motion } from "framer-motion";
 export const Container = styled.div`
   position: relative;
   width: 100%;
-  min-height: 200px;
+  min-height: 280px;
   border-radius: 40px;
   background-color: ${({ theme }) => theme.colors.blue[100]};
-  padding: 20px;
+  padding: 24px;
+  padding-bottom: 80px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -18,26 +19,37 @@ export const Container = styled.div`
   overflow: hidden;
 
   @media (max-width: 768px) {
-    min-height: 350px;
+    min-height: 320px;
+    padding: 20px;
+    padding-bottom: 70px;
   }
 
   @media (max-width: 480px) {
-    min-height: 300px;
-    padding: 15px;
+    min-height: 280px;
+    padding: 16px;
+    padding-bottom: 60px;
   }
 `;
 
 export const PostActions = styled.div`
   position: absolute;
-  right: 100px;
-  bottom: 10px;
+  right: 24px;
+  bottom: 24px;
   display: flex;
   align-items: center;
   gap: 20px;
+  z-index: 5;
+
+  @media (max-width: 768px) {
+    right: 20px;
+    bottom: 20px;
+    gap: 16px;
+  }
 
   @media (max-width: 480px) {
-    right: 10px;
-    gap: 15px;
+    right: 16px;
+    bottom: 16px;
+    gap: 12px;
   }
 `;
 
@@ -50,15 +62,21 @@ export const PostContent = styled.div`
   text-align: center;
   padding: 0 20px;
   max-width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
 `;
 
 export const UserPostInfo = styled.div`
   position: absolute;
-  left: 20px;
-  bottom: 20px;
+  left: 24px;
+  bottom: 24px;
   display: flex;
   align-items: center;
   font-size: 13px;
+  z-index: 5;
 
   img {
     width: 30px;
@@ -70,12 +88,19 @@ export const UserPostInfo = styled.div`
 
   h3 {
     margin: 0;
-    font-weight: normal;
+    font-weight: 500;
     font-size: 14px;
+    color: ${({ theme }) => theme.colors.gray[900]};
+  }
+
+  @media (max-width: 768px) {
+    left: 20px;
+    bottom: 20px;
   }
 
   @media (max-width: 480px) {
-    left: 10px;
+    left: 16px;
+    bottom: 16px;
   }
 `;
 

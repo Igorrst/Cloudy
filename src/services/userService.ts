@@ -36,3 +36,13 @@ export const getUserById = async (userId: string) => {
   const response = await api.get(`/users/${userId}`);
   return response.data;
 };
+
+interface UpdateUserData {
+  bio?: string;
+  profilePhoto?: string;
+}
+
+export const updateUser = async (userId: string, userData: UpdateUserData) => {
+  const response = await api.put(`/users/${userId}`, userData);
+  return response.data;
+};

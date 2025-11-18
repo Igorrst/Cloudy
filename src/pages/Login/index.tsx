@@ -12,6 +12,7 @@ import {
 import { Mail, LockKeyhole } from "lucide-react";
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
 import { loginUser } from "../../services/userService";
+import { isApiError } from "../../types";
 import { Link } from "react-router-dom";
 
 const Login = () => {
@@ -63,11 +64,11 @@ const Login = () => {
         setLoading(false);
         navigate("/home");
       }
-    } catch (error: any) {
-      alert(
-        error.response?.data?.message ||
-          "Erro ao fazer login. Verifique suas credenciais."
-      );
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.response?.data?.message || "Erro ao fazer login. Verifique suas credenciais."
+        : "Erro ao fazer login. Verifique suas credenciais.";
+      alert(errorMessage);
       setLoading(false);
     }
   };
