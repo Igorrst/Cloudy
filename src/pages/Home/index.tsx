@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Container,
   TextPost,
@@ -6,115 +6,51 @@ import {
   PublishButton,
   UserTop,
   TextArea,
+  TextAreaContainer,
+  EmojiButton,
+  EmojiPickerContainer,
+  PostsContainer,
 } from "./styles";
 
 import PostCard from "../../components/PostCard";
 import Avatar from "../../components/Avatar";
-import { UploadCloud } from "lucide-react";
+import { UploadCloud, Smile } from "lucide-react";
 import Configurations from "../../components/Configurations";
+import EmojiPicker, { EmojiClickData, Theme, Categories } from "emoji-picker-react";
 import { getPosts, createPost, updatePost, deletePost, likePost, unlikePost } from "../../services/postService";
 import { createComment, updateComment, deleteComment, likeComment, unlikeComment } from "../../services/commentService";
 import { getCurrentUser } from "../../services/userService";
+import useThemeStore from "../../stores/themeStore";
+import { Post, PostComment, CurrentUser, ApiPostsResponse, ApiPostResponse, ApiCommentResponse, isApiError } from "../../types";
 
-interface PostOwner {
-  name: string;
-  id: string;
-}
-
-interface PostLike {
-  id: string;
-  name: string;
-}
-
-interface PostComment {
-  id: string;
-  content: string;
-  owner: {
-    name: string;
-    id: string;
-  };
-  createdAt: string;
-  updatedAt?: string;
-  likes?: PostLike[];
-}
-
-interface Post {
-  id: string;
-  content: string;
-  owner: PostOwner;
-  ownerId: string;
-  createdAt: string;
-  updatedAt: string;
-  likes: PostLike[];
-  comments: PostComment[];
-}
-
-interface CurrentUser {
-  id: string;
-  name: string;
-  email: string;
-}
-
-interface ApiPostResponse {
-  id: string;
-  content: string;
-  ownerId: string;
-  createdAt: string;
-  updatedAt: string;
-  owner?: PostOwner;
-  likes?: PostLike[];
-  comments?: ApiCommentResponse[];
-}
-
-interface ApiCommentResponse {
-  id: string;
-  content: string;
-  ownerId: string;
-  createdAt: string;
-  updatedAt?: string;
-  owner?: PostOwner;
-  likes?: PostLike[];
-}
-
-interface ApiPostsResponse {
-  posts: ApiPostResponse[];
-  meta?: {
-    page: number;
-    total?: number;
-  };
-}
-
-interface ApiError {
-  response?: {
-    data?: {
-      message?: string;
-    };
-  };
-}
-
-const isApiError = (error: unknown): error is ApiError => {
-  return (
-    typeof error === 'object' &&
-    error !== null &&
-    'response' in error
-  );
-};
+const POLLING_INTERVAL = 5000;
 
 const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [newPost, setNewPost] = useState("");
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const isNight = useThemeStore((state) => state.isNight);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     loadUser();
     loadPosts();
   }, []);
 
-  // Polling para sincronizar atualizações entre usuários (sem recarregar a página)
   useEffect(() => {
-    const POLLING_INTERVAL = 5000; // Verifica a cada 5 segundos
-
     const syncPosts = async () => {
       try {
         const response = await getPosts() as ApiPostsResponse;
@@ -136,33 +72,27 @@ const Home = () => {
           })),
         }));
 
-        // Mesclagem inteligente: atualiza apenas o que mudou, preservando o resto
         setPosts(prevPosts => {
-          // Cria um mapa dos posts atuais para acesso rápido
           const prevPostsMap = new Map(prevPosts.map(p => [p.id, p]));
           
           let hasChanges = false;
           const mergedPosts: Post[] = [];
 
-          // Processa posts na ordem da API (mais recentes primeiro)
           for (const newPost of formattedPosts) {
             const oldPost = prevPostsMap.get(newPost.id);
             
             if (!oldPost) {
-              // Novo post - adiciona
               mergedPosts.push(newPost);
               hasChanges = true;
             } else {
-              // Post existente - verifica se precisa atualizar
               const needsUpdate = 
                 oldPost.content !== newPost.content ||
                 oldPost.updatedAt !== newPost.updatedAt ||
                 oldPost.likes.length !== newPost.likes.length ||
                 oldPost.comments.length !== newPost.comments.length ||
-                // Verifica mudanças em comentários
                 newPost.comments.some((newComment: PostComment) => {
                   const oldComment = oldPost.comments.find(c => c.id === newComment.id);
-                  if (!oldComment) return true; // Novo comentário
+                  if (!oldComment) return true;
                   return (
                     oldComment.content !== newComment.content ||
                     (oldComment.likes?.length || 0) !== (newComment.likes?.length || 0)
@@ -170,24 +100,20 @@ const Home = () => {
                 });
 
               if (needsUpdate) {
-                // Mescla comentários inteligentemente
                 const mergedComments: PostComment[] = [];
                 const oldCommentsMap = new Map(oldPost.comments.map(c => [c.id, c]));
                 
                 for (const newComment of newPost.comments) {
                   const oldComment = oldCommentsMap.get(newComment.id);
                   if (!oldComment) {
-                    // Novo comentário
                     mergedComments.push(newComment);
                   } else {
-                    // Comentário existente - verifica se precisa atualizar
                     if (
                       oldComment.content !== newComment.content ||
                       (oldComment.likes?.length || 0) !== (newComment.likes?.length || 0)
                     ) {
                       mergedComments.push(newComment);
                     } else {
-                      // Mantém o comentário antigo (preserva estado local se houver)
                       mergedComments.push(oldComment);
                     }
                   }
@@ -199,26 +125,20 @@ const Home = () => {
                 });
                 hasChanges = true;
               } else {
-                // Nenhuma mudança - mantém o post original (preserva estado local)
                 mergedPosts.push(oldPost);
               }
             }
           }
 
-          // Retorna posts mesclados apenas se houver mudanças reais
           return hasChanges ? mergedPosts : prevPosts;
         });
       } catch (error) {
-        // Silenciosamente ignora erros no polling para não interromper a experiência
-        console.error("Erro ao sincronizar posts:", error);
       }
     };
 
     const intervalId = setInterval(syncPosts, POLLING_INTERVAL);
-
-    // Limpa o intervalo quando o componente é desmontado
     return () => clearInterval(intervalId);
-  }, []); // Executa apenas uma vez quando o componente monta
+  }, []);
 
   const loadUser = async () => {
     const user = await getCurrentUser();
@@ -248,7 +168,6 @@ const Home = () => {
       }));
       setPosts(formattedPosts);
     } catch (error) {
-      console.error("Erro ao carregar posts:", error);
     } finally {
       setIsLoading(false);
     }
@@ -289,17 +208,14 @@ const Home = () => {
         await likePost(postId);
       }
       
-      // Atualiza apenas o post específico no estado local
       setPosts(posts.map(post => {
         if (post.id === postId) {
           if (isLiked) {
-            // Remove o like
             return {
               ...post,
               likes: post.likes.filter(like => like.id !== currentUser.id)
             };
           } else {
-            // Adiciona o like
             return {
               ...post,
               likes: [...post.likes, { id: currentUser.id, name: currentUser.name }]
@@ -320,7 +236,6 @@ const Home = () => {
     try {
       const response = await updatePost(postId, { content: newContent });
       
-      // Atualiza apenas o post específico no estado local
       setPosts(posts.map(post => {
         if (post.id === postId) {
           return {
@@ -357,7 +272,6 @@ const Home = () => {
     try {
       const response = await createComment(postId, { content });
       
-      // Adiciona o novo comentário ao post específico no estado local
       const newComment: PostComment = {
         id: response.id,
         content: response.content,
@@ -390,7 +304,6 @@ const Home = () => {
     try {
       const response = await updateComment(postId, commentId, { content });
       
-      // Atualiza apenas o comentário específico no estado local
       setPosts(posts.map(post => {
         if (post.id === postId) {
           return {
@@ -421,7 +334,6 @@ const Home = () => {
     try {
       await deleteComment(postId, commentId);
       
-      // Remove apenas o comentário específico do estado local
       setPosts(posts.map(post => {
         if (post.id === postId) {
           return {
@@ -449,7 +361,6 @@ const Home = () => {
         await likeComment(postId, commentId);
       }
       
-      // Atualiza apenas o like do comentário específico no estado local
       setPosts(posts.map(post => {
         if (post.id === postId) {
           return {
@@ -457,13 +368,11 @@ const Home = () => {
             comments: post.comments.map(comment => {
               if (comment.id === commentId) {
                 if (isLiked) {
-                  // Remove o like
                   return {
                     ...comment,
                     likes: (comment.likes || []).filter(like => like.id !== currentUser.id)
                   };
                 } else {
-                  // Adiciona o like
                   return {
                     ...comment,
                     likes: [...(comment.likes || []), { id: currentUser.id, name: currentUser.name }]
@@ -489,29 +398,131 @@ const Home = () => {
     return post.likes.some((like) => like.id === currentUser.id);
   };
 
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    const textarea = textAreaRef.current;
+    if (!textarea) return;
+
+    const cursorPosition = textarea.selectionStart;
+    const textBefore = newPost.substring(0, cursorPosition);
+    const textAfter = newPost.substring(cursorPosition);
+    const newText = textBefore + emojiData.emoji + textAfter;
+
+    setNewPost(newText);
+    setShowEmojiPicker(false);
+
+    setTimeout(() => {
+      textarea.focus();
+      const newCursorPosition = cursorPosition + emojiData.emoji.length;
+      textarea.setSelectionRange(newCursorPosition, newCursorPosition);
+    }, 0);
+  };
+
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target as Node) &&
+        textAreaRef.current &&
+        !textAreaRef.current.contains(event.target as Node) &&
+        !(event.target as HTMLElement).closest('button[aria-label="emoji"]')
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    if (showEmojiPicker) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [showEmojiPicker]);
+
+  useEffect(() => {
+    if (showEmojiPicker && emojiPickerRef.current) {
+      const translateEmojiPicker = () => {
+        const container = emojiPickerRef.current;
+        if (!container) return;
+
+        const inputs = container.querySelectorAll('input[placeholder="Search"], input[placeholder*="Search"]');
+        inputs.forEach((input) => {
+          if (input instanceof HTMLInputElement && input.placeholder === "Search") {
+            input.placeholder = "Buscar";
+          }
+        });
+      };
+
+      const timeoutId = setTimeout(translateEmojiPicker, 300);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [showEmojiPicker]);
+
   return (
     <Container>
       <UserTop>
         <Configurations />
       </UserTop>
 
-      <TextPost>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Avatar name={currentUser?.name || "Usuário"} />
-          <TextArea
-            placeholder="O que está pensando?"
-            maxLength={280}
-            value={newPost}
-            onChange={(e) => setNewPost(e.target.value)}
-          />
-        </div>
-        <PublishButton onClick={handleAddPost}>
-          <UploadCloud size={20} />
-          <p>Postar</p>
-        </PublishButton>
-      </TextPost>
+      <PostsContainer>
+        <TextPost>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Avatar name={currentUser?.name || "Usuário"} />
+            <TextAreaContainer>
+              <TextArea
+                ref={textAreaRef}
+                placeholder="O que está pensando?"
+                maxLength={280}
+                value={newPost}
+                onChange={(e) => setNewPost(e.target.value)}
+                onClick={() => setShowEmojiPicker(false)}
+              />
+              <EmojiButton
+                type="button"
+                onClick={toggleEmojiPicker}
+                aria-label="emoji"
+              >
+                <Smile size={20} />
+              </EmojiButton>
+            </TextAreaContainer>
+          </div>
+          <PublishButton onClick={handleAddPost}>
+            <UploadCloud size={20} />
+            <p>Postar</p>
+          </PublishButton>
+          {showEmojiPicker && (
+            <EmojiPickerContainer ref={emojiPickerRef}>
+              <EmojiPicker
+                onEmojiClick={handleEmojiClick}
+                theme={isNight ? Theme.DARK : Theme.LIGHT}
+                width={windowWidth <= 480 ? windowWidth - 20 : 350}
+                height={windowWidth <= 480 ? 350 : 400}
+                searchDisabled={false}
+                skinTonesDisabled={false}
+                previewConfig={{ showPreview: false }}
+                categories={[
+                  { category: Categories.SUGGESTED, name: "Mais Usados" },
+                  { category: Categories.SMILEYS_PEOPLE, name: "Carinhas e Pessoas" },
+                  { category: Categories.ANIMALS_NATURE, name: "Animais e Natureza" },
+                  { category: Categories.FOOD_DRINK, name: "Comida e Bebida" },
+                  { category: Categories.TRAVEL_PLACES, name: "Viagem e Lugares" },
+                  { category: Categories.ACTIVITIES, name: "Atividades" },
+                  { category: Categories.OBJECTS, name: "Objetos" },
+                  { category: Categories.SYMBOLS, name: "Símbolos" },
+                  { category: Categories.FLAGS, name: "Bandeiras" }
+                ]}
+              />
+            </EmojiPickerContainer>
+          )}
+        </TextPost>
 
-      <BoxPost>
+        <BoxPost>
         {isLoading ? (
           <p>Carregando posts...</p>
         ) : posts.length > 0 ? (
@@ -537,7 +548,8 @@ const Home = () => {
         ) : (
           <p>Nenhum Post ainda, crie seu primeiro!</p>
         )}
-      </BoxPost>
+        </BoxPost>
+      </PostsContainer>
     </Container>
   );
 };
