@@ -13,6 +13,7 @@ import EmojiPicker, { EmojiClickData, Theme, Categories } from "emoji-picker-rea
 import useThemeStore from "../../stores/themeStore";
 import { Post, PostComment, UserProfile, ApiPostsResponse, ApiPostResponse, ApiCommentResponse, isApiError } from "../../types";
 import { getUserIdFromToken } from "../../utils/auth";
+import { validateContent } from "../../utils/contentFilter";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -242,8 +243,14 @@ const Profile = () => {
   };
 
   const handleEditPost = async (postId: string, newContent: string) => {
+    const validation = await validateContent(newContent.trim());
+    if (!validation.isValid) {
+      alert(validation.message);
+      return;
+    }
+
     try {
-      const response = await updatePost(postId, { content: newContent });
+      const response = await updatePost(postId, { content: newContent.trim() });
       
       setPosts(posts.map(post => {
         if (post.id === postId) {
@@ -278,8 +285,14 @@ const Profile = () => {
   const handleCommentCreate = async (postId: string, content: string) => {
     if (!currentUserId || !user) return;
     
+    const validation = await validateContent(content.trim());
+    if (!validation.isValid) {
+      alert(validation.message);
+      return;
+    }
+    
     try {
-      const response = await createComment(postId, { content });
+      const response = await createComment(postId, { content: content.trim() });
       
       const newComment: PostComment = {
         id: response.id,
@@ -310,8 +323,14 @@ const Profile = () => {
   };
 
   const handleCommentEdit = async (postId: string, commentId: string, content: string) => {
+    const validation = await validateContent(content.trim());
+    if (!validation.isValid) {
+      alert(validation.message);
+      return;
+    }
+
     try {
-      const response = await updateComment(postId, commentId, { content });
+      const response = await updateComment(postId, commentId, { content: content.trim() });
       
       setPosts(posts.map(post => {
         if (post.id === postId) {

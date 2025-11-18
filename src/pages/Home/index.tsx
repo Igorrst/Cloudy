@@ -22,6 +22,7 @@ import { createComment, updateComment, deleteComment, likeComment, unlikeComment
 import { getCurrentUser } from "../../services/userService";
 import useThemeStore from "../../stores/themeStore";
 import { Post, PostComment, CurrentUser, ApiPostsResponse, ApiPostResponse, ApiCommentResponse, isApiError } from "../../types";
+import { validateContent } from "../../utils/contentFilter";
 
 const POLLING_INTERVAL = 5000;
 
@@ -175,6 +176,12 @@ const Home = () => {
 
   const handleAddPost = async () => {
     if (newPost.trim()) {
+      const validation = await validateContent(newPost.trim());
+      if (!validation.isValid) {
+        alert(validation.message);
+        return;
+      }
+
       try {
         const response = await createPost({ content: newPost.trim() });
         const newPostData: Post = {
@@ -233,8 +240,14 @@ const Home = () => {
   };
 
   const handleEditPost = async (postId: string, newContent: string) => {
+    const validation = await validateContent(newContent.trim());
+    if (!validation.isValid) {
+      alert(validation.message);
+      return;
+    }
+
     try {
-      const response = await updatePost(postId, { content: newContent });
+      const response = await updatePost(postId, { content: newContent.trim() });
       
       setPosts(posts.map(post => {
         if (post.id === postId) {
@@ -269,8 +282,14 @@ const Home = () => {
   const handleCommentCreate = async (postId: string, content: string) => {
     if (!currentUser) return;
     
+    const validation = await validateContent(content.trim());
+    if (!validation.isValid) {
+      alert(validation.message);
+      return;
+    }
+    
     try {
-      const response = await createComment(postId, { content });
+      const response = await createComment(postId, { content: content.trim() });
       
       const newComment: PostComment = {
         id: response.id,
@@ -301,8 +320,14 @@ const Home = () => {
   };
 
   const handleCommentEdit = async (postId: string, commentId: string, content: string) => {
+    const validation = await validateContent(content.trim());
+    if (!validation.isValid) {
+      alert(validation.message);
+      return;
+    }
+
     try {
-      const response = await updateComment(postId, commentId, { content });
+      const response = await updateComment(postId, commentId, { content: content.trim() });
       
       setPosts(posts.map(post => {
         if (post.id === postId) {
