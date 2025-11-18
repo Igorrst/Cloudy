@@ -125,7 +125,7 @@ export const OptionsButton = styled.button`
   justify-content: center;
   color: ${({ theme }) => theme.colors.gray[800]};
   transition: background-color 0.2s ease;
-  z-index: 10;
+  z-index: 1;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.gray[200]};
@@ -140,7 +140,7 @@ export const OptionsModal = styled(motion.div)`
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   min-width: 150px;
-  z-index: 1000;
+  z-index: 100;
   overflow: hidden;
 `;
 
