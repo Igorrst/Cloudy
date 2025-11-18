@@ -62,8 +62,6 @@ const Login = () => {
         alert("Login realizado com sucesso!");
         setLoading(false);
         navigate("/home");
-      } else {
-        console.error("Token não encontrado");
       }
     } catch (error: any) {
       alert(
