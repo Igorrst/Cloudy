@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { SearchContainer, SearchInput, SearchResults, UserResult, UserInfo, UserName, UserBio, EmptyResults } from "./styles";
-import { Search, User } from "lucide-react";
+import { Search } from "lucide-react";
 import Avatar from "../Avatar";
 import { searchUsers } from "../../services/userService";
 import { useNavigate } from "react-router-dom";
