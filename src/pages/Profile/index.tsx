@@ -1,16 +1,515 @@
-import { Container, UserTop } from "./styles";
-import Back from "../../components/GoToBack";
+import { useState, useEffect, useRef } from "react";
+import { Container, TopBar, BackButton, ProfileHeader, ProfileInfo, BioSection, BioText, BioTextarea, BioActions, EditButton, SaveButton, CancelButton, PostsGrid, PostItem, EmptyState, StatsSection, StatItem, EmojiButton, EmojiPickerContainer } from "./styles";
+import Configurations from "../../components/Configurations";
+import Avatar from "../../components/Avatar";
+import PostCard from "../../components/PostCard";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { getCurrentUser, updateUser } from "../../services/userService";
+import { getPosts, likePost, unlikePost, updatePost, deletePost } from "../../services/postService";
+import { createComment, updateComment, deleteComment, likeComment, unlikeComment } from "../../services/commentService";
+import { Smile, Edit2, Check, X } from "lucide-react";
+import EmojiPicker, { EmojiClickData, Theme, Categories } from "emoji-picker-react";
+import useThemeStore from "../../stores/themeStore";
+import { Post, PostComment, UserProfile, ApiPostsResponse, ApiPostResponse, ApiCommentResponse, isApiError } from "../../types";
+import { getUserIdFromToken } from "../../utils/auth";
 
 const Profile = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isEditingBio, setIsEditingBio] = useState(false);
+  const [bioText, setBioText] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const bioTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const isNight = useThemeStore((state) => state.isNight);
+  const currentUserId = getUserIdFromToken();
 
-    return(
-        <Container>
-            <UserTop>
-            <Back />
-            </UserTop>
-        </Container>
-    )
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
 
-}
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  useEffect(() => {
+    if (showEmojiPicker && emojiPickerRef.current) {
+      const translateEmojiPicker = () => {
+        const container = emojiPickerRef.current;
+        if (!container) return;
+
+        const inputs = container.querySelectorAll('input[placeholder="Search"], input[placeholder*="Search"]');
+        inputs.forEach((input) => {
+          if (input instanceof HTMLInputElement && input.placeholder === "Search") {
+            input.placeholder = "Buscar";
+          }
+        });
+      };
+
+      const timeoutId = setTimeout(translateEmojiPicker, 300);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [showEmojiPicker]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target as Node) &&
+        bioTextareaRef.current &&
+        !bioTextareaRef.current.contains(event.target as Node) &&
+        !(event.target as HTMLElement).closest('button[aria-label="emoji"]')
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    if (showEmojiPicker) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [showEmojiPicker]);
+
+  const loadProfile = async () => {
+    try {
+      setIsLoading(true);
+      const userData = await getCurrentUser();
+      if (userData) {
+        setUser(userData);
+        setBioText(userData.bio || "");
+        
+        const response = await getPosts() as ApiPostsResponse;
+        const userPosts = response.posts
+          .filter((post: ApiPostResponse) => post.ownerId === userData.id)
+          .map((post: ApiPostResponse): Post => ({
+            id: post.id,
+            content: post.content,
+            owner: post.owner || { name: userData.name, id: userData.id },
+            ownerId: post.ownerId,
+            createdAt: post.createdAt,
+            updatedAt: post.updatedAt,
+            likes: post.likes || [],
+            comments: (post.comments || []).map((comment: ApiCommentResponse): PostComment => ({
+              id: comment.id,
+              content: comment.content,
+              owner: comment.owner || { name: "Usuário", id: comment.ownerId },
+              createdAt: comment.createdAt,
+              updatedAt: comment.updatedAt,
+              likes: comment.likes || [],
+            })),
+          }));
+        
+        setPosts(userPosts);
+      }
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSaveBio = async () => {
+    if (!user || !currentUserId) return;
+
+    try {
+      await updateUser(currentUserId, { bio: bioText.trim() });
+      setUser({ ...user, bio: bioText.trim() });
+      setIsEditingBio(false);
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.response?.data?.message || "Erro ao salvar bio"
+        : "Erro ao salvar bio";
+      alert(errorMessage);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setBioText(user?.bio || "");
+    setIsEditingBio(false);
+    setShowEmojiPicker(false);
+  };
+
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    const textarea = bioTextareaRef.current;
+    if (!textarea) return;
+
+    const cursorPosition = textarea.selectionStart;
+    const textBefore = bioText.substring(0, cursorPosition);
+    const textAfter = bioText.substring(cursorPosition);
+    const newText = textBefore + emojiData.emoji + textAfter;
+
+    setBioText(newText);
+    setShowEmojiPicker(false);
+
+    setTimeout(() => {
+      textarea.focus();
+      const newCursorPosition = cursorPosition + emojiData.emoji.length;
+      textarea.setSelectionRange(newCursorPosition, newCursorPosition);
+    }, 0);
+  };
+
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker((prev) => !prev);
+  };
+
+  const isPostLiked = (post: Post): boolean => {
+    if (!currentUserId) return false;
+    return post.likes.some((like) => like.id === currentUserId);
+  };
+
+  const handleLike = async (postId: string, isLiked: boolean) => {
+    if (!currentUserId) return;
+    
+    try {
+      if (isLiked) {
+        await unlikePost(postId);
+      } else {
+        await likePost(postId);
+      }
+      
+      setPosts(posts.map(post => {
+        if (post.id === postId) {
+          if (isLiked) {
+            return {
+              ...post,
+              likes: post.likes.filter(like => like.id !== currentUserId)
+            };
+          } else {
+            const user = posts.find(p => p.id === postId)?.owner;
+            return {
+              ...post,
+              likes: [...post.likes, { id: currentUserId, name: user?.name || "Usuário" }]
+            };
+          }
+        }
+        return post;
+      }));
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.response?.data?.message || "Erro ao curtir post"
+        : "Erro ao curtir post";
+      alert(errorMessage);
+    }
+  };
+
+  const handleEditPost = async (postId: string, newContent: string) => {
+    try {
+      const response = await updatePost(postId, { content: newContent });
+      
+      setPosts(posts.map(post => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            content: response.content,
+            updatedAt: response.updatedAt
+          };
+        }
+        return post;
+      }));
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.response?.data?.message || "Erro ao editar post"
+        : "Erro ao editar post";
+      alert(errorMessage);
+    }
+  };
+
+  const handleDeletePost = async (postId: string) => {
+    try {
+      await deletePost(postId);
+      setPosts(posts.filter((post) => post.id !== postId));
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.response?.data?.message || "Erro ao excluir post"
+        : "Erro ao excluir post";
+      alert(errorMessage);
+    }
+  };
+
+  const handleCommentCreate = async (postId: string, content: string) => {
+    if (!currentUserId || !user) return;
+    
+    try {
+      const response = await createComment(postId, { content });
+      
+      const newComment: PostComment = {
+        id: response.id,
+        content: response.content,
+        owner: {
+          name: user.name,
+          id: currentUserId
+        },
+        createdAt: response.createdAt,
+        likes: []
+      };
+      
+      setPosts(posts.map(post => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            comments: [...post.comments, newComment]
+          };
+        }
+        return post;
+      }));
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.response?.data?.message || "Erro ao criar comentário"
+        : "Erro ao criar comentário";
+      alert(errorMessage);
+    }
+  };
+
+  const handleCommentEdit = async (postId: string, commentId: string, content: string) => {
+    try {
+      const response = await updateComment(postId, commentId, { content });
+      
+      setPosts(posts.map(post => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            comments: post.comments.map(comment => {
+              if (comment.id === commentId) {
+                return {
+                  ...comment,
+                  content: response.content,
+                  updatedAt: response.updatedAt
+                };
+              }
+              return comment;
+            })
+          };
+        }
+        return post;
+      }));
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.response?.data?.message || "Erro ao editar comentário"
+        : "Erro ao editar comentário";
+      alert(errorMessage);
+    }
+  };
+
+  const handleCommentDelete = async (postId: string, commentId: string) => {
+    try {
+      await deleteComment(postId, commentId);
+      
+      setPosts(posts.map(post => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            comments: post.comments.filter(comment => comment.id !== commentId)
+          };
+        }
+        return post;
+      }));
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.response?.data?.message || "Erro ao excluir comentário"
+        : "Erro ao excluir comentário";
+      alert(errorMessage);
+    }
+  };
+
+  const handleCommentLike = async (postId: string, commentId: string, isLiked: boolean) => {
+    if (!currentUserId) return;
+    
+    try {
+      if (isLiked) {
+        await unlikeComment(postId, commentId);
+      } else {
+        await likeComment(postId, commentId);
+      }
+      
+      setPosts(posts.map(post => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            comments: post.comments.map(comment => {
+              if (comment.id === commentId) {
+                if (isLiked) {
+                  return {
+                    ...comment,
+                    likes: (comment.likes || []).filter(like => like.id !== currentUserId)
+                  };
+                } else {
+                  return {
+                    ...comment,
+                    likes: [...(comment.likes || []), { id: currentUserId, name: user?.name || "Usuário" }]
+                  };
+                }
+              }
+              return comment;
+            })
+          };
+        }
+        return post;
+      }));
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.response?.data?.message || "Erro ao curtir comentário"
+        : "Erro ao curtir comentário";
+      alert(errorMessage);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Container>
+        <p>Carregando perfil...</p>
+      </Container>
+    );
+  }
+
+  if (!user) {
+    return (
+      <Container>
+        <p>Erro ao carregar perfil</p>
+      </Container>
+    );
+  }
+
+  const followersCount = user.followers?.length || 0;
+  const followingCount = user.following?.length || 0;
+  const postsCount = posts.length;
+
+  return (
+    <Container>
+      <TopBar>
+        <Configurations />
+        <BackButton onClick={() => navigate("/home")}>
+          <ArrowLeft size={24} />
+        </BackButton>
+      </TopBar>
+      <ProfileHeader>
+        <Avatar name={user.name} size={90} isNavigation={false} />
+        <ProfileInfo>
+          <h1>{user.name}</h1>
+          <StatsSection>
+            <StatItem>
+              <strong>{postsCount}</strong>
+              <span>posts</span>
+            </StatItem>
+            <StatItem>
+              <strong>{followersCount}</strong>
+              <span>seguidores</span>
+            </StatItem>
+            <StatItem>
+              <strong>{followingCount}</strong>
+              <span>seguindo</span>
+            </StatItem>
+          </StatsSection>
+        </ProfileInfo>
+      </ProfileHeader>
+
+      <BioSection>
+        {isEditingBio ? (
+          <div style={{ position: "relative", width: "100%" }}>
+            <BioTextarea
+              ref={bioTextareaRef}
+              value={bioText}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setBioText(e.target.value)}
+              placeholder="Escreva sua bio..."
+              maxLength={150}
+              onClick={() => setShowEmojiPicker(false)}
+            />
+            <EmojiButton
+              type="button"
+              onClick={toggleEmojiPicker}
+              aria-label="emoji"
+            >
+              <Smile size={18} />
+            </EmojiButton>
+            {showEmojiPicker && (
+              <EmojiPickerContainer ref={emojiPickerRef}>
+                <EmojiPicker
+                  onEmojiClick={handleEmojiClick}
+                  theme={isNight ? Theme.DARK : Theme.LIGHT}
+                  width={windowWidth <= 480 ? windowWidth - 20 : 350}
+                  height={windowWidth <= 480 ? 350 : 400}
+                  searchDisabled={false}
+                  skinTonesDisabled={false}
+                  previewConfig={{ showPreview: false }}
+                  categories={[
+                    { category: Categories.SUGGESTED, name: "Mais Usados" },
+                    { category: Categories.SMILEYS_PEOPLE, name: "Carinhas e Pessoas" },
+                    { category: Categories.ANIMALS_NATURE, name: "Animais e Natureza" },
+                    { category: Categories.FOOD_DRINK, name: "Comida e Bebida" },
+                    { category: Categories.TRAVEL_PLACES, name: "Viagem e Lugares" },
+                    { category: Categories.ACTIVITIES, name: "Atividades" },
+                    { category: Categories.OBJECTS, name: "Objetos" },
+                    { category: Categories.SYMBOLS, name: "Símbolos" },
+                    { category: Categories.FLAGS, name: "Bandeiras" }
+                  ]}
+                />
+              </EmojiPickerContainer>
+            )}
+            <BioActions>
+              <SaveButton onClick={handleSaveBio}>
+                <Check size={16} />
+                Salvar
+              </SaveButton>
+              <CancelButton onClick={handleCancelEdit}>
+                <X size={16} />
+                Cancelar
+              </CancelButton>
+            </BioActions>
+          </div>
+        ) : (
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", width: "100%" }}>
+            <BioText>{user.bio || "Nenhuma bio ainda."}</BioText>
+            {currentUserId === user.id && (
+              <EditButton onClick={() => setIsEditingBio(true)}>
+                <Edit2 size={16} />
+              </EditButton>
+            )}
+          </div>
+        )}
+      </BioSection>
+
+      <PostsGrid>
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <PostItem key={post.id}>
+              <PostCard
+                id={post.id}
+                content={post.content}
+                owner={post.owner}
+                ownerId={post.ownerId}
+                liked={isPostLiked(post)}
+                likesCount={post.likes.length}
+                comments={post.comments}
+                onLike={() => handleLike(post.id, isPostLiked(post))}
+                onEdit={handleEditPost}
+                onDelete={handleDeletePost}
+                onCommentCreate={handleCommentCreate}
+                onCommentEdit={handleCommentEdit}
+                onCommentDelete={handleCommentDelete}
+                onCommentLike={handleCommentLike}
+              />
+            </PostItem>
+          ))
+        ) : (
+          <EmptyState>
+            <p>Nenhum post ainda</p>
+          </EmptyState>
+        )}
+      </PostsGrid>
+    </Container>
+  );
+};
 
 export default Profile;

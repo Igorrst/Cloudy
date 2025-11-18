@@ -52,6 +52,19 @@ export const OptionRow = styled.div`
   align-items: center;
   justify-content: space-around;
   font-weight: 500;
+  color: ${({ theme }) => theme.colors.gray[1000]};
+
+  body.night-mode & {
+    color: ${({ theme }) => theme.colors.gray[1000]} !important;
+  }
+
+  svg {
+    color: ${({ theme }) => theme.colors.gray[1000]};
+  }
+
+  body.night-mode & svg {
+    color: ${({ theme }) => theme.colors.gray[1000]} !important;
+  }
 `;
 
 export const Separator = styled.hr`
@@ -71,6 +84,11 @@ export const ReportSection = styled.div`
     font-size: 14px;
     margin-bottom: 6px;
     font-weight: bold;
+    color: ${({ theme }) => theme.colors.gray[1000]};
+  }
+
+  body.night-mode & h4 {
+    color: ${({ theme }) => theme.colors.gray[1000]} !important;
   }
 `;
 
@@ -145,6 +163,19 @@ export const ClickableRow = styled.div`
   cursor: pointer;
   font-size: 16px;
   font-weight: 500;
+  color: ${({ theme }) => theme.colors.gray[1000]};
+
+  body.night-mode & {
+    color: ${({ theme }) => theme.colors.gray[1000]} !important;
+  }
+
+  span {
+    color: ${({ theme }) => theme.colors.gray[1000]};
+  }
+
+  body.night-mode & span {
+    color: ${({ theme }) => theme.colors.gray[1000]} !important;
+  }
 
   &:hover {
     opacity: 0.8;
