@@ -37,7 +37,7 @@ export const ModalOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
+  z-index: 20000;
   padding: 20px;
 `;
 
@@ -51,6 +51,8 @@ export const ModalContent = styled.div`
   flex-direction: column;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+  z-index: 20001;
+  position: relative;
 `;
 
 export const ModalHeader = styled.div`
@@ -297,7 +299,7 @@ export const CommentOptionsModal = styled.div`
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   min-width: 120px;
-  z-index: 1000;
+  z-index: 20002;
   overflow: hidden;
 `;
 
