@@ -223,15 +223,20 @@ export const BioSection = styled.div`
   }
 
   @media (max-width: 640px) {
-    gap: 16px;
-    padding: 16px 0;
-    margin-bottom: 20px;
+    gap: 12px;
+    padding: 6px 0;
+    margin-bottom: 12px;
   }
 `;
 
 export const BioContent = styled.div`
   flex: 1;
   min-width: 0;
+
+  @media (max-width: 640px) {
+    max-height: 110px;
+    overflow: hidden;
+  }
 `;
 
 export const BioText = styled.p`
@@ -247,8 +252,12 @@ export const BioText = styled.p`
   }
 
   @media (max-width: 640px) {
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 12px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 `;
 
@@ -291,11 +300,11 @@ export const BioTextarea = styled.textarea`
   }
 
   @media (max-width: 640px) {
-    min-height: 70px;
-    padding: 10px;
-    padding-right: 36px;
-    font-size: 14px;
-    border-radius: 6px;
+    min-height: 60px;
+    padding: 6px;
+    padding-right: 28px;
+    font-size: 12px;
+    border-radius: 5px;
   }
 `;
 
@@ -305,8 +314,8 @@ export const BioActions = styled.div`
   margin-top: 10px;
 
   @media (max-width: 640px) {
-    gap: 8px;
-    margin-top: 8px;
+    gap: 4px;
+    margin-top: 4px;
   }
 `;
 
@@ -456,13 +465,14 @@ export const PostsScrollContainer = styled.div`
   @media (max-width: 768px) {
     max-height: calc(100vh - 130px);
     min-height: 300px;
-    padding-bottom: 100px;
+    padding-bottom: 140px;
   }
 
   @media (max-width: 640px) {
-    max-height: calc(100vh - 120px);
-    min-height: 250px;
-    padding-bottom: 80px;
+    max-height: calc(100vh - 110px);
+    min-height: 240px;
+    padding-bottom: 180px;
+    scroll-padding-bottom: 120px;
     margin-top: 20px;
   }
 `;
@@ -489,7 +499,7 @@ export const PostsGrid = styled.div`
 
   @media (max-width: 640px) {
     gap: 16px;
-    padding-bottom: 50px;
+    padding-bottom: 90px;
   }
 `;
 
@@ -530,10 +540,10 @@ export const PostItem = styled.div`
   }
 
   @media (max-width: 640px) {
-    min-height: 280px;
+    min-height: 240px;
     
     & > div {
-      min-height: 280px;
+      min-height: 240px;
     }
   }
 `;
