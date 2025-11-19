@@ -12,6 +12,21 @@ export const ConfigTrigger = styled.div`
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.blue[100]};
   z-index: 1000;
+
+  @media (max-width: 768px) {
+    top: 15px;
+    right: 15px;
+    padding: 5px 10px;
+    gap: 6px;
+  }
+
+  @media (max-width: 640px) {
+    top: 12px;
+    right: 12px;
+    padding: 4px 8px;
+    gap: 5px;
+    border-radius: 10px;
+  }
 `;
 
 export const UserInfo = styled.div`
@@ -45,6 +60,23 @@ export const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  @media (max-width: 768px) {
+    top: 45px;
+    right: 15px;
+    width: 200px;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  @media (max-width: 640px) {
+    top: 42px;
+    right: 12px;
+    width: 180px;
+    padding: 12px;
+    gap: 12px;
+    border-radius: 8px;
+  }
 `;
 
 export const OptionRow = styled.div`
@@ -202,6 +234,13 @@ export const ConfirmModalContent = styled.div`
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   min-width: 300px;
   max-width: 90%;
+
+  @media (max-width: 640px) {
+    padding: 20px;
+    min-width: 280px;
+    max-width: 95%;
+    border-radius: 10px;
+  }
 `;
 
 export const ConfirmModalTitle = styled.h3`
@@ -210,6 +249,11 @@ export const ConfirmModalTitle = styled.h3`
   margin-bottom: 20px;
   text-align: center;
   color: ${({ theme }) => theme.colors.gray[1000]};
+
+  @media (max-width: 640px) {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
 `;
 
 export const ConfirmModalButtons = styled.div`

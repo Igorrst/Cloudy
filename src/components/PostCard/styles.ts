@@ -18,16 +18,24 @@ export const Container = styled.div`
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 
+  @media (max-width: 1024px) {
+    border-radius: 32px;
+    padding: 22px;
+    padding-bottom: 75px;
+  }
+
   @media (max-width: 768px) {
     min-height: 320px;
     padding: 20px;
     padding-bottom: 70px;
+    border-radius: 28px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     min-height: 280px;
     padding: 16px;
     padding-bottom: 60px;
+    border-radius: 24px;
   }
 `;
 
@@ -46,7 +54,7 @@ export const PostActions = styled.div`
     gap: 16px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     right: 16px;
     bottom: 16px;
     gap: 12px;
@@ -67,6 +75,16 @@ export const PostContent = styled.div`
   align-items: center;
   justify-content: center;
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 15px;
+    padding: 0 16px;
+  }
+
+  @media (max-width: 640px) {
+    font-size: 14px;
+    padding: 0 12px;
+  }
 `;
 
 export const UserPostInfo = styled.div`
@@ -96,11 +114,33 @@ export const UserPostInfo = styled.div`
   @media (max-width: 768px) {
     left: 20px;
     bottom: 20px;
+    font-size: 12px;
+
+    img {
+      width: 28px;
+      height: 28px;
+      margin-right: 8px;
+    }
+
+    h3 {
+      font-size: 13px;
+    }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     left: 16px;
     bottom: 16px;
+    font-size: 11px;
+
+    img {
+      width: 24px;
+      height: 24px;
+      margin-right: 6px;
+    }
+
+    h3 {
+      font-size: 12px;
+    }
   }
 `;
 
@@ -130,6 +170,17 @@ export const OptionsButton = styled.button`
   &:hover {
     background-color: ${({ theme }) => theme.colors.gray[200]};
   }
+
+  @media (max-width: 640px) {
+    top: 16px;
+    right: 16px;
+    padding: 3px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
 `;
 
 export const OptionsModal = styled(motion.div)`
@@ -142,6 +193,13 @@ export const OptionsModal = styled(motion.div)`
   min-width: 150px;
   z-index: 100;
   overflow: hidden;
+
+  @media (max-width: 640px) {
+    top: 40px;
+    right: 16px;
+    min-width: 130px;
+    border-radius: 10px;
+  }
 `;
 
 export const OptionItem = styled.div<{ delete?: boolean }>`
@@ -161,5 +219,16 @@ export const OptionItem = styled.div<{ delete?: boolean }>`
   svg {
     width: 16px;
     height: 16px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 10px 14px;
+    font-size: 13px;
+    gap: 6px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
   }
 `;

@@ -25,6 +25,19 @@ export const Button = styled.button<{ hasComments: boolean }>`
   &:hover svg {
     opacity: 1;
   }
+
+  @media (max-width: 640px) {
+    gap: 4px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    span {
+      font-size: 12px;
+    }
+  }
 `;
 
 export const ModalOverlay = styled.div`
@@ -39,6 +52,10 @@ export const ModalOverlay = styled.div`
   justify-content: center;
   z-index: 20000;
   padding: 20px;
+
+  @media (max-width: 640px) {
+    padding: 12px;
+  }
 `;
 
 export const ModalContent = styled.div`
@@ -53,6 +70,18 @@ export const ModalContent = styled.div`
   overflow: hidden;
   z-index: 20001;
   position: relative;
+
+  @media (max-width: 768px) {
+    max-width: 95%;
+    max-height: 85vh;
+    border-radius: 16px;
+  }
+
+  @media (max-width: 640px) {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 12px;
+  }
 `;
 
 export const ModalHeader = styled.div`
@@ -67,6 +96,18 @@ export const ModalHeader = styled.div`
     font-size: 20px;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.gray[1000]};
+  }
+
+  @media (max-width: 768px) {
+    padding: 16px 20px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 12px 16px;
+
+    h3 {
+      font-size: 18px;
+    }
   }
 `;
 
@@ -84,6 +125,15 @@ export const CloseButton = styled.button`
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.gray[200]};
+  }
+
+  @media (max-width: 640px) {
+    padding: 3px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
   }
 `;
 
@@ -111,6 +161,16 @@ export const CommentsList = styled.div`
   &::-webkit-scrollbar-thumb:hover {
     background: ${({ theme }) => theme.colors.gray[500]};
   }
+
+  @media (max-width: 768px) {
+    padding: 12px 20px;
+    gap: 14px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 10px 16px;
+    gap: 12px;
+  }
 `;
 
 export const CommentItem = styled.div`
@@ -125,6 +185,12 @@ export const CommentItem = styled.div`
   &:hover {
     background-color: ${({ theme }) => theme.colors.blue[200]};
   }
+
+  @media (max-width: 640px) {
+    padding: 10px;
+    gap: 6px;
+    border-radius: 10px;
+  }
 `;
 
 export const CommentHeader = styled.div`
@@ -138,6 +204,10 @@ export const CommentHeader = styled.div`
     font-size: 14px;
     font-weight: 600;
     color: ${({ theme }) => theme.colors.gray[1000]};
+
+    @media (max-width: 640px) {
+      font-size: 13px;
+    }
   }
 `;
 
@@ -148,12 +218,23 @@ export const CommentContent = styled.p`
   line-height: 1.5;
   color: ${({ theme }) => theme.colors.gray[900]};
   word-break: break-word;
+
+  @media (max-width: 640px) {
+    padding-left: 36px;
+    font-size: 13px;
+    line-height: 1.4;
+  }
 `;
 
 export const CommentTime = styled.span`
   font-size: 12px;
   color: ${({ theme }) => theme.colors.gray[600]};
   margin-left: 8px;
+
+  @media (max-width: 640px) {
+    font-size: 11px;
+    margin-left: 6px;
+  }
 `;
 
 export const CommentInputContainer = styled.div`
@@ -162,6 +243,16 @@ export const CommentInputContainer = styled.div`
   padding: 16px 24px;
   border-top: 1px solid ${({ theme }) => theme.colors.gray[300]};
   background-color: ${({ theme }) => theme.colors.blue[100]};
+
+  @media (max-width: 768px) {
+    padding: 12px 20px;
+    gap: 10px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 10px 16px;
+    gap: 8px;
+  }
 `;
 
 export const CommentInput = styled.textarea`
@@ -185,6 +276,21 @@ export const CommentInput = styled.textarea`
   &:focus {
     border-color: ${({ theme }) => theme.colors.blue[650]};
   }
+
+  @media (max-width: 768px) {
+    padding: 10px 14px;
+    font-size: 13px;
+    border-radius: 10px;
+    min-height: 45px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+    min-height: 40px;
+    max-height: 100px;
+  }
 `;
 
 export const SendButton = styled.button`
@@ -207,6 +313,18 @@ export const SendButton = styled.button`
     background-color: ${({ theme }) => theme.colors.gray[400]};
     cursor: not-allowed;
     opacity: 0.6;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 20px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 8px 16px;
+    font-size: 12px;
+    border-radius: 8px;
   }
 `;
 
@@ -234,6 +352,24 @@ export const EmptyComments = styled.div`
   span {
     font-size: 14px;
     color: ${({ theme }) => theme.colors.gray[600]};
+  }
+
+  @media (max-width: 640px) {
+    padding: 40px 16px;
+
+    svg {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+
+    span {
+      font-size: 12px;
+    }
   }
 `;
 
@@ -269,6 +405,21 @@ export const CommentLikeButton = styled.button<{ liked: boolean }>`
     min-width: 12px;
   }
 
+  @media (max-width: 640px) {
+    padding: 5px 8px;
+    gap: 3px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    span {
+      font-size: 12px;
+      min-width: 10px;
+    }
+  }
+
   &:hover {
     background-color: ${({ theme }) => theme.colors.blue[200]};
     transform: scale(1.05);
@@ -295,6 +446,15 @@ export const CommentOptionsButton = styled.button`
   &:hover {
     background-color: ${({ theme }) => theme.colors.gray[200]};
   }
+
+  @media (max-width: 640px) {
+    padding: 3px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
 `;
 
 export const CommentOptionsModal = styled.div`
@@ -307,6 +467,12 @@ export const CommentOptionsModal = styled.div`
   min-width: 120px;
   z-index: 20002;
   overflow: hidden;
+
+  @media (max-width: 640px) {
+    top: 28px;
+    min-width: 110px;
+    border-radius: 10px;
+  }
 `;
 
 export const CommentOptionItem = styled.div<{ delete?: boolean }>`
@@ -326,5 +492,16 @@ export const CommentOptionItem = styled.div<{ delete?: boolean }>`
   svg {
     width: 14px;
     height: 14px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 8px 12px;
+    font-size: 12px;
+    gap: 6px;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
   }
 `;

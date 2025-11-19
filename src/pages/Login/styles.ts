@@ -12,8 +12,8 @@ export const LoginContainer = styled.div`
     padding: 0 20px;
   }
 
-  @media (max-width: 480px) {
-    padding: 0 10px;
+  @media (max-width: 640px) {
+    padding: 0 16px;
   }
 `;
 
@@ -31,7 +31,7 @@ export const HeaderContainer = styled.div`
       width: 120px;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 640px) {
       width: 100px;
     }
   }
@@ -61,11 +61,20 @@ export const FormContainer = styled.form`
   @media (max-width: 768px) {
     padding: 30px;
     max-width: 350px;
+
+    h2 {
+      font-size: 22px;
+    }
   }
 
-  @media (max-width: 480px) {
-    padding: 25px;
-    max-width: 280px;
+  @media (max-width: 640px) {
+    padding: 20px;
+    max-width: 100%;
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
   }
 `;
 
@@ -105,9 +114,9 @@ export const InputField = styled.input<{ hasError?: boolean }>`
     font-size: 14px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     font-size: 13px;
-    height: 40px;
+    height: 42px;
   }
 `;
 
@@ -116,8 +125,8 @@ export const ErrorMessage = styled.p`
   font-size: 0.85rem;
   margin-top: -30px;
 
-  @media (max-width: 480px) {
-    font-size: 0.8rem;
+  @media (max-width: 640px) {
+    font-size: 0.75rem;
   }
 `;
 
@@ -147,9 +156,9 @@ export const ButtonWrapper = styled.div`
       padding: 8px 16px;
     }
 
-    @media (max-width: 480px) {
-      font-size: 14px;
-      padding: 8px 15px;
+    @media (max-width: 640px) {
+      font-size: 13px;
+      padding: 8px 14px;
     }
   }
 `;

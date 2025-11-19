@@ -17,6 +17,14 @@ export const AvatarWrapper = styled.div<AvatarWrapperProps>`
   font-size: ${({ size }) => size * 0.45}px;
   cursor: pointer;
   margin-right: 20px;
+
+  @media (max-width: 768px) {
+    margin-right: 16px;
+  }
+
+  @media (max-width: 640px) {
+    margin-right: 12px;
+  }
 `;
 
 export const Initials = styled.span`

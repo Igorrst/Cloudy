@@ -16,7 +16,11 @@ export const Container = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding: 80px 10px 60px;
+    padding: 80px 16px 60px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 70px 12px 50px;
   }
 `;
 
@@ -40,6 +44,12 @@ export const TopBar = styled.div`
     top: 15px;
     right: 15px;
     gap: 16px;
+  }
+
+  @media (max-width: 640px) {
+    top: 12px;
+    right: 12px;
+    gap: 12px;
   }
 `;
 
@@ -84,6 +94,11 @@ export const BackButton = styled.button`
     width: 36px;
     height: 36px;
   }
+
+  @media (max-width: 640px) {
+    width: 32px;
+    height: 32px;
+  }
 `;
 
 export const ProfileHeader = styled.div`
@@ -103,10 +118,13 @@ export const ProfileHeader = styled.div`
     margin-bottom: 20px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
   }
 `;
 
@@ -126,9 +144,13 @@ export const ProfileInfo = styled.div`
       color: ${({ theme }) => theme.colors.gray[50]};
     }
 
-    @media (max-width: 768px) {
-      font-size: 24px;
-    }
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
+
+  @media (max-width: 640px) {
+    font-size: 20px;
+  }
   }
 `;
 
@@ -140,7 +162,7 @@ export const StatsSection = styled.div`
     gap: 30px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     justify-content: center;
     gap: 20px;
   }
@@ -164,6 +186,10 @@ export const StatItem = styled.div`
     body.night-mode & {
       color: ${({ theme }) => theme.colors.gray[50]};
     }
+
+    @media (max-width: 640px) {
+      font-size: 16px;
+    }
   }
 
   span {
@@ -174,6 +200,10 @@ export const StatItem = styled.div`
 
     body.night-mode & {
       color: ${({ theme }) => theme.colors.gray[300]};
+    }
+
+    @media (max-width: 640px) {
+      font-size: 12px;
     }
   }
 `;
@@ -190,6 +220,12 @@ export const BioSection = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
     gap: 20px;
+  }
+
+  @media (max-width: 640px) {
+    gap: 16px;
+    padding: 16px 0;
+    margin-bottom: 20px;
   }
 `;
 
@@ -208,6 +244,11 @@ export const BioText = styled.p`
 
   body.night-mode & {
     color: ${({ theme }) => theme.colors.gray[200]};
+  }
+
+  @media (max-width: 640px) {
+    font-size: 14px;
+    line-height: 1.5;
   }
 `;
 
@@ -248,12 +289,25 @@ export const BioTextarea = styled.textarea`
       color: ${({ theme }) => theme.colors.gray[500]};
     }
   }
+
+  @media (max-width: 640px) {
+    min-height: 70px;
+    padding: 10px;
+    padding-right: 36px;
+    font-size: 14px;
+    border-radius: 6px;
+  }
 `;
 
 export const BioActions = styled.div`
   display: flex;
   gap: 10px;
   margin-top: 10px;
+
+  @media (max-width: 640px) {
+    gap: 8px;
+    margin-top: 8px;
+  }
 `;
 
 export const EditButton = styled.button`
@@ -287,6 +341,17 @@ export const EditButton = styled.button`
   &:active {
     transform: scale(0.95);
   }
+
+  @media (max-width: 640px) {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
 `;
 
 export const SaveButton = styled.button`
@@ -309,6 +374,18 @@ export const SaveButton = styled.button`
 
   &:active {
     transform: scale(0.95);
+  }
+
+  @media (max-width: 640px) {
+    padding: 6px 12px;
+    font-size: 13px;
+    gap: 5px;
+    border-radius: 5px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
   }
 `;
 
@@ -343,6 +420,18 @@ export const CancelButton = styled.button`
   &:active {
     transform: scale(0.95);
   }
+
+  @media (max-width: 640px) {
+    padding: 6px 12px;
+    font-size: 13px;
+    gap: 5px;
+    border-radius: 5px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
 `;
 
 export const PostsScrollContainer = styled.div`
@@ -369,6 +458,13 @@ export const PostsScrollContainer = styled.div`
     min-height: 300px;
     padding-bottom: 100px;
   }
+
+  @media (max-width: 640px) {
+    max-height: calc(100vh - 120px);
+    min-height: 250px;
+    padding-bottom: 80px;
+    margin-top: 20px;
+  }
 `;
 
 export const PostsGrid = styled.div`
@@ -389,6 +485,11 @@ export const PostsGrid = styled.div`
     grid-template-columns: 1fr;
     gap: 20px;
     padding-bottom: 60px;
+  }
+
+  @media (max-width: 640px) {
+    gap: 16px;
+    padding-bottom: 50px;
   }
 `;
 
@@ -427,6 +528,14 @@ export const PostItem = styled.div`
       min-height: 300px;
     }
   }
+
+  @media (max-width: 640px) {
+    min-height: 280px;
+    
+    & > div {
+      min-height: 280px;
+    }
+  }
 `;
 
 export const EmptyState = styled.div`
@@ -441,6 +550,10 @@ export const EmptyState = styled.div`
   p {
     font-size: 18px;
     margin: 0;
+
+    @media (max-width: 640px) {
+      font-size: 16px;
+    }
   }
 `;
 
@@ -477,6 +590,18 @@ export const EmojiButton = styled.button`
 
   &:active {
     transform: scale(0.95);
+  }
+
+  @media (max-width: 640px) {
+    width: 28px;
+    height: 28px;
+    right: 10px;
+    top: 10px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
   }
 `;
 
@@ -590,14 +715,17 @@ export const EmojiPickerContainer = styled.div`
     left: 50%;
     transform: translateX(-50%);
     max-width: calc(100vw - 40px);
+    min-width: calc(100vw - 40px) !important;
+    width: calc(100vw - 40px) !important;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     left: 50%;
     right: auto;
     transform: translateX(-50%);
-    max-width: calc(100vw - 20px);
-    width: auto;
+    max-width: calc(100vw - 24px);
+    min-width: calc(100vw - 24px) !important;
+    width: calc(100vw - 24px) !important;
   }
 `;
 
@@ -612,6 +740,19 @@ export const SearchWrapper = styled.div`
 
   @media (max-width: 768px) {
     width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    & input {
+      font-size: 13px !important;
+      padding: 6px 32px 6px 10px !important;
+    }
+
+    & svg {
+      right: 8px !important;
+      width: 16px !important;
+      height: 16px !important;
+    }
   }
 
   & > div {
@@ -664,6 +805,17 @@ export const FollowButton = styled.button`
     padding: 8px 16px;
     font-size: 13px;
   }
+
+  @media (max-width: 640px) {
+    padding: 6px 12px;
+    font-size: 12px;
+    gap: 6px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
 `;
 
 export const UnfollowButton = styled.button`
@@ -711,6 +863,18 @@ export const UnfollowButton = styled.button`
     padding: 8px 16px;
     font-size: 13px;
   }
+
+  @media (max-width: 640px) {
+    padding: 6px 12px;
+    font-size: 12px;
+    gap: 6px;
+    border-width: 1.5px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
 `;
 
 export const ModalOverlay = styled.div`
@@ -746,6 +910,12 @@ export const ModalContent = styled.div`
     max-width: 90%;
     max-height: 70vh;
   }
+
+  @media (max-width: 640px) {
+    max-width: 95%;
+    max-height: 75vh;
+    border-radius: 12px;
+  }
 `;
 
 export const ModalHeader = styled.div`
@@ -768,6 +938,10 @@ export const ModalTitle = styled.h3`
 
   body.night-mode & {
     color: ${({ theme }) => theme.colors.gray[50]};
+  }
+
+  @media (max-width: 640px) {
+    font-size: 16px;
   }
 `;
 
@@ -848,6 +1022,16 @@ export const ModalUserItem = styled.div`
       color: ${({ theme }) => theme.colors.gray[50]};
     }
   }
+
+  @media (max-width: 640px) {
+    width: 28px;
+    height: 28px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
 `;
 
 export const ModalEmptyState = styled.div`
@@ -858,5 +1042,10 @@ export const ModalEmptyState = styled.div`
 
   body.night-mode & {
     color: ${({ theme }) => theme.colors.gray[400]};
+  }
+
+  @media (max-width: 640px) {
+    padding: 30px 16px;
+    font-size: 13px;
   }
 `;

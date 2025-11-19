@@ -9,8 +9,9 @@ export const Container = styled.div`
   box-sizing: border-box;
   gap: 20px;
 
-  @media (max-width: 768px) {
-    padding: 20px;
+  @media (max-width: 640px) {
+    padding: 20px 16px;
+    gap: 16px;
   }
 `;
 
@@ -29,7 +30,8 @@ export const TextPost = styled.div`
   flex-direction: column;
   gap: 20px;
   margin-top: 50px;
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   border-radius: 10px;
   padding: 20px;
   position: relative;
@@ -40,13 +42,21 @@ export const TextPost = styled.div`
     0.4
   );
 
-  @media (max-width: 768px) {
-    margin-top: 100px;
+  @media (max-width: 1024px) {
+    max-width: 100%;
   }
 
-  @media (max-width: 480px) {
-    margin-top: 100px;
-    max-width: 90%;
+  @media (max-width: 768px) {
+    margin-top: 80px;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  @media (max-width: 640px) {
+    margin-top: 70px;
+    padding: 12px;
+    gap: 12px;
+    border-radius: 8px;
   }
 `;
 
@@ -70,6 +80,13 @@ export const TextArea = styled.textarea`
     outline: 2px solid ${({ theme }) => theme.colors.blue[650]};
     outline-offset: -2px;
   }
+
+  @media (max-width: 640px) {
+    height: 70px;
+    padding: 8px 8px 8px 16px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
 `;
 
 export const PublishButton = styled.button`
@@ -88,6 +105,22 @@ export const PublishButton = styled.button`
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.blue[250]};
+  }
+
+  @media (max-width: 640px) {
+    padding: 6px 10px;
+    font-size: 13px;
+    gap: 3px;
+    border-radius: 8px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    p {
+      font-size: 13px;
+    }
   }
 `;
 
@@ -111,12 +144,22 @@ export const BoxPost = styled.div`
   scrollbar-width: none;
   -ms-overflow-style: none;
 
-  @media (max-width: 768px) {
-    max-width: 90%;
+  @media (max-width: 1024px) {
+    max-width: 100%;
   }
 
-  @media (max-width: 480px) {
-    max-width: 100%;
+  @media (max-width: 768px) {
+    height: 70vh;
+    gap: 24px;
+    padding: 8px;
+    border-radius: 16px;
+  }
+
+  @media (max-width: 640px) {
+    height: 65vh;
+    gap: 20px;
+    padding: 6px;
+    border-radius: 12px;
   }
 `;
 
@@ -127,6 +170,21 @@ export const UserTop = styled.div`
   position: fixed;
   top: 20px;
   z-index: 1000;
+
+  @media (max-width: 1024px) {
+    right: 60px;
+    top: 18px;
+  }
+
+  @media (max-width: 768px) {
+    right: 50px;
+    top: 15px;
+  }
+
+  @media (max-width: 640px) {
+    right: 16px;
+    top: 12px;
+  }
 `;
 
 export const TextAreaContainer = styled.div`
@@ -136,6 +194,10 @@ export const TextAreaContainer = styled.div`
   width: 100%;
   position: relative;
   flex: 1;
+
+  @media (max-width: 640px) {
+    gap: 6px;
+  }
 `;
 
 export const EmojiButton = styled.button`
@@ -157,6 +219,18 @@ export const EmojiButton = styled.button`
 
   &:active {
     transform: scale(0.95);
+  }
+
+  @media (max-width: 640px) {
+    min-width: 36px;
+    height: 36px;
+    padding: 6px;
+    border-radius: 8px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
   }
 `;
 
@@ -266,6 +340,8 @@ export const EmojiPickerContainer = styled.div`
     top: calc(100% + 10px);
     transform: none;
     animation: slideInUp 0.3s ease-out;
+    min-width: 320px !important;
+    width: 320px !important;
 
     @keyframes slideInUp {
       from {
@@ -284,13 +360,16 @@ export const EmojiPickerContainer = styled.div`
     right: 0;
     top: calc(100% + 10px);
     max-width: calc(100vw - 40px);
+    min-width: calc(100vw - 40px) !important;
+    width: calc(100vw - 40px) !important;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     left: 50%;
     right: auto;
     transform: translateX(-50%);
-    max-width: calc(100vw - 20px);
-    width: auto;
+    max-width: calc(100vw - 32px);
+    min-width: calc(100vw - 32px) !important;
+    width: calc(100vw - 32px) !important;
   }
 `;
