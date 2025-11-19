@@ -8,6 +8,10 @@ export const SignupContainer = styled.div`
   height: 100vh;
   z-index: 10;
   padding: 0 15px;
+
+  @media (max-width: 640px) {
+    padding: 0 12px;
+  }
 `;
 
 export const ScreenCloudy = styled.div`
@@ -23,7 +27,8 @@ export const ScreenCloudy = styled.div`
   @media (max-width: 768px) {
     padding: 20px 40px;
   }
-  @media (max-width: 480px) {
+
+  @media (max-width: 640px) {
     padding: 15px 20px;
   }
 `;
@@ -44,10 +49,11 @@ export const ButtonContainer = styled.div`
     top: -50px;
     border-bottom: 2px solid ${({ theme }) => theme.colors.gray[1000]};
 
-    @media (max-width: 480px) {
+    @media (max-width: 640px) {
       left: 0;
       top: -10px;
       text-align: center;
+      font-size: 13px;
     }
   }
 
@@ -77,7 +83,8 @@ export const ButtonLabel = styled.span`
   @media (max-width: 768px) {
     font-size: 18px;
   }
-  @media (max-width: 480px) {
+
+  @media (max-width: 640px) {
     font-size: 16px;
   }
 `;
@@ -98,10 +105,13 @@ export const CloudyBox = styled.div`
   @media (max-width: 768px) {
     width: 400px;
     height: 320px;
+    border-radius: 24px;
   }
 
-  @media (max-width: 480px) {
-    width: 320px;
+  @media (max-width: 640px) {
+    width: 100%;
+    max-width: 320px;
     height: 280px;
+    border-radius: 20px;
   }
 `;

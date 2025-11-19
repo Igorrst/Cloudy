@@ -7,6 +7,10 @@ export const RegisterContainer = styled.div`
   justify-content: center;
   min-height: 100vh;
   padding: 0 15px;
+
+  @media (max-width: 640px) {
+    padding: 0 12px;
+  }
 `;
 
 export const HeaderContainer = styled.div`
@@ -22,6 +26,10 @@ export const LogoImage = styled.img`
 
   @media (max-width: 768px) {
     width: 120px;
+  }
+
+  @media (max-width: 640px) {
+    width: 100px;
   }
 `;
 
@@ -70,7 +78,7 @@ export const FormContainer = styled.form`
     }
   }
 
-  @media (max-width: 1366px) {
+  @media (max-width: 1280px) {
     padding: 35px;
     width: 85%;
     max-width: 380px;
@@ -80,18 +88,39 @@ export const FormContainer = styled.form`
     padding: 30px;
     width: 80%;
     max-width: 350px;
+
+    h2 {
+      font-size: 22px;
+    }
   }
 
   @media (max-width: 768px) {
     padding: 20px;
     width: 90%;
-    max-width: 300px;
+    max-width: 100%;
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    input,
+    textarea,
+    select,
+    button {
+      font-size: 15px;
+      padding: 9px;
+    }
   }
 
-  @media (max-width: 480px) {
-    padding: 15px;
-    width: 90%;
-    max-width: 250px;
+  @media (max-width: 640px) {
+    padding: 16px;
+    width: 95%;
+
+    h2 {
+      font-size: 18px;
+      margin-bottom: 14px;
+    }
 
     input,
     textarea,
@@ -99,24 +128,6 @@ export const FormContainer = styled.form`
     button {
       font-size: 14px;
       padding: 8px;
-    }
-  }
-
-  @media (max-width: 360px) {
-    padding: 10px;
-    width: 95%;
-    max-width: 220px;
-
-    h2 {
-      font-size: 20px;
-    }
-
-    input,
-    textarea,
-    select,
-    button {
-      font-size: 12px;
-      padding: 6px;
     }
   }
 `;
@@ -145,12 +156,22 @@ export const InputField = styled.input<{ hasError?: boolean }>`
     border-color: ${({ theme, hasError }) =>
       hasError ? theme.colors.red[700] : theme.colors.blue[950]};
   }
+
+  @media (max-width: 640px) {
+    font-size: 14px;
+    height: 42px;
+  }
 `;
 
 export const ErrorMessage = styled.p`
   color: ${({ theme }) => theme.colors.red[500]};
   font-size: 0.85rem;
   margin-top: -30px;
+
+  @media (max-width: 640px) {
+    font-size: 0.75rem;
+    margin-top: -28px;
+  }
 `;
 
 export const ButtonWrapper = styled.div`
@@ -171,6 +192,16 @@ export const ButtonWrapper = styled.div`
     &:hover {
       transform: translateY(-2px);
       background-color: ${({ theme }) => theme.colors.blue[650]};
+    }
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+      padding: 8px 16px;
+    }
+
+    @media (max-width: 640px) {
+      font-size: 13px;
+      padding: 8px 14px;
     }
   }
 `;

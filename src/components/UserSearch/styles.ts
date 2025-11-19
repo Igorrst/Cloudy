@@ -5,6 +5,20 @@ export const SearchContainer = styled.div`
   width: 100%;
   max-width: 400px;
   margin: 0 auto 30px;
+
+  @media (max-width: 1024px) {
+    max-width: 350px;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 300px;
+    margin: 0 auto 20px;
+  }
+
+  @media (max-width: 640px) {
+    max-width: 100%;
+    margin: 0 auto 16px;
+  }
 `;
 
 export const SearchInput = styled.input`
@@ -18,6 +32,18 @@ export const SearchInput = styled.input`
   background: ${({ theme }) => theme.colors.blue[50]};
   outline: none;
   transition: all 0.2s;
+
+  @media (max-width: 768px) {
+    padding: 10px 36px 10px 14px;
+    font-size: 15px;
+    border-radius: 20px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 8px 32px 8px 12px;
+    font-size: 14px;
+    border-radius: 18px;
+  }
 
   body.night-mode & {
     border: 2px solid ${({ theme }) => theme.colors.gray[600]};
@@ -70,6 +96,16 @@ export const SearchResults = styled.div`
   overflow-y: auto;
   z-index: 1000;
 
+  @media (max-width: 768px) {
+    max-height: 350px;
+    border-radius: 14px;
+  }
+
+  @media (max-width: 640px) {
+    max-height: 300px;
+    border-radius: 12px;
+  }
+
   body.night-mode & {
     background: ${({ theme }) => theme.colors.gray[900]};
     border: 2px solid ${({ theme }) => theme.colors.gray[700]};
@@ -85,6 +121,11 @@ export const UserResult = styled.div`
   cursor: pointer;
   transition: background-color 0.2s;
   border-bottom: 1px solid ${({ theme }) => theme.colors.blue[200]};
+
+  @media (max-width: 640px) {
+    padding: 10px 14px;
+    gap: 10px;
+  }
 
   body.night-mode & {
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
@@ -123,6 +164,10 @@ export const UserName = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
 
+  @media (max-width: 640px) {
+    font-size: 14px;
+  }
+
   body.night-mode & {
     color: ${({ theme }) => theme.colors.gray[50]};
   }
@@ -135,6 +180,10 @@ export const UserBio = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
 
+  @media (max-width: 640px) {
+    font-size: 12px;
+  }
+
   body.night-mode & {
     color: ${({ theme }) => theme.colors.gray[400]};
   }
@@ -145,6 +194,11 @@ export const EmptyResults = styled.div`
   text-align: center;
   color: ${({ theme }) => theme.colors.gray[600]};
   font-size: 14px;
+
+  @media (max-width: 640px) {
+    padding: 16px;
+    font-size: 13px;
+  }
 
   body.night-mode & {
     color: ${({ theme }) => theme.colors.gray[400]};
