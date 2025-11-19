@@ -8,6 +8,7 @@ import {
   InputField,
   ErrorMessage,
   ButtonWrapper,
+  FormFeedback,
 } from "./styles";
 import { Mail, LockKeyhole } from "lucide-react";
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
@@ -27,6 +28,7 @@ const Login = () => {
   });
 
   const [isLoading, setLoading] = useState(false);
+  const [generalError, setGeneralError] = useState("");
 
   const navigate = useNavigate();
 
@@ -37,11 +39,13 @@ const Login = () => {
       [name]: value,
     }));
     setErrors((prevErrors) => ({ ...prevErrors, [name]: false }));
+    setGeneralError("");
   };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setGeneralError("");
 
     const newErrors = {
       email: !formData.email.trim(),
@@ -51,7 +55,10 @@ const Login = () => {
     setErrors(newErrors);
 
     const hasErrors = Object.values(newErrors).some((error) => error);
-    if (hasErrors) return;
+    if (hasErrors) {
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await loginUser(formData);
@@ -60,7 +67,6 @@ const Login = () => {
 
       if (token && token.trim() !== "") {
         localStorage.setItem("authToken", token);
-        alert("Login realizado com sucesso!");
         setLoading(false);
         navigate("/home");
       }
@@ -68,7 +74,7 @@ const Login = () => {
       const errorMessage = isApiError(error)
         ? error.response?.data?.message || "Erro ao fazer login. Verifique suas credenciais."
         : "Erro ao fazer login. Verifique suas credenciais.";
-      alert(errorMessage);
+      setGeneralError(errorMessage);
       setLoading(false);
     }
   };
@@ -112,6 +118,7 @@ const Login = () => {
         <ButtonWrapper>
           <PrimaryButton disabled={isLoading} text="Entrar" />
         </ButtonWrapper>
+        {generalError && <FormFeedback>{generalError}</FormFeedback>}
         <p style={{ marginLeft: "100px" }}>
           Ou{" "}
           <Link

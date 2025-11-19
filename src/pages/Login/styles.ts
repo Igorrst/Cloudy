@@ -130,6 +130,17 @@ export const ErrorMessage = styled.p`
   }
 `;
 
+export const FormFeedback = styled.p`
+  color: ${({ theme }) => theme.colors.red[500]};
+  font-size: 0.85rem;
+  margin-top: 8px;
+  text-align: center;
+
+  @media (max-width: 640px) {
+    font-size: 0.8rem;
+  }
+`;
+
 export const ButtonWrapper = styled.div`
   width: 100%;
   max-width: 380px;
