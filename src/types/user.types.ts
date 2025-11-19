@@ -1,3 +1,5 @@
+import { ApiPostResponse } from "./api.types";
+
 export interface CurrentUser {
   id: string;
   name: string;
@@ -12,13 +14,7 @@ export interface UserProfile {
   profilePhoto?: string;
   createdAt: string;
   updatedAt: string;
-  posts?: Array<{
-    id: string;
-    content: string;
-    createdAt: string;
-    updatedAt: string;
-    ownerId: string;
-  }>;
+  posts?: ApiPostResponse[];
   followers?: Array<{
     follower: {
       id: string;

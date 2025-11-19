@@ -133,6 +133,12 @@ export const CommentHeader = styled.div`
   gap: 12px;
   position: relative;
   flex-wrap: wrap;
+
+  strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.gray[1000]};
+  }
 `;
 
 export const CommentContent = styled.p`
