@@ -111,27 +111,6 @@ const Profile = () => {
     }
   }, [showEmojiPicker]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (isLoadingMore || !hasMorePosts || !user || !scrollContainerRef.current) return;
-
-      const scrollContainer = scrollContainerRef.current;
-      const scrollTop = scrollContainer.scrollTop;
-      const scrollHeight = scrollContainer.scrollHeight;
-      const clientHeight = scrollContainer.clientHeight;
-
-      if (scrollTop + clientHeight >= scrollHeight - 200) {
-        loadMorePosts();
-      }
-    };
-
-    const scrollContainer = scrollContainerRef.current;
-    if (scrollContainer) {
-      scrollContainer.addEventListener("scroll", handleScroll);
-      return () => scrollContainer.removeEventListener("scroll", handleScroll);
-    }
-  }, [isLoadingMore, hasMorePosts, user, loadMorePosts]);
-
   const loadUserPosts = async (ownerId: string, page: number = 1, append: boolean = false) => {
     try {
       if (append) {
@@ -223,6 +202,27 @@ const Profile = () => {
       setIsLoadingMore(false);
     }
   }, [user, isLoadingMore, hasMorePosts, currentPage]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isLoadingMore || !hasMorePosts || !user || !scrollContainerRef.current) return;
+
+      const scrollContainer = scrollContainerRef.current;
+      const scrollTop = scrollContainer.scrollTop;
+      const scrollHeight = scrollContainer.scrollHeight;
+      const clientHeight = scrollContainer.clientHeight;
+
+      if (scrollTop + clientHeight >= scrollHeight - 200) {
+        loadMorePosts();
+      }
+    };
+
+    const scrollContainer = scrollContainerRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", handleScroll);
+      return () => scrollContainer.removeEventListener("scroll", handleScroll);
+    }
+  }, [isLoadingMore, hasMorePosts, user, loadMorePosts]);
 
   const loadProfile = async () => {
     try {
@@ -563,9 +563,9 @@ const Profile = () => {
 
   if (isLoading) {
     return (
-      <Container>
+        <Container>
         <p>Carregando perfil...</p>
-      </Container>
+        </Container>
     );
   }
 
