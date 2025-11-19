@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Container, TopBar, BackButton, ProfileHeader, ProfileInfo, BioSection, BioContent, BioText, BioTextarea, BioActions, EditButton, SaveButton, CancelButton, PostsScrollContainer, PostsGrid, PostItem, EmptyState, StatsSection, StatItem, EmojiButton, EmojiPickerContainer, SearchWrapper, FollowButton, UnfollowButton, ModalOverlay, ModalContent, ModalHeader, ModalTitle, ModalCloseButton, ModalList, ModalUserItem, ModalEmptyState } from "./styles";
 import Configurations from "../../components/Configurations";
 import Avatar from "../../components/Avatar";
@@ -21,6 +21,9 @@ const Profile = () => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioText, setBioText] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -32,6 +35,7 @@ const Profile = () => {
   const [showFollowingModal, setShowFollowingModal] = useState(false);
   const bioTextareaRef = useRef<HTMLTextAreaElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isNight = useThemeStore((state) => state.isNight);
   const currentUserId = getUserIdFromToken();
   const isOwnProfile = !userId || userId === currentUserId;
@@ -107,6 +111,119 @@ const Profile = () => {
     }
   }, [showEmojiPicker]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isLoadingMore || !hasMorePosts || !user || !scrollContainerRef.current) return;
+
+      const scrollContainer = scrollContainerRef.current;
+      const scrollTop = scrollContainer.scrollTop;
+      const scrollHeight = scrollContainer.scrollHeight;
+      const clientHeight = scrollContainer.clientHeight;
+
+      if (scrollTop + clientHeight >= scrollHeight - 200) {
+        loadMorePosts();
+      }
+    };
+
+    const scrollContainer = scrollContainerRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", handleScroll);
+      return () => scrollContainer.removeEventListener("scroll", handleScroll);
+    }
+  }, [isLoadingMore, hasMorePosts, user, loadMorePosts]);
+
+  const loadUserPosts = async (ownerId: string, page: number = 1, append: boolean = false) => {
+    try {
+      if (append) {
+        setIsLoadingMore(true);
+      } else {
+        setIsLoading(true);
+      }
+      
+      const response = await getPosts(undefined, page) as ApiPostsResponse;
+      const userPosts = response.posts
+        .filter((post: ApiPostResponse) => post.ownerId === ownerId)
+        .map((post: ApiPostResponse): Post => ({
+          id: post.id,
+          content: post.content,
+          owner: {
+            name: post.owner?.name || user?.name || "Usuário",
+            id: ownerId
+          },
+          ownerId: post.ownerId,
+          createdAt: post.createdAt,
+          updatedAt: post.updatedAt,
+          likes: post.likes || [],
+          comments: (post.comments || []).map((comment: ApiCommentResponse): PostComment => ({
+            id: comment.id,
+            content: comment.content,
+            owner: {
+              name: comment.owner?.name || "Usuário",
+              id: comment.ownerId
+            },
+            createdAt: comment.createdAt,
+            updatedAt: comment.updatedAt,
+            likes: comment.likes || [],
+          })),
+        }));
+      
+      if (append) {
+        setPosts(prevPosts => [...prevPosts, ...userPosts]);
+      } else {
+        setPosts(userPosts);
+      }
+      
+      setHasMorePosts(userPosts.length === 20);
+      
+      setCurrentPage(page);
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+      setIsLoadingMore(false);
+    }
+  };
+
+  const loadMorePosts = useCallback(async () => {
+    if (!user || isLoadingMore || !hasMorePosts) return;
+    
+    try {
+      setIsLoadingMore(true);
+      const response = await getPosts(undefined, currentPage + 1) as ApiPostsResponse;
+      const userPosts = response.posts
+        .filter((post: ApiPostResponse) => post.ownerId === user.id)
+        .map((post: ApiPostResponse): Post => ({
+          id: post.id,
+          content: post.content,
+          owner: {
+            name: post.owner?.name || user.name,
+            id: user.id
+          },
+          ownerId: post.ownerId,
+          createdAt: post.createdAt,
+          updatedAt: post.updatedAt,
+          likes: post.likes || [],
+          comments: (post.comments || []).map((comment: ApiCommentResponse): PostComment => ({
+            id: comment.id,
+            content: comment.content,
+            owner: {
+              name: comment.owner?.name || "Usuário",
+              id: comment.ownerId
+            },
+            createdAt: comment.createdAt,
+            updatedAt: comment.updatedAt,
+            likes: comment.likes || [],
+          })),
+        }));
+      
+      setPosts(prevPosts => [...prevPosts, ...userPosts]);
+      setHasMorePosts(userPosts.length === 20);
+      setCurrentPage(prev => prev + 1);
+    } catch (error) {
+    } finally {
+      setIsLoadingMore(false);
+    }
+  }, [user, isLoadingMore, hasMorePosts, currentPage]);
+
   const loadProfile = async () => {
     try {
       setIsLoading(true);
@@ -129,28 +246,7 @@ const Profile = () => {
           setIsFollowing(isUserFollowing);
         }
         
-        const response = await getPosts() as ApiPostsResponse;
-        const userPosts = response.posts
-          .filter((post: ApiPostResponse) => post.ownerId === userData.id)
-          .map((post: ApiPostResponse): Post => ({
-            id: post.id,
-            content: post.content,
-            owner: post.owner || { name: userData.name, id: userData.id },
-            ownerId: post.ownerId,
-            createdAt: post.createdAt,
-            updatedAt: post.updatedAt,
-            likes: post.likes || [],
-            comments: (post.comments || []).map((comment: ApiCommentResponse): PostComment => ({
-              id: comment.id,
-              content: comment.content,
-              owner: comment.owner || { name: "Usuário", id: comment.ownerId },
-              createdAt: comment.createdAt,
-              updatedAt: comment.updatedAt,
-              likes: comment.likes || [],
-            })),
-          }));
-        
-        setPosts(userPosts);
+        await loadUserPosts(userData.id, 1, false);
       }
     } catch (error) {
     } finally {
@@ -283,7 +379,7 @@ const Profile = () => {
   };
 
   const handleCommentCreate = async (postId: string, content: string) => {
-    if (!currentUserId || !user) return;
+    if (!currentUserId || !currentUserName) return;
     
     const validation = await validateContent(content.trim());
     if (!validation.isValid) {
@@ -298,7 +394,7 @@ const Profile = () => {
         id: response.id,
         content: response.content,
         owner: {
-          name: user.name,
+          name: currentUserName,
           id: currentUserId
         },
         createdAt: response.createdAt,
@@ -380,7 +476,7 @@ const Profile = () => {
   };
 
   const handleCommentLike = async (postId: string, commentId: string, isLiked: boolean) => {
-    if (!currentUserId) return;
+    if (!currentUserId || !currentUserName) return;
     
     try {
       if (isLiked) {
@@ -403,7 +499,7 @@ const Profile = () => {
                 } else {
                   return {
                     ...comment,
-                    likes: [...(comment.likes || []), { id: currentUserId, name: user?.name || "Usuário" }]
+                    likes: [...(comment.likes || []), { id: currentUserId, name: currentUserName }]
                   };
                 }
               }
@@ -602,29 +698,41 @@ const Profile = () => {
         </SearchWrapper>
       </BioSection>
 
-      <PostsScrollContainer>
+      <PostsScrollContainer ref={scrollContainerRef}>
         <PostsGrid>
           {posts.length > 0 ? (
-            posts.map((post) => (
-              <PostItem key={post.id}>
-                <PostCard
-                  id={post.id}
-                  content={post.content}
-                  owner={post.owner}
-                  ownerId={post.ownerId}
-                  liked={isPostLiked(post)}
-                  likesCount={post.likes.length}
-                  comments={post.comments}
-                  onLike={() => handleLike(post.id, isPostLiked(post))}
-                  onEdit={handleEditPost}
-                  onDelete={handleDeletePost}
-                  onCommentCreate={handleCommentCreate}
-                  onCommentEdit={handleCommentEdit}
-                  onCommentDelete={handleCommentDelete}
-                  onCommentLike={handleCommentLike}
-                />
-              </PostItem>
-            ))
+            <>
+              {posts.map((post) => (
+                <PostItem key={post.id}>
+                  <PostCard
+                    id={post.id}
+                    content={post.content}
+                    owner={post.owner}
+                    ownerId={post.ownerId}
+                    liked={isPostLiked(post)}
+                    likesCount={post.likes.length}
+                    comments={post.comments}
+                    onLike={() => handleLike(post.id, isPostLiked(post))}
+                    onEdit={handleEditPost}
+                    onDelete={handleDeletePost}
+                    onCommentCreate={handleCommentCreate}
+                    onCommentEdit={handleCommentEdit}
+                    onCommentDelete={handleCommentDelete}
+                    onCommentLike={handleCommentLike}
+                  />
+                </PostItem>
+              ))}
+              {isLoadingMore && (
+                <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "20px" }}>
+                  <p>Carregando mais posts...</p>
+                </div>
+              )}
+              {!hasMorePosts && posts.length > 0 && (
+                <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "20px", color: "#666" }}>
+                  <p>Não há mais posts para carregar</p>
+                </div>
+              )}
+            </>
           ) : (
             <EmptyState>
               <p>Nenhum post ainda</p>

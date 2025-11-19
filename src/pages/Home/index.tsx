@@ -31,6 +31,9 @@ const Home = () => {
   const [newPost, setNewPost] = useState("");
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -58,7 +61,10 @@ const Home = () => {
         const formattedPosts: Post[] = response.posts.map((post: ApiPostResponse) => ({
           id: post.id,
           content: post.content,
-          owner: post.owner || { name: "Usuário", id: post.ownerId },
+          owner: {
+            name: post.owner?.name || "Usuário",
+            id: post.ownerId
+          },
           ownerId: post.ownerId,
           createdAt: post.createdAt,
           updatedAt: post.updatedAt,
@@ -66,7 +72,10 @@ const Home = () => {
           comments: (post.comments || []).map((comment: ApiCommentResponse): PostComment => ({
             id: comment.id,
             content: comment.content,
-            owner: comment.owner || { name: "Usuário", id: comment.ownerId },
+            owner: {
+              name: comment.owner?.name || "Usuário",
+              id: comment.ownerId
+            },
             createdAt: comment.createdAt,
             updatedAt: comment.updatedAt,
             likes: comment.likes || [],
@@ -146,14 +155,22 @@ const Home = () => {
     setCurrentUser(user);
   };
 
-  const loadPosts = async () => {
+  const loadPosts = async (page: number = 1, append: boolean = false) => {
     try {
-      setIsLoading(true);
-      const response = await getPosts() as ApiPostsResponse;
+      if (append) {
+        setIsLoadingMore(true);
+      } else {
+        setIsLoading(true);
+      }
+      
+      const response = await getPosts(undefined, page) as ApiPostsResponse;
       const formattedPosts: Post[] = response.posts.map((post: ApiPostResponse) => ({
         id: post.id,
         content: post.content,
-        owner: post.owner || { name: "Usuário", id: post.ownerId },
+        owner: {
+          name: post.owner?.name || "Usuário",
+          id: post.ownerId
+        },
         ownerId: post.ownerId,
         createdAt: post.createdAt,
         updatedAt: post.updatedAt,
@@ -161,17 +178,40 @@ const Home = () => {
         comments: (post.comments || []).map((comment: ApiCommentResponse): PostComment => ({
           id: comment.id,
           content: comment.content,
-          owner: comment.owner || { name: "Usuário", id: comment.ownerId },
+          owner: {
+            name: comment.owner?.name || "Usuário",
+            id: comment.ownerId
+          },
           createdAt: comment.createdAt,
           updatedAt: comment.updatedAt,
           likes: comment.likes || [],
         })),
       }));
-      setPosts(formattedPosts);
+      
+      if (append) {
+        setPosts(prevPosts => [...prevPosts, ...formattedPosts]);
+      } else {
+        setPosts(formattedPosts);
+      }
+      
+      if (response.meta) {
+        const totalPages = Math.ceil((response.meta.total || 0) / 20);
+        setHasMorePosts(page < totalPages);
+      } else {
+        setHasMorePosts(formattedPosts.length === 20);
+      }
+      
+      setCurrentPage(page);
     } catch (error) {
     } finally {
       setIsLoading(false);
+      setIsLoadingMore(false);
     }
+  };
+
+  const loadMorePosts = async () => {
+    if (isLoadingMore || !hasMorePosts) return;
+    await loadPosts(currentPage + 1, true);
   };
 
   const handleAddPost = async () => {
@@ -489,6 +529,23 @@ const Home = () => {
     }
   }, [showEmojiPicker]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isLoadingMore || !hasMorePosts) return;
+
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      if (scrollTop + windowHeight >= documentHeight - 200) {
+        loadMorePosts();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isLoadingMore, hasMorePosts]);
+
   return (
     <Container>
       <UserTop>
@@ -551,25 +608,33 @@ const Home = () => {
         {isLoading ? (
           <p>Carregando posts...</p>
         ) : posts.length > 0 ? (
-          posts.map((post) => (
-            <PostCard
-              key={post.id}
-              id={post.id}
-              content={post.content}
-              owner={post.owner}
-              ownerId={post.ownerId}
-              liked={isPostLiked(post)}
-              likesCount={post.likes.length}
-              comments={post.comments}
-              onLike={() => handleLike(post.id, isPostLiked(post))}
-              onEdit={handleEditPost}
-              onDelete={handleDeletePost}
-              onCommentCreate={handleCommentCreate}
-              onCommentEdit={handleCommentEdit}
-              onCommentDelete={handleCommentDelete}
-              onCommentLike={handleCommentLike}
-            />
-          ))
+          <>
+            {posts.map((post) => (
+              <PostCard
+                key={post.id}
+                id={post.id}
+                content={post.content}
+                owner={post.owner}
+                ownerId={post.ownerId}
+                liked={isPostLiked(post)}
+                likesCount={post.likes.length}
+                comments={post.comments}
+                onLike={() => handleLike(post.id, isPostLiked(post))}
+                onEdit={handleEditPost}
+                onDelete={handleDeletePost}
+                onCommentCreate={handleCommentCreate}
+                onCommentEdit={handleCommentEdit}
+                onCommentDelete={handleCommentDelete}
+                onCommentLike={handleCommentLike}
+              />
+            ))}
+            {isLoadingMore && (
+              <p style={{ textAlign: "center", padding: "20px" }}>Carregando mais posts...</p>
+            )}
+            {!hasMorePosts && posts.length > 0 && (
+              <p style={{ textAlign: "center", padding: "20px", color: "#666" }}>Não há mais posts para carregar</p>
+            )}
+          </>
         ) : (
           <p>Nenhum Post ainda, crie seu primeiro!</p>
         )}

@@ -164,7 +164,7 @@ const PostCard = ({
       </motion.div>
 
       <UserPostInfo>
-        <Avatar name={owner.name} />
+        <Avatar name={owner.name} userId={owner.id} />
         <h3>{owner.name}</h3>
       </UserPostInfo>
 

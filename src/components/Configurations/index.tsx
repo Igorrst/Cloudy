@@ -1,5 +1,5 @@
 import useModalStore from "../../stores/modalStore";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -26,15 +26,30 @@ import SwitchButton from "../SwitchButton";
 import { LogOut, Moon, ChevronDown } from "lucide-react";
 import Avatar from "../Avatar";
 import useThemeStore from "../../stores/themeStore";
+import { getCurrentUser } from "../../services/userService";
 
 const Configurations: React.FC = () => {
   const { isModalOpen, toggleModal } = useModalStore();
   const navigate = useNavigate();
   const [reportText, setReportText] = useState("");
   const [showConfirmLogout, setShowConfirmLogout] = useState(false);
+  const [currentUserName, setCurrentUserName] = useState<string>("Usuário");
 
   const isNight = useThemeStore((state) => state.isNight);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
+
+  useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+        const user = await getCurrentUser();
+        if (user) {
+          setCurrentUserName(user.name);
+        }
+      } catch (error) {
+      }
+    };
+    loadCurrentUser();
+  }, []);
 
   const handleReportChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -66,7 +81,7 @@ const Configurations: React.FC = () => {
     <>
       <ConfigTrigger onClick={toggleModal}>
         <UserInfo>
-          <Avatar isNavigation={false} name="Igor" size={25} />
+          <Avatar isNavigation={false} name={currentUserName} size={25} />
         </UserInfo>
         <VerticalSeparator />
         <ArrowIcon isOpen={isModalOpen}>
@@ -77,7 +92,7 @@ const Configurations: React.FC = () => {
       {isModalOpen && (
         <ModalContainer>
           <ClickableRow onClick={goToProfile}>
-            <Avatar name="Igor" size={30} />
+            <Avatar name={currentUserName} size={30} />
             <span>Perfil</span>
           </ClickableRow>
 

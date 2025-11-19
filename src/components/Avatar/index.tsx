@@ -5,14 +5,19 @@ interface AvatarProps {
   name: string;
   size?: number;
   isNavigation?: boolean;
+  userId?: string;
 }
 
-const Avatar = ({ isNavigation = true, name, size = 40 }: AvatarProps) => {
+const Avatar = ({ isNavigation = true, name, size = 40, userId }: AvatarProps) => {
   const navigate = useNavigate();
   const initial = name.charAt(0).toUpperCase();
   function handleclick() {
     if (isNavigation) {
-      navigate("/profile");
+      if (userId) {
+        navigate(`/profile/${userId}`);
+      } else {
+        navigate("/profile");
+      }
       return;
     }
   }
