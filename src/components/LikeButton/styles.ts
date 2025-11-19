@@ -20,6 +20,10 @@ export const Button = styled.button<{ liked: boolean }>`
     font-size: 14px;
     font-weight: 500;
     color: ${({ theme }) => theme.colors.gray[800]};
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
   }
 
   @media (max-width: 480px) {

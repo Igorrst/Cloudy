@@ -1,11 +1,26 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MoreVertical, Edit, Trash2 } from "lucide-react";
-import { Container, PostContent, UserPostInfo, PostActions, OptionsButton, OptionsModal, OptionItem } from "./styles";
+import { MoreVertical, Edit, Trash2, X } from "lucide-react";
+import {
+  Container,
+  PostContent,
+  UserPostInfo,
+  PostActions,
+  OptionsButton,
+  OptionsModal,
+  OptionItem,
+  LikesModalOverlay,
+  LikesModalContent,
+  LikesModalHeader,
+  LikesList,
+  LikeUserItem,
+  LikesEmptyState
+} from "./styles";
 import Avatar from "../Avatar";
 import LikeButton from "../LikeButton";
 import Comment from "../Comment";
 import { getUserIdFromToken } from "../../utils/auth";
+import { PostLike } from "../../types";
 
 interface PostOwner {
   name: string;
@@ -29,6 +44,7 @@ interface PostCardProps {
   ownerId: string;
   liked: boolean;
   likesCount: number;
+  likes: PostLike[];
   comments: PostComment[];
   onLike: () => void;
   onEdit: (postId: string, newContent: string) => void;
@@ -39,16 +55,17 @@ interface PostCardProps {
   onCommentLike?: (postId: string, commentId: string, isLiked: boolean) => void;
 }
 
-const PostCard = ({ 
-  id, 
-  content, 
-  owner, 
-  ownerId, 
-  liked, 
+const PostCard = ({
+  id,
+  content,
+  owner,
+  ownerId,
+  liked,
   likesCount,
+  likes,
   comments,
-  onLike, 
-  onEdit, 
+  onLike,
+  onEdit,
   onDelete,
   onCommentCreate,
   onCommentEdit,
@@ -58,6 +75,7 @@ const PostCard = ({
   const [showOptions, setShowOptions] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editContent, setEditContent] = useState(content);
+  const [showLikesModal, setShowLikesModal] = useState(false);
   const currentUserId = getUserIdFromToken();
   const isOwner = currentUserId === ownerId;
 
@@ -78,6 +96,15 @@ const PostCard = ({
       onDelete(id);
       setShowOptions(false);
     }
+  };
+
+  const handleOpenLikesModal = () => {
+    if (!likes || likes.length === 0) return;
+    setShowLikesModal(true);
+  };
+
+  const handleCloseLikesModal = () => {
+    setShowLikesModal(false);
   };
 
   return (
@@ -170,7 +197,12 @@ const PostCard = ({
 
       <PostActions>
         <div className="action-button like">
-          <LikeButton liked={liked} likesCount={likesCount} onClick={onLike} />
+          <LikeButton
+            liked={liked}
+            likesCount={likesCount}
+            onClick={onLike}
+            onCountClick={handleOpenLikesModal}
+          />
         </div>
         <div className="action-button comment">
           <Comment 
@@ -184,6 +216,35 @@ const PostCard = ({
           />
         </div>
       </PostActions>
+
+      {showLikesModal && (
+        <LikesModalOverlay onClick={handleCloseLikesModal}>
+          <LikesModalContent onClick={(event) => event.stopPropagation()}>
+            <LikesModalHeader>
+              <strong>Curtidas</strong>
+              <button type="button" onClick={handleCloseLikesModal}>
+                <X size={18} />
+              </button>
+            </LikesModalHeader>
+            {likes.length > 0 ? (
+              <LikesList>
+                {likes.map((like) => (
+                  <LikeUserItem key={like.id}>
+                    <Avatar name={like.name} size={36} userId={like.id} />
+                    <div>
+                      <strong>{like.name}</strong>
+                      {like.id === currentUserId && <span>Você</span>}
+                      {like.id === ownerId && like.id !== currentUserId && <span>Autor</span>}
+                    </div>
+                  </LikeUserItem>
+                ))}
+              </LikesList>
+            ) : (
+              <LikesEmptyState>Ninguém curtiu ainda.</LikesEmptyState>
+            )}
+          </LikesModalContent>
+        </LikesModalOverlay>
+      )}
     </Container>
   );
 };

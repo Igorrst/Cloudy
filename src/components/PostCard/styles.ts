@@ -232,3 +232,133 @@ export const OptionItem = styled.div<{ delete?: boolean }>`
     }
   }
 `;
+
+export const LikesModalOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 20000;
+`;
+
+export const LikesModalContent = styled.div`
+  background: ${({ theme }) => theme.colors.blue[50]};
+  border-radius: 16px;
+  width: 100%;
+  max-width: 360px;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+
+  body.night-mode & {
+    background: ${({ theme }) => theme.colors.gray[900]};
+  }
+`;
+
+export const LikesModalHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.blue[200]};
+
+  strong {
+    font-size: 16px;
+    color: ${({ theme }) => theme.colors.gray[1000]};
+
+    body.night-mode & {
+      color: ${({ theme }) => theme.colors.gray[50]};
+    }
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: ${({ theme }) => theme.colors.gray[800]};
+    padding: 4px;
+    border-radius: 50%;
+    transition: background 0.2s;
+
+    body.night-mode & {
+      color: ${({ theme }) => theme.colors.gray[200]};
+    }
+
+    &:hover {
+      background: ${({ theme }) => theme.colors.blue[100]};
+
+      body.night-mode & {
+        background: ${({ theme }) => theme.colors.gray[800]};
+      }
+    }
+  }
+`;
+
+export const LikesList = styled.div`
+  padding: 8px 0;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.blue[300]};
+    border-radius: 999px;
+  }
+`;
+
+export const LikeUserItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.blue[100]};
+
+    body.night-mode & {
+      background: ${({ theme }) => theme.colors.gray[800]};
+    }
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+
+    strong {
+      font-size: 15px;
+      color: ${({ theme }) => theme.colors.gray[1000]};
+
+      body.night-mode & {
+        color: ${({ theme }) => theme.colors.gray[50]};
+      }
+    }
+
+    span {
+      font-size: 12px;
+      color: ${({ theme }) => theme.colors.gray[600]};
+
+      body.night-mode & {
+        color: ${({ theme }) => theme.colors.gray[400]};
+      }
+    }
+  }
+`;
+
+export const LikesEmptyState = styled.div`
+  padding: 32px 20px;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.gray[600]};
+
+  body.night-mode & {
+    color: ${({ theme }) => theme.colors.gray[400]};
+  }
+`;
