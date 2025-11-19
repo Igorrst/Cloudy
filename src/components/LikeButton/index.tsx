@@ -7,9 +7,10 @@ interface LikeButtonProps {
   liked: boolean;
   likesCount: number;
   onClick: () => void;
+  onCountClick?: () => void;
 }
 
-const LikeButton = ({ liked, likesCount, onClick }: LikeButtonProps) => {
+const LikeButton = ({ liked, likesCount, onClick, onCountClick }: LikeButtonProps) => {
   const theme = useTheme();
 
   return (
@@ -21,7 +22,25 @@ const LikeButton = ({ liked, likesCount, onClick }: LikeButtonProps) => {
           fill={liked ? "red" : "none"}
         />
       </motion.div>
-      {likesCount > 0 && <span>{likesCount}</span>}
+      {likesCount > 0 && (
+        <span
+          role="button"
+          tabIndex={0}
+          onClick={(event) => {
+            event.stopPropagation();
+            onCountClick?.();
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              onCountClick?.();
+            }
+          }}
+        >
+          {likesCount}
+        </span>
+      )}
     </Button>
   );
 };

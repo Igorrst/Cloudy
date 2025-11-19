@@ -618,6 +618,7 @@ const Home = () => {
                 ownerId={post.ownerId}
                 liked={isPostLiked(post)}
                 likesCount={post.likes.length}
+                likes={post.likes}
                 comments={post.comments}
                 onLike={() => handleLike(post.id, isPostLiked(post))}
                 onEdit={handleEditPost}
