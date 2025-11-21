@@ -63,7 +63,8 @@ const Home = () => {
           content: post.content,
           owner: {
             name: post.owner?.name || "Usuário",
-            id: post.ownerId
+            id: post.ownerId,
+            profilePhoto: post.owner?.profilePhoto || undefined,
           },
           ownerId: post.ownerId,
           createdAt: post.createdAt,
@@ -74,13 +75,19 @@ const Home = () => {
             content: comment.content,
             owner: {
               name: comment.owner?.name || "Usuário",
-              id: comment.ownerId
+              id: comment.ownerId,
+              profilePhoto: comment.owner?.profilePhoto || undefined,
             },
             createdAt: comment.createdAt,
             updatedAt: comment.updatedAt,
             likes: comment.likes || [],
           })),
         }));
+        
+        const currentUserData = await getCurrentUser();
+        if (currentUserData) {
+          setCurrentUser(currentUserData);
+        }
 
         setPosts(prevPosts => {
           const prevPostsMap = new Map(prevPosts.map(p => [p.id, p]));
@@ -151,8 +158,11 @@ const Home = () => {
   }, []);
 
   const loadUser = async () => {
-    const user = await getCurrentUser();
-    setCurrentUser(user);
+    try {
+      const user = await getCurrentUser();
+      setCurrentUser(user);
+    } catch (error) {
+    }
   };
 
   const loadPosts = async (page: number = 1, append: boolean = false) => {
@@ -164,12 +174,14 @@ const Home = () => {
       }
       
       const response = await getPosts(undefined, page) as ApiPostsResponse;
+      
       const formattedPosts: Post[] = response.posts.map((post: ApiPostResponse) => ({
         id: post.id,
         content: post.content,
         owner: {
           name: post.owner?.name || "Usuário",
-          id: post.ownerId
+          id: post.ownerId,
+          profilePhoto: post.owner?.profilePhoto || undefined,
         },
         ownerId: post.ownerId,
         createdAt: post.createdAt,
@@ -180,7 +192,8 @@ const Home = () => {
           content: comment.content,
           owner: {
             name: comment.owner?.name || "Usuário",
-            id: comment.ownerId
+            id: comment.ownerId,
+            profilePhoto: comment.owner?.profilePhoto || undefined,
           },
           createdAt: comment.createdAt,
           updatedAt: comment.updatedAt,
@@ -224,11 +237,23 @@ const Home = () => {
 
       try {
         const response = await createPost({ content: newPost.trim() });
+        
+        const updatedUser = await getCurrentUser();
+        if (updatedUser) {
+          setCurrentUser(updatedUser);
+        }
+        
+        const userToUse = updatedUser || currentUser;
+        
         const newPostData: Post = {
           id: response.id,
           content: response.content,
-          owner: currentUser || { name: "Você", id: "" },
-          ownerId: currentUser?.id || "",
+          owner: {
+            name: userToUse?.name || "Você",
+            id: userToUse?.id || "",
+            profilePhoto: userToUse?.profilePhoto || undefined,
+          },
+          ownerId: userToUse?.id || "",
           createdAt: response.createdAt,
           updatedAt: response.updatedAt,
           likes: [],
@@ -336,7 +361,8 @@ const Home = () => {
         content: response.content,
         owner: {
           name: currentUser.name,
-          id: currentUser.id
+          id: currentUser.id,
+          profilePhoto: currentUser.profilePhoto || undefined,
         },
         createdAt: response.createdAt,
         likes: []
@@ -555,7 +581,11 @@ const Home = () => {
       <PostsContainer>
         <TextPost>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Avatar name={currentUser?.name || "Usuário"} />
+            <Avatar 
+              name={currentUser?.name || "Usuário"} 
+              userId={currentUser?.id}
+              profilePhoto={currentUser?.profilePhoto}
+            />
             <TextAreaContainer>
               <TextArea
                 ref={textAreaRef}

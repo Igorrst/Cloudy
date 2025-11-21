@@ -96,13 +96,6 @@ export const UserPostInfo = styled.div`
   font-size: 13px;
   z-index: 5;
 
-  img {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    opacity: 0.85;
-    margin-right: 10px;
-  }
 
   h3 {
     margin: 0;
@@ -116,12 +109,6 @@ export const UserPostInfo = styled.div`
     bottom: 20px;
     font-size: 12px;
 
-    img {
-      width: 28px;
-      height: 28px;
-      margin-right: 8px;
-    }
-
     h3 {
       font-size: 13px;
     }
@@ -131,12 +118,6 @@ export const UserPostInfo = styled.div`
     left: 16px;
     bottom: 16px;
     font-size: 11px;
-
-    img {
-      width: 24px;
-      height: 24px;
-      margin-right: 6px;
-    }
 
     h3 {
       font-size: 12px;

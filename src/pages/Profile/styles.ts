@@ -1059,3 +1059,38 @@ export const ModalEmptyState = styled.div`
     font-size: 13px;
   }
 `;
+
+export const ChangeAvatarButton = styled.button`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  background-color: ${({ theme }) => theme.colors.blue[650]};
+  border: 3px solid white;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 178, 255, 0.3);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: ${({ theme }) => theme.colors.blue[850]};
+  }
+
+  @media (max-width: 640px) {
+    width: 28px;
+    height: 28px;
+    border-width: 2px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+`;
+

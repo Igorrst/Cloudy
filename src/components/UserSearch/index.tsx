@@ -86,7 +86,12 @@ const UserSearch = () => {
           ) : users.length > 0 ? (
             users.map((user) => (
               <UserResult key={user.id} onClick={() => handleUserClick(user.id)}>
-                <Avatar name={user.name} size={40} isNavigation={false} />
+                <Avatar
+                  name={user.name}
+                  size={40}
+                  isNavigation={false}
+                  profilePhoto={user.profilePhoto}
+                />
                 <UserInfo>
                   <UserName>{user.name}</UserName>
                   {user.bio && <UserBio>{user.bio}</UserBio>}

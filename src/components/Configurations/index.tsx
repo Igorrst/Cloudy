@@ -54,6 +54,7 @@ const Configurations: React.FC = () => {
   const [showConfirmLogout, setShowConfirmLogout] = useState(false);
   const [currentUserName, setCurrentUserName] = useState<string>("Usuário");
   const [currentUserId, setCurrentUserId] = useState<string>("");
+  const [currentUserProfilePhoto, setCurrentUserProfilePhoto] = useState<string | undefined>(undefined);
   const [showReportsModal, setShowReportsModal] = useState(false);
   const [reports, setReports] = useState<Report[]>([]);
   const [isLoadingReports, setIsLoadingReports] = useState(false);
@@ -77,6 +78,9 @@ const Configurations: React.FC = () => {
           setCurrentUserName(user.name);
           if (user.id) {
             setCurrentUserId(user.id);
+          }
+          if (user.profilePhoto) {
+            setCurrentUserProfilePhoto(user.profilePhoto);
           }
         }
       } catch (error) {
@@ -242,7 +246,12 @@ const Configurations: React.FC = () => {
     <>
       <ConfigTrigger onClick={toggleModal}>
         <UserInfo>
-          <Avatar isNavigation={false} name={currentUserName} size={25} />
+          <Avatar
+            isNavigation={false}
+            name={currentUserName}
+            size={25}
+            profilePhoto={currentUserProfilePhoto}
+          />
         </UserInfo>
         <VerticalSeparator />
         <ArrowIcon isOpen={isModalOpen}>
@@ -253,7 +262,11 @@ const Configurations: React.FC = () => {
       {isModalOpen && (
         <ModalContainer>
           <ClickableRow onClick={goToProfile}>
-            <Avatar name={currentUserName} size={30} />
+            <Avatar
+              name={currentUserName}
+              size={30}
+              profilePhoto={currentUserProfilePhoto}
+            />
             <span>Perfil</span>
           </ClickableRow>
 

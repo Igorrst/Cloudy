@@ -25,6 +25,7 @@ import { PostLike } from "../../types";
 interface PostOwner {
   name: string;
   id: string;
+  profilePhoto?: string;
 }
 
 interface PostComment {
@@ -33,6 +34,7 @@ interface PostComment {
   owner: {
     name: string;
     id: string;
+    profilePhoto?: string;
   };
   createdAt: string;
 }
@@ -191,7 +193,11 @@ const PostCard = ({
       </motion.div>
 
       <UserPostInfo>
-        <Avatar name={owner.name} userId={owner.id} />
+        <Avatar
+          name={owner.name}
+          userId={owner.id}
+          profilePhoto={owner.profilePhoto}
+        />
         <h3>{owner.name}</h3>
       </UserPostInfo>
 
