@@ -267,7 +267,10 @@ const Configurations: React.FC = () => {
           <Separator />
 
           <ReportSection>
-            <h4>Reportar Bug</h4>
+            <h4>
+              <Bug size={18} />
+              Reportar Bug
+            </h4>
             <Textarea
               value={reportText}
               onChange={handleReportChange}
