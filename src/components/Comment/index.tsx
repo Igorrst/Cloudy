@@ -36,6 +36,7 @@ interface Comment {
   owner: {
     name: string;
     id: string;
+    profilePhoto?: string;
   };
   createdAt: string;
   likes?: CommentLike[];
