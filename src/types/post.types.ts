@@ -1,6 +1,7 @@
 export interface PostOwner {
   name: string;
   id: string;
+  profilePhoto?: string;
 }
 
 export interface PostLike {
@@ -14,6 +15,7 @@ export interface PostComment {
   owner: {
     name: string;
     id: string;
+    profilePhoto?: string;
   };
   createdAt: string;
   updatedAt?: string;

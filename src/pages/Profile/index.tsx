@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Container, TopBar, BackButton, ProfileHeader, ProfileInfo, BioSection, BioContent, BioText, BioTextarea, BioActions, EditButton, SaveButton, CancelButton, PostsScrollContainer, PostsGrid, PostItem, EmptyState, StatsSection, StatItem, EmojiButton, EmojiPickerContainer, SearchWrapper, FollowButton, UnfollowButton, ModalOverlay, ModalContent, ModalHeader, ModalTitle, ModalCloseButton, ModalList, ModalUserItem, ModalEmptyState } from "./styles";
+import { Container, TopBar, BackButton, ProfileHeader, ProfileInfo, BioSection, BioContent, BioText, BioTextarea, BioActions, EditButton, SaveButton, CancelButton, PostsScrollContainer, PostsGrid, PostItem, EmptyState, StatsSection, StatItem, EmojiButton, EmojiPickerContainer, SearchWrapper, FollowButton, UnfollowButton, ModalOverlay, ModalContent, ModalHeader, ModalTitle, ModalCloseButton, ModalList, ModalUserItem, ModalEmptyState, ChangeAvatarButton } from "./styles";
 import Configurations from "../../components/Configurations";
 import Avatar from "../../components/Avatar";
+import AvatarSelector from "../../components/AvatarSelector";
 import PostCard from "../../components/PostCard";
 import UserSearch from "../../components/UserSearch";
-import { ArrowLeft, UserPlus, UserMinus, X, Smile, Edit2, Check } from "lucide-react";
+import { ArrowLeft, UserPlus, UserMinus, X, Smile, Edit2, Check, Image } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCurrentUser, getUserById, updateUser, followUser, unfollowUser } from "../../services/userService";
 import { getPosts, likePost, unlikePost, updatePost, deletePost } from "../../services/postService";
@@ -33,6 +34,7 @@ const Profile = () => {
   const [currentUserName, setCurrentUserName] = useState<string>("");
   const [showFollowersModal, setShowFollowersModal] = useState(false);
   const [showFollowingModal, setShowFollowingModal] = useState(false);
+  const [showAvatarSelector, setShowAvatarSelector] = useState(false);
   const bioTextareaRef = useRef<HTMLTextAreaElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -120,6 +122,7 @@ const Profile = () => {
       }
       
       const response = await getPosts(undefined, page) as ApiPostsResponse;
+      
       const userPosts = response.posts
         .filter((post: ApiPostResponse) => post.ownerId === ownerId)
         .map((post: ApiPostResponse): Post => ({
@@ -127,7 +130,8 @@ const Profile = () => {
           content: post.content,
           owner: {
             name: post.owner?.name || user?.name || "Usuário",
-            id: ownerId
+            id: ownerId,
+            profilePhoto: post.owner?.profilePhoto || user?.profilePhoto || undefined,
           },
           ownerId: post.ownerId,
           createdAt: post.createdAt,
@@ -138,7 +142,8 @@ const Profile = () => {
             content: comment.content,
             owner: {
               name: comment.owner?.name || "Usuário",
-              id: comment.ownerId
+              id: comment.ownerId,
+              profilePhoto: comment.owner?.profilePhoto || undefined,
             },
             createdAt: comment.createdAt,
             updatedAt: comment.updatedAt,
@@ -175,7 +180,8 @@ const Profile = () => {
           content: post.content,
           owner: {
             name: post.owner?.name || user.name,
-            id: user.id
+            id: user.id,
+            profilePhoto: post.owner?.profilePhoto || user.profilePhoto || undefined,
           },
           ownerId: post.ownerId,
           createdAt: post.createdAt,
@@ -186,7 +192,8 @@ const Profile = () => {
             content: comment.content,
             owner: {
               name: comment.owner?.name || "Usuário",
-              id: comment.ownerId
+              id: comment.ownerId,
+              profilePhoto: comment.owner?.profilePhoto || undefined,
             },
             createdAt: comment.createdAt,
             updatedAt: comment.updatedAt,
@@ -265,6 +272,39 @@ const Profile = () => {
       const errorMessage = isApiError(error)
         ? error.response?.data?.message || "Erro ao salvar bio"
         : "Erro ao salvar bio";
+      alert(errorMessage);
+    }
+  };
+
+
+  const handleSelectAvatar = async (avatarUrl: string) => {
+    if (!user || !currentUserId) return;
+
+    try {
+      await updateUser(currentUserId, { profilePhoto: avatarUrl });
+      
+      setUser({ ...user, profilePhoto: avatarUrl });
+      
+      const allPosts = [...posts];
+      const updatedPosts = allPosts.map((post) => {
+        if (post.ownerId === currentUserId) {
+          return {
+            ...post,
+            owner: {
+              ...post.owner,
+              profilePhoto: avatarUrl,
+            },
+          };
+        }
+        return post;
+      });
+      setPosts(updatedPosts);
+      
+      alert("Avatar atualizado! ⚠️ Esta funcionalidade é temporária e apenas para testes até o backend estar completo.");
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.response?.data?.message || "Erro ao atualizar avatar"
+        : "Erro ao atualizar avatar";
       alert(errorMessage);
     }
   };
@@ -395,7 +435,8 @@ const Profile = () => {
         content: response.content,
         owner: {
           name: currentUserName,
-          id: currentUserId
+          id: currentUserId,
+          profilePhoto: user?.profilePhoto || undefined,
         },
         createdAt: response.createdAt,
         likes: []
@@ -591,7 +632,19 @@ const Profile = () => {
       </TopBar>
 
       <ProfileHeader>
-        <Avatar name={user.name} size={90} isNavigation={false} />
+        <div style={{ position: "relative", display: "inline-block" }}>
+          <Avatar
+            name={user.name}
+            size={90}
+            isNavigation={false}
+            profilePhoto={user.profilePhoto}
+          />
+          {isOwnProfile && (
+            <ChangeAvatarButton onClick={() => setShowAvatarSelector(true)}>
+              <Image size={16} />
+            </ChangeAvatarButton>
+          )}
+        </div>
         <ProfileInfo>
           <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
             <h1>{user.name}</h1>
@@ -761,7 +814,11 @@ const Profile = () => {
                       setShowFollowersModal(false);
                     }}
                   >
-                    <Avatar name={follower.follower.name} size={40} isNavigation={false} />
+                    <Avatar
+                      name={follower.follower.name}
+                      size={40}
+                      isNavigation={false}
+                    />
                     <span>{follower.follower.name}</span>
                   </ModalUserItem>
                 ))
@@ -792,7 +849,11 @@ const Profile = () => {
                       setShowFollowingModal(false);
                     }}
                   >
-                    <Avatar name={following.following.name} size={40} isNavigation={false} />
+                    <Avatar
+                      name={following.following.name}
+                      size={40}
+                      isNavigation={false}
+                    />
                     <span>{following.following.name}</span>
                   </ModalUserItem>
                 ))
@@ -803,6 +864,13 @@ const Profile = () => {
           </ModalContent>
         </ModalOverlay>
       )}
+
+      <AvatarSelector
+        isOpen={showAvatarSelector}
+        onClose={() => setShowAvatarSelector(false)}
+        onSelect={handleSelectAvatar}
+        currentAvatar={user.profilePhoto}
+      />
     </Container>
   );
 };

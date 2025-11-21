@@ -4,6 +4,7 @@ export interface CurrentUser {
   id: string;
   name: string;
   email: string;
+  profilePhoto?: string;
 }
 
 export interface UserProfile {

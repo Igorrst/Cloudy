@@ -178,7 +178,12 @@ const CommentButton = ({
                     comments.map((comment) => (
                       <CommentItem key={comment.id}>
                         <CommentHeader>
-                          <Avatar name={comment.owner.name} size={32} userId={comment.owner.id} />
+                          <Avatar
+                            name={comment.owner.name}
+                            size={32}
+                            userId={comment.owner.id}
+                            profilePhoto={comment.owner.profilePhoto}
+                          />
                           <div style={{ flex: 1 }}>
                             <strong>{comment.owner.name}</strong>
                             <CommentTime>{formatDate(comment.createdAt)}</CommentTime>
